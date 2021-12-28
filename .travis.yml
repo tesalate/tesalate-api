@@ -21,7 +21,7 @@ env:
     - TESLA_OAUTH_V3_URL=https://auth.tesla.com/oauth2/v3
     - PUBLIC_URL=http://localhost
   matrix:
-    - MONGODB=4.2.7
+    - MONGODB=4.2.8
 
 cache:
   directories:
