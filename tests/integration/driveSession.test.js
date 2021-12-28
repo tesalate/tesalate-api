@@ -266,8 +266,9 @@ describe('DriveSession routes', () => {
       const res = await request(app)
         .get(`/v1/drive-sessions/${driveSessionForVehicleOneForUser._id}`)
         .set('Cookie', `token=${userOneAccessToken}`)
-        .send()
-        .expect(httpStatus.OK);
+        .send();
+      console.log('WHAT', res.body);
+      // res.expect(httpStatus.OK);
 
       const { _id } = driveSessionForVehicleOneForUser;
       const dbVehicleData = await VehicleData.find({ drive_session_id: _id }).lean();

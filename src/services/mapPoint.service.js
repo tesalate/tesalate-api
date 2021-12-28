@@ -28,15 +28,6 @@ const getMapPointById = async (_id, user) => {
 };
 
 /**
- * Get map point by user id
- * @param {string} user
- * @returns {Promise<MapPoint>}
- */
-const getMapPointByUserId = async (user) => {
-  return MapPoint.find({ user });
-};
-
-/**
  * Get map point by vehicle id
  * @param {ObjectId} vid
  * @param {ObjectId} user
@@ -70,30 +61,31 @@ const deleteMapPointById = async (mapPointPointId, user) => {
 const getMapPointsByDistanceApart = async (km, vid, user) => {
   const mapPoints = await getMapPointByVid(vid, user);
   const geoPoints = [];
-  return mapPoints.reduce((acc, curr) => {
-    const { geoJSON, user: _user, ...rest } = curr.toJSON();
-    const latLong = curr.dataPoints[0].drive_state;
-    if (geoPoints.length === 0) {
+  return mapPoints
+    .sort((a, b) => a.updatedAt - b.updatedAt)
+    .reduce((acc, curr) => {
+      const { geoJSON, user: _user, ...rest } = curr.toJSON();
+      const latLong = rest.dataPoints[0].drive_state;
+      if (geoPoints.length === 0) {
+        geoPoints.push(latLong);
+        return [...acc, rest];
+      }
+      let save = true;
+      for (let i = geoPoints.length - 1; i >= 0; i -= 1) {
+        if (geolib.getDistance(geoPoints[i], latLong) <= parseInt(km, 10) * 1000) {
+          save = false;
+          break;
+        }
+      }
+      if (!save) return [...acc];
       geoPoints.push(latLong);
       return [...acc, rest];
-    }
-    let save = true;
-    for (let i = geoPoints.length - 1; i >= 0; i -= 1) {
-      if (geolib.getDistance(geoPoints[i], latLong) <= parseInt(km, 10) * 1000) {
-        save = false;
-        break;
-      }
-    }
-    if (!save) return [...acc];
-    geoPoints.push(latLong);
-    return [...acc, rest];
-  }, []);
+    }, []);
 };
 
 module.exports = {
   queryMapPoints,
   getMapPointById,
   getMapPointsByDistanceApart,
-  getMapPointByUserId,
   deleteMapPointById,
 };

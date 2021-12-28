@@ -133,6 +133,7 @@ vehicleData.plugin(paginate);
 
 vehicleData.index({ vin: 'text', user: 1 });
 vehicleData.index({ user: 1 });
+vehicleData.index({ GeoJSON: '2dsphere', user: 1 });
 
 /**
  * @typedef VehicleData

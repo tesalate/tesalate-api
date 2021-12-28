@@ -1,4 +1,6 @@
+const mongoose = require('mongoose');
 const request = require('supertest');
+const faker = require('faker');
 const httpStatus = require('http-status');
 const app = require('../../src/app');
 const setupTestDB = require('../utils/setupTestDB');
@@ -290,13 +292,23 @@ describe('MapPoint routes', () => {
   });
 
   describe('GET /v1/map-points/distance', () => {
-    test('should return 200 and the mapPoint object if data is ok', async () => {
+    test('should return 200 and the mapPoint object if data is ok based on km', async () => {
       await insertUsers([admin, userOne]);
-      await insertMapPoints([mapPointForVehicleOneForUser, mapPointForVehicleTwoForUser, mapPointForVehicleOneForAdmin]);
+      const newPoints = Array.from({ length: faker.datatype.number({ min: 2, max: 12 }) }, () => ({
+        ...mapPointForVehicleOneForUser,
+        _id: mongoose.Types.ObjectId(),
+      }));
+
+      await insertMapPoints([
+        mapPointForVehicleOneForUser,
+        mapPointForVehicleTwoForUser,
+        mapPointForVehicleOneForAdmin,
+        ...newPoints,
+      ]);
 
       const res = await request(app)
         .get(`/v1/map-points/distance/${mapPointForVehicleOneForUser.vid}`)
-        .query({ km: 1 })
+        .query({ km: 100 })
         .set('Cookie', `token=${userOneAccessToken}`)
         .send()
         .expect(httpStatus.OK);
