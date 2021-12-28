@@ -7,8 +7,9 @@ branches:
     - main
 
 env:
-  global:
+  matrix:
     - MONGODB=4.2.8
+  global:
     - APP_NAME=teslog-travis
     - PORT=4400
     - MONGODB_URL=mongodb://localhost:27017/node-boilerplate
