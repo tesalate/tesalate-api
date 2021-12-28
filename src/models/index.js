@@ -1,0 +1,10 @@
+module.exports.Token = require('./token.model');
+module.exports.User = require('./user.model');
+module.exports.Vehicle = require('./vehicle.model');
+module.exports.TeslaAccount = require('./teslaAccount.model');
+module.exports.VehicleData = require('./vehicleData.model');
+module.exports.ChargeSession = require('./chargeSession.model');
+module.exports.DriveSession = require('./driveSession.model');
+module.exports.MapPoint = require('./mapPoint.model');
+module.exports.Reminder = require('./reminder.model');
+module.exports.Charger = require('./charger.model');
