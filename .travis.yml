@@ -7,8 +7,6 @@ branches:
     - main
 
 env:
-  matrix:
-    - MONGODB=4.2.8
   global:
     - APP_NAME=teslog-travis
     - PORT=4400
@@ -20,13 +18,13 @@ env:
     - PUBLIC_URL=http://localhost
 
 install:
-  - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGODB}.tgz
-  - tar xzf mongodb-linux-x86_64-${MONGODB}.tgz
-  - ${PWD}/mongodb-linux-x86_64-${MONGODB}/bin/mongod --version
+  - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-4.2.8.tgz
+  - tar xzf mongodb-linux-x86_64-4.2.8.tgz
+  - ${PWD}/mongodb-linux-x86_64-4.2.8/bin/mongod --version
 
 before_script:
-  - mkdir ${PWD}/mongodb-linux-x86_64-${MONGODB}/data
-  - ${PWD}/mongodb-linux-x86_64-${MONGODB}/bin/mongod --dbpath ${PWD}/mongodb-linux-x86_64-${MONGODB}/data --logpath ${PWD}/mongodb-linux-x86_64-${MONGODB}/mongodb.log --fork
+  - mkdir ${PWD}/mongodb-linux-x86_64-4.2.8/data
+  - ${PWD}/mongodb-linux-x86_64-4.2.8/bin/mongod --dbpath ${PWD}/mongodb-linux-x86_64-4.2.8/data --logpath ${PWD}/mongodb-linux-x86_64-4.2.8/mongodb.log --fork
 
 script:
   - yarn lint
