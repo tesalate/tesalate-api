@@ -2,8 +2,7 @@ dist: xenial
 language: node_js
 node_js:
   - '15'
-services:
-  - mongodb
+
 cache:
   directories:
     - "$TRAVIS_BUILD_DIR/mongodb"
