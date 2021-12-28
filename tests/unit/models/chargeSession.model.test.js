@@ -26,12 +26,12 @@ describe('ChargeSession model', () => {
     });
 
     test('should throw a validation error if startDate is not a date', async () => {
-      newChargeSession.startDate = faker.datatype.array(2);
+      newChargeSession.startDate = faker.random.alphaNumeric(36);
       await expect(new ChargeSession(newChargeSession).validate()).rejects.toThrow();
     });
 
     test('should throw a validation error if endDate is not a date', async () => {
-      newChargeSession.endDate = faker.datatype.array(2);
+      newChargeSession.endDate = faker.random.alphaNumeric(36);
       await expect(new ChargeSession(newChargeSession).validate()).rejects.toThrow();
     });
 

@@ -26,12 +26,12 @@ describe('DriveSession model', () => {
     });
 
     test('should throw a validation error if startDate is not a date', async () => {
-      newDriveSession.startDate = faker.datatype.array(2);
+      newDriveSession.startDate = faker.random.alphaNumeric(36);
       await expect(new DriveSession(newDriveSession).validate()).rejects.toThrow();
     });
 
     test('should throw a validation error if endDate is not a date', async () => {
-      newDriveSession.endDate = faker.datatype.array(2);
+      newDriveSession.endDate = faker.random.alphaNumeric(36);
       await expect(new DriveSession(newDriveSession).validate()).rejects.toThrow();
     });
 

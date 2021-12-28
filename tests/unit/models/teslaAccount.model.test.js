@@ -32,8 +32,8 @@ describe('TeslaAccount model', () => {
   });
 
   describe('TeslaAccount toJSON()', () => {
-    test('should not return teslaAccount password when toJSON is called', () => {
-      expect(new TeslaAccount(newTeslaAccount).toJSON()).not.toHaveProperty('password');
+    test('should not return teslaAccount __v when toJSON is called', () => {
+      expect(new TeslaAccount(newTeslaAccount).toJSON()).not.toHaveProperty('__v');
     });
   });
 });

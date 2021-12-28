@@ -60,7 +60,7 @@ describe('Vehicle model', () => {
   });
 
   describe('Vehicle toJSON()', () => {
-    test('should not return vehicle password when toJSON is called', () => {
+    test('should not return vehicle __v when toJSON is called', () => {
       expect(new Vehicle(newVehicle).toJSON()).not.toHaveProperty('__v');
     });
   });
