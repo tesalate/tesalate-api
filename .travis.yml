@@ -1,0 +1,49 @@
+dist: xenial
+language: node_js
+node_js:
+  - '15'
+
+cache:
+  directories:
+    - "$TRAVIS_BUILD_DIR/mongodb"
+    - "$HOME/.npm"
+branches:
+  only:
+    - main
+env:
+  global:
+    - APP_NAME=teslog-travis
+    - PORT=4400
+    - MONGODB_URL=mongodb://localhost:27017/node-boilerplate
+    - JWT_SECRET=thisisasamplesecret
+    - JWT_ACCESS_EXPIRATION_MINUTES=30
+    - JWT_REFRESH_EXPIRATION_DAYS=30
+    - TESLA_OAUTH_V3_URL=https://auth.tesla.com/oauth2/v3
+    - PUBLIC_URL=http://localhost
+  matrix:
+    - MONGODB=4.2.8
+
+cache:
+  directories:
+    - "${TRAVIS_BUILD_DIR}/mongodb"
+    - "$HOME/.npm"
+
+matrix:
+  fast_finish: true
+
+before_install:
+  - chmod +x "${TRAVIS_BUILD_DIR}/scripts/travis/install_mongodb.sh" "${TRAVIS_BUILD_DIR}/scripts/travis/run_mongodb.sh"
+
+install:
+  # Don't let npm send metrics as it creates a file in the .npm folder invalidating the cache every time
+  - yarn
+  - "${TRAVIS_BUILD_DIR}/scripts/travis/install_mongodb.sh"
+
+before_script:
+  - "${TRAVIS_BUILD_DIR}/scripts/travis/run_mongodb.sh"
+script:
+  - yarn lint
+  - yarn test
+after_success: yarn coverage:coveralls
+after_script:
+  - pkill mongod

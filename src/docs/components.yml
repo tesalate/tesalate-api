@@ -1,0 +1,741 @@
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - displayName
+        - firstName
+        - lastName
+        - email
+      properties:
+        _id:
+          type: string
+        username:
+          type: string
+          format: username
+        displayName:
+          type: string
+        fistName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [user, admin]
+          default: user
+        isEmailVerified:
+          type: boolean
+          default: false
+        teslaAccount:
+          default: null
+          $ref: '#/components/schemas/TeslaAccount'
+        vehicles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vehicle'
+
+      example:
+        _id: 5ebac534954b54139806c112
+        email: fake@example.com
+        username: fake_name
+        displayName: Fake_Name
+        firstName: fake
+        lastName: fake
+        role: user
+        teslaAccount: '5ebac534954b54139806c113'
+        vehicles: ['5ebac534954b54139806c14', 5ebac534954b54139806c115]
+
+    TeslaAccount:
+      type: object
+      required:
+        - user
+        - email
+      properties:
+        _id:
+          type: string
+        user:
+          type: string
+          $ref: '#/components/schemas/User'
+        email:
+          type: string
+          format: email
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        linked:
+          type: boolean
+
+      example:
+        _id: 5ebac534954b54139806c116
+        user: 5ebac534954b54139806c112
+        email: fake@example.com
+        access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWJhYzUzNDk1NGI1NDEzOTgwNmMxMTIiLCJpYXQiOjE1ODkyOTg0ODQsImV4cCI6MTU4OTMwMDI4NH0.m1U63blB0MLej_WfB7yC2FTMnCziif9X8yzwDEfJXAg
+        refresh_token: eyJhbGciOiKSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ilg0RmNua0RCUVBUTnBrZBZiMnNuRi04YmdVUSJ9
+        linked: True
+
+    Vehicle:
+      type: object
+      required:
+        - user
+        - vin
+        - id_s
+      properties:
+        _id:
+          type: string
+        user:
+          type: string
+          $ref: '#/components/schemas/User'
+        teslaAccount:
+          type: string
+          $ref: '#/components/schemas/TeslaAccount'
+        collectData:
+          type: boolean
+        id:
+          type: number
+        vin:
+          type: string
+        vehicle_id:
+          type: string
+        display_name:
+          type: string
+          default: ''
+        option_codes:
+          type: string
+        access_type:
+          type: string
+        color:
+          oneOf:
+            - type: null
+            - type: string
+        tokens:
+          type: array
+        state:
+          type: string
+        in_service:
+          type: boolean
+        id_s:
+          type: string
+        calendar_enabled:
+          type: boolean
+        backseat_token:
+          oneOf:
+            - type: null
+            - type: string
+        backseat_token_updated_at:
+          oneOf:
+            - type: null
+            - type: string
+      example:
+        _id: 5ebac534954b54139806c14
+        user: 5ebac534954b54139806c112
+        teslaAccount: 5ebac534954b54139806c116
+        collectData: True
+        display_name: tyl3r
+        tokens:
+          - z3lz0a
+          - ko5v4d
+        vehicle_id: 26262
+        vin: dczmdjo1b8uq
+        option_codes: 'u6biart6d31a, c7bkart8d48k'
+        color: magenta
+        access_type: OWNER
+        state: offline
+        in_service: true
+        id_s: 0gtvq7ax9eo3
+        calendar_enabled: true
+        api_version: 3
+        backseat_token:
+        backseat_token_updated_at:
+
+    VehicleData:
+      type: object
+      required:
+        - user
+        - vid
+        - geoJSON
+      properties:
+        _id:
+          type: string
+        user_id:
+          type: number
+        vehicle_id:
+          type: number
+        vin:
+          type: string
+        display_name:
+          type: string
+        option_codes:
+          type: string
+        color:
+          type: object
+          properties: {}
+        access_type:
+          type: string
+        tokens:
+          type: array
+          items:
+            type: object
+        state:
+          type: string
+        in_service:
+          type: boolean
+        id_s:
+          type: string
+        calendar_enabled:
+          type: boolean
+        api_version:
+          type: number
+        backseat_token:
+          type: object
+          properties: {}
+        backseat_token_updated_at:
+          type: object
+          properties: {}
+        charge_state:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+        climate_state:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+        drive_state:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+        gui_settings:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+        vehicle_config:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+        vehicle_state:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+        valet_mode:
+          type: boolean
+        drive_session_id:
+          type: string
+          $ref: '#/components/schemas/DriveSession'
+        charge_session_id:
+          type: string
+          $ref: '#/components/schemas/ChargeSession'
+        speed:
+          type: array
+          items:
+            type: number
+        power:
+          type: array
+          items:
+            type: number
+        geoJSON:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - Point
+            coordinates:
+              type: array
+        vid:
+          type: string
+          $ref: '#/components/schemas/Vehicle'
+        user:
+          type: string
+          $ref: '#/components/schemas/User'
+
+      example:
+        _id: 61c237a930a1dbb488e85ca5
+        user: 5ebac534954b54139806c112
+        vin: meqe8sqc4mry
+        geoJSON:
+          coordinates:
+            - 38
+            - 30
+          type: Point
+        color: violet
+        tokens:
+          - t2hsou
+          - sfuukh
+        backseat_token:
+        backseat_token_updated_at:
+        drive_session_id:
+        charge_session_id: 61c237a930a1dbb488e85c36
+        speed:
+          - 49
+          - 31
+        power:
+          - 90
+          - 133
+        access_type: OWNER
+        id: 48679
+        vehicle_id: 28453
+        display_name: Andres68
+        option_codes: c1ddtz2tn14s
+        state: online
+        in_service: true
+        id_s: 3tgjk8it5vut
+        calendar_enabled: false
+        vid: 5ebac534954b54139806c14
+        api_version: 291
+        charge_state:
+          battery_heater_on: false
+          battery_level: 11
+          battery_range: 12
+          charge_amps: 198
+          charge_current_request: 73
+          charge_current_request_max: 82
+          charge_enable_request: true
+          charge_energy_added: 84
+          charge_limit_soc: 6
+          charge_limit_soc_max: 14
+          charge_limit_soc_min: 10
+          charge_limit_soc_std: 82
+          charge_miles_added_ideal: 74
+          charge_miles_added_rated: 34
+          charge_port_cold_weather_mode: true
+          charge_port_door_open: true
+          charge_port_latch: Engaged
+          charge_rate: 110
+          charge_to_max_range: true
+          charger_actual_current: 50
+          charger_phases:
+          charger_pilot_current: 142
+          charger_power: 171
+          charger_voltage: 216
+          charging_state: Complete
+          conn_charge_cable: '<invalid>'
+          est_battery_range: 81
+          fast_charger_brand: Tesla
+          fast_charger_present: false
+          fast_charger_type: ACSingleWireCAN
+          ideal_battery_range: 270
+          managed_charging_active: true
+          managed_charging_start_time:
+          managed_charging_user_canceled: true
+          max_range_charge_counter: 9
+          minutes_to_full_charge: 16518
+          not_enough_power_to_heat:
+          off_peak_charging_enabled: true
+          off_peak_charging_times: all_week
+          off_peak_hours_end_time: 69
+          preconditioning_enabled: false
+          preconditioning_times: all_week
+          scheduled_charging_mode: 'On'
+          scheduled_charging_pending: true
+          scheduled_charging_start_time: 460231636
+          scheduled_departure_time: 230372034
+          time_to_full_charge: 20
+          timestamp: 47323784126
+          trip_charging: false
+          usable_battery_level: 77
+          user_charge_enable_request:
+        climate_state:
+          battery_heater: true
+          battery_heater_no_power:
+          climate_keeper_mode: dog
+          defrost_mode: 1
+          driver_temp_setting: 1
+          fan_status: 4
+          inside_temp: 64
+          is_auto_conditioning_on: false
+          is_climate_on: true
+          is_front_defroster_on: true
+          is_preconditioning: true
+          is_rear_defroster_on: false
+          left_temp_direction: 948
+          max_avail_temp: 24
+          min_avail_temp: 8
+          outside_temp: 6
+          passenger_temp_setting: 6
+          remote_heater_control_enabled: false
+          right_temp_direction: 223
+          seat_heater_left: 1
+          seat_heater_rear_center: 1
+          seat_heater_rear_left: 3
+          seat_heater_rear_right: 2
+          seat_heater_right: 0
+          side_mirror_heaters: true
+          timestamp: 806265854819
+          wiper_blade_heater: false
+        drive_state:
+          gps_as_of: 355583150
+          heading: 196
+          latitude: 12
+          longitude: 68
+          native_latitude: 98
+          native_location_supported: 2
+          native_longitude: 12
+          native_type: wgs
+          power: 59
+          shift_state: N
+          speed: 113
+          timestamp: 505942278051
+        gui_settings:
+          gui_24_hour_time: true
+          gui_charge_rate_units: kW
+          gui_distance_units: mi/hr
+          gui_range_display: Rated
+          gui_temperature_units: C
+          show_range_units: false
+          timestamp: 660487708063
+        vehicle_config:
+          can_accept_navigation_requests: false
+          can_actuate_trunks: true
+          car_special_type: base
+          car_type: modelx2
+          charge_port_type: US
+          default_charge_to_max: true
+          driver_assist: TeslaAP2
+          ece_restrictions: true
+          efficiency_package: Default
+          eu_vehicle: true
+          exterior_color: Black
+          exterior_trim: Black
+          has_air_suspension: true
+          has_ludicrous_mode: false
+          interior_trim_type: Black
+          key_version: 2
+          motorized_charge_port: true
+          performance_package: Base
+          plg: false
+          pws: false
+          rear_drive_unit: PM216MOSFET
+          rear_seat_heaters: 0
+          rear_seat_type: 0
+          rhd: false
+          roof_color: None
+          seat_type: 2
+          spoiler_type: None
+          sun_roof_installed: 2
+          third_row_seats: None
+          timestamp: 423773295045
+          trim_badging: p90d
+          use_range_badging: true
+          utc_offset: 79789
+          webcam_supported: true
+          wheel_type: Pinwheel18
+        vehicle_state:
+          api_version: 27
+          autopark_state_v3: available
+          calendar_supported: false
+          car_version: 2021.36.5 9428f5d2f612
+          center_display_state: 1
+          df: 1
+          dr: 1
+          fd_window: 0
+          fp_window: 1
+          ft: 0
+          homelink_device_count: 0
+          homelink_nearby: true
+          is_user_present: false
+          locked: false
+          media_state:
+            remote_control_enabled: true
+          notifications_supported: true
+          odometer: 40
+          parsed_calendar_supported: false
+          pf: 1
+          pr: 1
+          rd_window: 1
+          remote_start: false
+          remote_start_enabled: true
+          remote_start_supported: true
+          rp_window: 0
+          rt: 1
+          sentry_mode: false
+          sentry_mode_available: false
+          software_update:
+            download_perc: 16
+            expected_duration_sec: 2019
+            install_perc: 15
+            status: downloading_wifi_wait
+            version: ' '
+          speed_limit_mode:
+            active: true
+            current_limit_mph: 50
+            max_limit_mph: 45
+            min_limit_mph: 49
+            pin_code_set: false
+          timestamp: 300205862412
+          valet_mode: true
+          vehicle_name: Roxane_Huels
+          vehicle_self_test_progress: 1
+          vehicle_self_test_requested: false
+          webcam_available: false
+        user_id: 2141
+
+    ChargeSession:
+      type: object
+      required:
+        - vid
+        - user
+      properties:
+        vid:
+          type: string
+          $ref: '#/components/schemas/Vehicle'
+        user:
+          type: string
+          $ref: '#/components/schemas/User'
+        dataPoints:
+          type: array
+          items:
+            type: string
+            $ref: '#/components/schemas/VehicleData'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        maxChargeRate:
+          type: number
+        energyAdded:
+          type: number
+        charger:
+          type: string
+          $ref: '#/components/schemas/Charger'
+        geoJSON:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - Point
+            coordinates:
+              type: array
+              items:
+                type: number
+        flags:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: ['info', 'warning', 'error']
+              message:
+                type: string
+              _id:
+                type: string
+      example:
+        _id: 61c237a930a1dbb488e85c36
+        geoJSON:
+          coordinates:
+            - 42.5678
+            - -125.1234
+          type: Point
+        dataPoints:
+          - 61c237a930a1dbb488e85ca5
+          - 61c237a930a1dbb488e85ca6
+          - 61c237a930a1dbb488e85ca7
+        maxChargeRate: 250
+        energyAdded: 74
+        charger: 61c237a930a1dbb488e85c7e
+        user: 5ebac534954b54139806c112
+        vid: 5ebac534954b54139806c14
+        flags:
+          - type: info
+            message: Id itaque ut quia odio fugiat a.
+            _id: 61c237aa30a1dbb488e85cb4
+          - type: warning
+            message: Quo voluptatibus rerum qui aliquam consectetur consequatur eos aut.
+            _id: 61c237aa30a1dbb488e85cb5
+        startDate: '2021-12-22T19:10:19.316Z'
+        endDate: '2021-12-22T20:59:12.661Z'
+
+    DriveSession:
+      type: object
+      required:
+        - vid
+        - user
+      properties:
+        vid:
+          type: string
+          $ref: '#/components/schemas/Vehicle'
+        user:
+          type: string
+          $ref: '#/components/schemas/User'
+        dataPoints:
+          type: array
+          items:
+            type: string
+            $ref: '#/components/schemas/VehicleData'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        maxSpeed:
+          type: number
+        maxPower:
+          type: number
+        maxRegen:
+          type: number
+        distance:
+          type: number
+        startLocation:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - Point
+            coordinates:
+              type: array
+              items:
+                type: number
+        endLocation:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - Point
+            coordinates:
+              type: array
+              items:
+                type: number
+        flags:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: ['info', 'warning', 'error']
+              message:
+                type: string
+              _id:
+                type: string
+      example:
+        _id: 61c237a930a1dbb488e85c49
+        startLocation:
+          coordinates:
+            - 42.5678
+            - -125.1234
+          type: Point
+        endLocation:
+          coordinates:
+            - 40.87654
+            - -120.4321
+          type: Point
+        dataPoints:
+          - 61c237a930a1dbb488e85ca5
+          - 61c237a930a1dbb488e85ca6
+          - 61c237a930a1dbb488e85ca7
+        maxSpeed: 134
+        maxPower: 420
+        maxRegen: -80
+        distance: 310
+        user: 5ebac534954b54139806c112
+        vid: 5ebac534954b54139806c14
+        flags:
+          - type: info
+            message: Id itaque ut quia odio fugiat a.
+            _id: 61c237aa30a1dbb488e85cb4
+          - type: warning
+            message: Quo voluptatibus rerum qui aliquam consectetur consequatur eos aut.
+            _id: 61c237aa30a1dbb488e85cb5
+        startDate: '2021-12-22T19:10:19.316Z'
+        endDate: '2021-12-22T20:59:12.661Z'
+
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+      example:
+        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWJhYzUzNDk1NGI1NDEzOTgwNmMxMTIiLCJpYXQiOjE1ODkyOTg0ODQsImV4cCI6MTU4OTMwMDI4NH0.m1U63blB0MLej_WfB7yC2FTMnCziif9X8yzwDEfJXAg
+        expiresAt: 2020-05-12T16:18:04.793Z
+
+    AuthTokens:
+      type: object
+      properties:
+        access:
+          $ref: '#/components/schemas/Token'
+        refresh:
+          $ref: '#/components/schemas/Token'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+
+  responses:
+    DuplicateVehicle:
+      description: Vehicle has already been registered
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Vehicle has already been registered
+    DuplicateEmail:
+      description: Email already taken
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Email already taken
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Please authenticate
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
+
+  securitySchemes:
+    cookieToken:
+      type: apiKey
+      in: cookie
+      name: token
+    cookieRefreshToken:
+      type: apiKey
+      in: cookie
+      name: refreshToken

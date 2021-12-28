@@ -1,0 +1,1262 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "*": {
+      "options": {
+        "summary": "*",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "summary": "/v1/auth/register",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "summary": "/v1/auth/login",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "summary": "/v1/auth/logout",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/auth/refresh-tokens": {
+      "post": {
+        "summary": "/v1/auth/refresh-tokens",
+        "responses": {},
+        "tags": [
+          "Token"
+        ]
+      }
+    },
+    "/v1/auth/forgot-password": {
+      "post": {
+        "summary": "/v1/auth/forgot-password",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/auth/reset-password": {
+      "post": {
+        "summary": "/v1/auth/reset-password",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/auth/send-verification-email": {
+      "post": {
+        "summary": "/v1/auth/send-verification-email",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/auth/verify-email": {
+      "post": {
+        "summary": "/v1/auth/verify-email",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/users": {
+      "post": {
+        "summary": "/v1/users",
+        "responses": {},
+        "tags": [
+          "User"
+        ]
+      },
+      "get": {
+        "summary": "/v1/users",
+        "responses": {},
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/v1/users/{userId}": {
+      "get": {
+        "summary": "/v1/users/{userId}",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "User"
+        ]
+      },
+      "patch": {
+        "summary": "/v1/users/{userId}",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "User"
+        ]
+      },
+      "delete": {
+        "summary": "/v1/users/{userId}",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/v1/vehicles": {
+      "post": {
+        "summary": "/v1/vehicles",
+        "responses": {},
+        "tags": [
+          "Vehicle"
+        ]
+      },
+      "get": {
+        "summary": "/v1/vehicles",
+        "responses": {},
+        "tags": [
+          "Vehicle"
+        ]
+      }
+    },
+    "/v1/vehicles/{vehicleId}": {
+      "get": {
+        "summary": "/v1/vehicles/{vehicleId}",
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Vehicle"
+        ]
+      },
+      "patch": {
+        "summary": "/v1/vehicles/{vehicleId}",
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Vehicle"
+        ]
+      },
+      "delete": {
+        "summary": "/v1/vehicles/{vehicleId}",
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Vehicle"
+        ]
+      }
+    },
+    "/v1/tesla-account": {
+      "post": {
+        "summary": "/v1/tesla-account",
+        "responses": {},
+        "tags": []
+      },
+      "get": {
+        "summary": "/v1/tesla-account",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/tesla-account/{teslaAccountId}": {
+      "get": {
+        "summary": "/v1/tesla-account/{teslaAccountId}",
+        "parameters": [
+          {
+            "name": "teslaAccountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "TeslaAccount"
+        ]
+      },
+      "patch": {
+        "summary": "/v1/tesla-account/{teslaAccountId}",
+        "parameters": [
+          {
+            "name": "teslaAccountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "TeslaAccount"
+        ]
+      },
+      "delete": {
+        "summary": "/v1/tesla-account/{teslaAccountId}",
+        "parameters": [
+          {
+            "name": "teslaAccountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "TeslaAccount"
+        ]
+      }
+    },
+    "/v1/tesla-account/link": {
+      "post": {
+        "summary": "/v1/tesla-account/link",
+        "responses": {},
+        "tags": []
+      },
+      "delete": {
+        "summary": "/v1/tesla-account/link",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/vehicle-data-points": {
+      "get": {
+        "summary": "/v1/vehicle-data-points",
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please authenticate"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Vehicle"
+        ]
+      }
+    },
+    "/v1/vehicle-data-points/{vehicleDataId}": {
+      "get": {
+        "summary": "/v1/vehicle-data-points/{vehicleDataId}",
+        "parameters": [
+          {
+            "name": "vehicleDataId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Vehicle"
+        ]
+      },
+      "delete": {
+        "summary": "/v1/vehicle-data-points/{vehicleDataId}",
+        "parameters": [
+          {
+            "name": "vehicleDataId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Vehicle"
+        ]
+      }
+    },
+    "/v1/charge-sessions": {
+      "get": {
+        "summary": "/v1/charge-sessions",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/charge-sessions/{chargeSessionId}": {
+      "get": {
+        "summary": "/v1/charge-sessions/{chargeSessionId}",
+        "parameters": [
+          {
+            "name": "chargeSessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "ChargeSession"
+        ]
+      },
+      "delete": {
+        "summary": "/v1/charge-sessions/{chargeSessionId}",
+        "parameters": [
+          {
+            "name": "chargeSessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "ChargeSession"
+        ]
+      }
+    },
+    "/v1/drive-sessions": {
+      "get": {
+        "summary": "/v1/drive-sessions",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/drive-sessions/{driveSessionId}": {
+      "get": {
+        "summary": "/v1/drive-sessions/{driveSessionId}",
+        "parameters": [
+          {
+            "name": "driveSessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "DriveSession"
+        ]
+      },
+      "delete": {
+        "summary": "/v1/drive-sessions/{driveSessionId}",
+        "parameters": [
+          {
+            "name": "driveSessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "DriveSession"
+        ]
+      }
+    },
+    "/v1/map-points": {
+      "get": {
+        "summary": "/v1/map-points",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/map-points/distance": {
+      "get": {
+        "summary": "/v1/map-points/distance",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/v1/map-points/{mapPointId}": {
+      "get": {
+        "summary": "/v1/map-points/{mapPointId}",
+        "parameters": [
+          {
+            "name": "mapPointId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "MapPoint"
+        ]
+      },
+      "delete": {
+        "summary": "/v1/map-points/{mapPointId}",
+        "parameters": [
+          {
+            "name": "mapPointId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "MapPoint"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Token"
+    },
+    {
+      "name": "User"
+    },
+    {
+      "name": "Vehicle"
+    },
+    {
+      "name": "TeslaAccount"
+    },
+    {
+      "name": "CompleteVehicleDataPoint"
+    },
+    {
+      "name": "ChargeSession"
+    },
+    {
+      "name": "DriveSession"
+    },
+    {
+      "name": "MapPoint"
+    },
+    {
+      "name": "Reminder"
+    },
+    {
+      "name": "Charger"
+    }
+  ],
+  "info": {
+    "title": "mytesla-api",
+    "version": "0.1.0",
+    "license": {
+      "name": "MIT"
+    },
+    "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI for myTesla"
+  },
+  "components": {
+    "schemas": {
+      "Token": {
+        "title": "Token",
+        "required": [
+          "token",
+          "user",
+          "type",
+          "expiresAt"
+        ],
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "refresh",
+              "resetPassword",
+              "verifyEmail"
+            ]
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "blacklisted": {
+            "type": "boolean"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User": {
+        "title": "User",
+        "required": [
+          "username",
+          "displayName",
+          "firstName",
+          "lastName",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "admin"
+            ]
+          },
+          "isEmailVerified": {
+            "type": "boolean"
+          },
+          "teslaAccount": {
+            "type": "string"
+          },
+          "vehicles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Vehicle": {
+        "title": "Vehicle",
+        "required": [
+          "user",
+          "vin",
+          "id_s"
+        ],
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "teslaAccount": {
+            "type": "string"
+          },
+          "collectData": {
+            "type": "boolean"
+          },
+          "vin": {
+            "type": "string"
+          },
+          "vehicle_id": {
+            "type": "number"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "option_codes": {
+            "type": "string"
+          },
+          "access_type": {
+            "type": "string"
+          },
+          "color": {
+            "type": "object",
+            "properties": {}
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "in_service": {
+            "type": "boolean"
+          },
+          "id_s": {
+            "type": "string"
+          },
+          "calendar_enabled": {
+            "type": "boolean"
+          },
+          "api_version": {
+            "type": "number"
+          },
+          "backseat_token": {
+            "type": "object",
+            "properties": {}
+          },
+          "backseat_token_updated_at": {
+            "type": "object",
+            "properties": {}
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TeslaAccount": {
+        "title": "TeslaAccount",
+        "required": [
+          "user",
+          "email"
+        ],
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "access_token": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          },
+          "linked": {
+            "type": "boolean"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CompleteVehicleDataPoint": {
+        "title": "CompleteVehicleDataPoint",
+        "required": [
+          "vid",
+          "user"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "number"
+          },
+          "vehicle_id": {
+            "type": "number"
+          },
+          "vin": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "option_codes": {
+            "type": "string"
+          },
+          "color": {
+            "type": "object",
+            "properties": {}
+          },
+          "access_type": {
+            "type": "string"
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "in_service": {
+            "type": "boolean"
+          },
+          "id_s": {
+            "type": "string"
+          },
+          "calendar_enabled": {
+            "type": "boolean"
+          },
+          "api_version": {
+            "type": "number"
+          },
+          "backseat_token": {
+            "type": "object",
+            "properties": {}
+          },
+          "backseat_token_updated_at": {
+            "type": "object",
+            "properties": {}
+          },
+          "charge_state": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "climate_state": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "drive_state": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "gui_settings": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "vehicle_config": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "vehicle_state": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "timestamp": {
+            "type": "number"
+          },
+          "valet_mode": {
+            "type": "boolean"
+          },
+          "drive_session_id": {
+            "type": "string"
+          },
+          "charge_session_id": {
+            "type": "string"
+          },
+          "speed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          },
+          "power": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          },
+          "geoJSON": {
+            "type": "string"
+          },
+          "vid": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ChargeSession": {
+        "title": "ChargeSession",
+        "required": [
+          "vid",
+          "user"
+        ],
+        "properties": {
+          "dataPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maxChargeRate": {
+            "type": "number"
+          },
+          "energyAdded": {
+            "type": "number"
+          },
+          "charger": {
+            "type": "string"
+          },
+          "geoJSON": {
+            "type": "string"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "vid": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DriveSession": {
+        "title": "DriveSession",
+        "required": [
+          "vid",
+          "user"
+        ],
+        "properties": {
+          "dataPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maxSpeed": {
+            "type": "number"
+          },
+          "maxPower": {
+            "type": "number"
+          },
+          "maxRegen": {
+            "type": "number"
+          },
+          "distance": {
+            "type": "number"
+          },
+          "startLocation": {
+            "type": "string"
+          },
+          "endLocation": {
+            "type": "string"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "vid": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MapPoint": {
+        "title": "MapPoint",
+        "required": [
+          "latLongString",
+          "vid",
+          "user"
+        ],
+        "properties": {
+          "dataPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "visitCount": {
+            "type": "number"
+          },
+          "latLongString": {
+            "type": "string"
+          },
+          "geoJSON": {
+            "type": "string"
+          },
+          "vid": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Reminder": {
+        "title": "Reminder",
+        "required": [
+          "type",
+          "message",
+          "when",
+          "vid",
+          "user"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "odometer",
+              "date"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "when": {
+            "type": "number"
+          },
+          "remindWithin": {
+            "type": "number"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "vid": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Charger": {
+        "title": "Charger",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "address_line_1": {
+            "type": "string"
+          },
+          "address_line_2": {
+            "type": "string"
+          },
+          "address_notes": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "amenities": {
+            "type": "string"
+          },
+          "baidu_lat": {
+            "type": "string"
+          },
+          "baidu_lng": {
+            "type": "string"
+          },
+          "chargers": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "common_name": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "destination_charger_logo": {
+            "type": "string"
+          },
+          "destination_website": {
+            "type": "string"
+          },
+          "directions_link": {
+            "type": "string"
+          },
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          },
+          "geocode": {
+            "type": "string"
+          },
+          "hours": {
+            "type": "string"
+          },
+          "is_gallery": {
+            "type": "boolean"
+          },
+          "kiosk_pin_x": {
+            "type": "string"
+          },
+          "kiosk_pin_y": {
+            "type": "string"
+          },
+          "kiosk_zoom_pin_x": {
+            "type": "string"
+          },
+          "kiosk_zoom_pin_y": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "string"
+          },
+          "location_id": {
+            "type": "string"
+          },
+          "location_type": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          },
+          "longitude": {
+            "type": "string"
+          },
+          "nid": {
+            "type": "string"
+          },
+          "open_soon": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "province_state": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "sales_phone": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          },
+          "sales_representative": {
+            "type": "boolean"
+          },
+          "sub_region": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "trt_id": {
+            "type": "string"
+          },
+          "geoJSON": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
