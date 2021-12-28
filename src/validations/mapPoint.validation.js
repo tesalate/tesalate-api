@@ -7,13 +7,16 @@ const getMapPoints = {
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
 
-    vid: Joi.string(),
+    vid: Joi.string().custom(objectId),
     latLongString: Joi.string(),
     visitCount: Joi.number().integer(),
   }),
 };
 
 const getMapPointsByDistanceApart = {
+  params: {
+    vid: Joi.string().custom(objectId).required(),
+  },
   query: Joi.object().keys({
     km: Joi.number(),
   }),

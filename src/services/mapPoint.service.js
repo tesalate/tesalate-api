@@ -37,6 +37,16 @@ const getMapPointByUserId = async (user) => {
 };
 
 /**
+ * Get map point by vehicle id
+ * @param {ObjectId} vid
+ * @param {ObjectId} user
+ * @returns {Promise<MapPoint>}
+ */
+const getMapPointByVid = async (vid, user) => {
+  return MapPoint.find({ vid, user });
+};
+
+/**
  * Delete map point by id
  * @param {ObjectId} mapPointPointId
  * @param {ObjectId} user
@@ -54,15 +64,15 @@ const deleteMapPointById = async (mapPointPointId, user) => {
 /**
  * Get map point data by id
  * @param {number} km
- * @param {ObjectId} user
+ * @param {ObjectId} vid
  * @returns {Promise<MapPoint[]>}
  */
-const getMapPointsByDistanceApart = async (km, user) => {
-  const mapPoints = await getMapPointByUserId(user);
+const getMapPointsByDistanceApart = async (km, vid, user) => {
+  const mapPoints = await getMapPointByVid(vid, user);
   const geoPoints = [];
   return mapPoints.reduce((acc, curr) => {
-    const { geoJSON, ...rest } = curr;
-    const latLong = rest.dataPoints[0].drive_state;
+    const { geoJSON, user: _user, ...rest } = curr.toJSON();
+    const latLong = curr.dataPoints[0].drive_state;
     if (geoPoints.length === 0) {
       geoPoints.push(latLong);
       return [...acc, rest];

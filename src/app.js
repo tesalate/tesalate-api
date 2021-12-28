@@ -7,8 +7,8 @@ const cors = require('cors');
 const passport = require('passport');
 const httpStatus = require('http-status');
 const cookieParser = require('cookie-parser');
-const expressOasGenerator = require('express-oas-generator');
-const mongoose = require('mongoose');
+// const expressOasGenerator = require('express-oas-generator');
+// const mongoose = require('mongoose');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
@@ -17,18 +17,18 @@ const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middleware/error');
 const ApiError = require('./utils/ApiError');
 
-const modelNames = mongoose.modelNames();
+// const modelNames = mongoose.modelNames();
 
 const app = express();
 
-expressOasGenerator.handleResponses(app, {
-  predefinedSpec(spec) {
-    return spec;
-  },
-  specOutputPath: './swagger/test_spec.json',
-  mongooseModels: modelNames,
-  alwaysServeDocs: true,
-});
+// expressOasGenerator.handleResponses(app, {
+//   predefinedSpec(spec) {
+//     return spec;
+//   },
+//   specOutputPath: './swagger/test_spec.json',
+//   mongooseModels: modelNames,
+//   alwaysServeDocs: true,
+// });
 
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
@@ -61,9 +61,9 @@ app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);
 
 // limit repeated failed requests to auth endpoints
-// if (config.env === 'production') {
-//   app.use('/v1/auth', authLimiter);
-// }
+if (config.env === 'production') {
+  app.use('/v1/auth', authLimiter);
+}
 
 // v1 api routes
 app.use('/v1', routes);
@@ -73,7 +73,7 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
-expressOasGenerator.handleRequests();
+// expressOasGenerator.handleRequests();
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));

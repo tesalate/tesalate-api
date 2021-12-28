@@ -28,7 +28,7 @@ const mapPoint = mongoose.Schema(
         required: true,
       },
       coordinates: {
-        type: [[[Number]]],
+        type: [[Number]],
         required: true,
       },
     },
@@ -36,13 +36,13 @@ const mapPoint = mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Vehicle',
       required: [true, 'Vid is required'],
-      autopopulate: { select: '_id' },
+      autopopulate: false,
     },
     user: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: [true, 'User is required'],
-      autopopulate: { select: '_id' },
+      autopopulate: false,
     },
   },
   {
@@ -53,6 +53,7 @@ const mapPoint = mongoose.Schema(
 // add plugin that converts mongoose to json
 mapPoint.plugin(toJSON);
 mapPoint.plugin(paginate);
+mapPoint.plugin(require('mongoose-autopopulate'));
 
 mapPoint.index({ vid: 'text', user: 1 });
 mapPoint.index({ user: 1 });

@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema(
       lowercase: true,
       trim: true,
       validate(username) {
+        // eslint-disable-next-line security/detect-unsafe-regex
         if (!username.match(/^(?![0-9])(?=.{4,36}$)(?:[a-zA-Z_\d]+(?:(?:\.|-|_)[a-zA-Z])*)+$/)) {
           throw new Error('Invalid username');
         }

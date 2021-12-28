@@ -55,6 +55,7 @@ const getUserByEmail = async (email) => {
  * @returns {Promise<User>}
  */
 const getUserByUsername = async (username) => {
+  // eslint-disable-next-line security/detect-non-literal-regexp
   return User.findOne({ username: { $regex: new RegExp(username, 'i') } });
 };
 

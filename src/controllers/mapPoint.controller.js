@@ -16,12 +16,12 @@ const getMapPoints = catchAsync(async (req, res) => {
 });
 
 const getMapPointsByDistanceApart = catchAsync(async (req, res) => {
-  const result = await mapPointService.getMapPointsByDistanceApart(req.params.km, req.user._id);
+  const result = await mapPointService.getMapPointsByDistanceApart(req.query.km, req.params.vid, req.user._id);
   res.send(result);
 });
 
 const getMapPoint = catchAsync(async (req, res) => {
-  const mapPoint = await mapPointService.getMapPointAggregateById(req.params.mapPointId, req.user._id);
+  const mapPoint = await mapPointService.getMapPointById(req.params.mapPointId, req.user._id);
   if (!mapPoint) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Charge session not found');
   }
