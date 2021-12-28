@@ -25,23 +25,22 @@ env:
 
 cache:
   directories:
-    - "$TRAVIS_BUILD_DIR/mongodb"
+    - "./mongodb"
     - "$HOME/.npm"
 
 matrix:
   fast_finish: true
 
 before_install:
-  - chmod +x "$TRAVIS_BUILD_DIR/scripts/travis/install_mongodb.sh" "$TRAVIS_BUILD_DIR/scripts/travis/run_mongodb.sh"
+  - chmod +x "./scripts/travis/install_mongodb.sh" "./scripts/travis/run_mongodb.sh"
 
 install:
   # Don't let npm send metrics as it creates a file in the .npm folder invalidating the cache every time
-  - npm config set send-metrics false
-  - npm i --no-audit
-  - "$TRAVIS_BUILD_DIR/scripts/travis/install_mongodb.sh"
+  - yarn
+  - "./scripts/travis/install_mongodb.sh"
 
 before_script:
-  - "$TRAVIS_BUILD_DIR/scripts/travis/run_mongodb.sh"
+  - "./scripts/travis/run_mongodb.sh"
 script:
   - yarn lint
   - yarn test

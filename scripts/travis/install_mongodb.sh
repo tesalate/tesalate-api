@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-MDB_TGZ=mongodb-linux-x86_64-ubuntu1604-${MONGODB}.tgz
-MDB_ROOT=${TRAVIS_BUILD_DIR}/mongodb/${MONGODB}
+MDB_TGZ=mongodb-linux-x86_64-ubuntu1604-4.2.8.tgz
+MDB_ROOT=${TRAVIS_BUILD_DIR}/mongodb/4.2.8
 MDB_DATA=${TRAVIS_BUILD_DIR}/mongodb-data
 
 # If it doesn't exist, it means the cache didn't pull it
