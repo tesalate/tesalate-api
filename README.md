@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/teslog/main-api.svg?token=zzEoocrLRD3857ju7qrT&branch=main)](https://app.travis-ci.com/teslog/main-api)
+
 # RESTful API Node Server Boilerplate
 
 [![Build Status](https://travis-ci.org/hagopj13/node-express-boilerplate.svg?branch=master)](https://travis-ci.org/hagopj13/node-express-boilerplate)
