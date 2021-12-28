@@ -1,14 +1,14 @@
 language: node_js
 node_js:
   - '15'
-services:
-  - mongodb
 cache: yarn
 branches:
   only:
     - main
+
 env:
   global:
+    - MONGODB=4.2.8
     - APP_NAME=teslog-travis
     - PORT=4400
     - MONGODB_URL=mongodb://localhost:27017/node-boilerplate
@@ -17,6 +17,16 @@ env:
     - JWT_REFRESH_EXPIRATION_DAYS=30
     - TESLA_OAUTH_V3_URL=https://auth.tesla.com/oauth2/v3
     - PUBLIC_URL=http://localhost
+
+install:
+  - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGODB}.tgz
+  - tar xzf mongodb-linux-x86_64-${MONGODB}.tgz
+  - ${PWD}/mongodb-linux-x86_64-${MONGODB}/bin/mongod --version
+
+before_script:
+  - mkdir ${PWD}/mongodb-linux-x86_64-${MONGODB}/data
+  - ${PWD}/mongodb-linux-x86_64-${MONGODB}/bin/mongod --dbpath ${PWD}/mongodb-linux-x86_64-${MONGODB}/data --logpath ${PWD}/mongodb-linux-x86_64-${MONGODB}/mongodb.log --fork
+
 script:
   - yarn lint
   - yarn test
