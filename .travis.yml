@@ -9,7 +9,7 @@ branches:
     - main
 env:
   global:
-    - APP_NAM=teslog-travis
+    - APP_NAME=teslog-travis
     - PORT=4400
     - MONGODB_URL=mongodb://localhost:27017/node-boilerplate
     - JWT_SECRET=thisisasamplesecret
