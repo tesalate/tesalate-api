@@ -141,11 +141,17 @@ userSchema.pre('save', async function () {
 
 userSchema.post('remove', async function (user) {
   try {
+    // if a user is deleted, remove all associated documents from all collections
     await mongoose.model('TeslaAccount').findOneAndDelete({ user: user._id });
     await mongoose.model('Vehicle').deleteMany({ user: user._id });
     await mongoose.model('Token').deleteMany({ user: user._id });
+    await mongoose.model('DriveSession').deleteMany({ user: user._id });
+    await mongoose.model('ChargeSession').deleteMany({ user: user._id });
+    await mongoose.model('Reminder').deleteMany({ user: user._id });
+    await mongoose.model('Reminder').deleteMany({ user: user._id });
+    await mongoose.model('VehicleData').deleteMany({ user: user._id });
   } catch (err) {
-    throw new Error('something went wrong', err);
+    throw new Error('something went wrong post remove of a user', err);
   }
 });
 

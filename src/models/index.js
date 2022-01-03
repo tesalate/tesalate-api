@@ -8,3 +8,4 @@ module.exports.DriveSession = require('./driveSession.model');
 module.exports.MapPoint = require('./mapPoint.model');
 module.exports.Reminder = require('./reminder.model');
 module.exports.Charger = require('./charger.model');
+module.exports.Flag = require('./flag.model');

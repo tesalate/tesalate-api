@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
 const { tokenCookieOptions, refreshTokenCookieOptions } = require('../config/tokens');
 
-const register = catchAsync(async (req, res) => {
+const register = catchAsync(async (req, res, next) => {
   const newUser = req.body;
 
   // CREATE USER
@@ -18,6 +18,7 @@ const register = catchAsync(async (req, res) => {
     .cookie('token', accessToken, tokenCookieOptions)
     .cookie('refreshToken', refreshToken, refreshTokenCookieOptions)
     .send({ user });
+  next();
 });
 
 const login = catchAsync(async (req, res) => {

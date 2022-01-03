@@ -7,7 +7,7 @@ const mapPoint = mongoose.Schema(
       type: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'CompleteVehicleDataPoint',
+          ref: 'VehicleData',
           autopopulate: { select: '_id drive_state.longitude drive_state.latitude drive_state.heading' },
         },
       ],
@@ -28,14 +28,14 @@ const mapPoint = mongoose.Schema(
         required: true,
       },
       coordinates: {
-        type: [[Number]],
+        type: [[[Number]]],
         required: true,
       },
     },
-    vid: {
+    vehicle: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Vehicle',
-      required: [true, 'Vid is required'],
+      required: [true, 'vehicle is required'],
       autopopulate: false,
     },
     user: {
@@ -55,7 +55,7 @@ mapPoint.plugin(toJSON);
 mapPoint.plugin(paginate);
 mapPoint.plugin(require('mongoose-autopopulate'));
 
-mapPoint.index({ vid: 'text', user: 1 });
+mapPoint.index({ vehicle: 'text', user: 1 });
 mapPoint.index({ user: 1 });
 
 /**

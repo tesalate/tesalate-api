@@ -109,7 +109,7 @@ const vehicleData = mongoose.Schema(
         required: true,
       },
     },
-    vid: {
+    vehicle: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Vehicle',
       required: true,
@@ -132,12 +132,13 @@ vehicleData.plugin(toJSON);
 vehicleData.plugin(paginate);
 
 vehicleData.index({ vin: 'text', user: 1 });
+vehicleData.index({ _id: -1, user: 1 });
 vehicleData.index({ user: 1 });
 vehicleData.index({ GeoJSON: '2dsphere', user: 1 });
 
 /**
  * @typedef VehicleData
  */
-const VehicleData = mongoose.model('CompleteVehicleDataPoint', vehicleData);
+const VehicleData = mongoose.model('VehicleData', vehicleData, 'vehicledata');
 
 module.exports = VehicleData;

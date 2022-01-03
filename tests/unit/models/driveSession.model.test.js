@@ -70,8 +70,8 @@ describe('DriveSession model', () => {
       await expect(new DriveSession(newDriveSession).validate()).rejects.toThrow();
     });
 
-    test('should throw a validation error if vid is not a objectId', async () => {
-      newDriveSession.vid = faker.datatype.array(2);
+    test('should throw a validation error if vehicle is not a objectId', async () => {
+      newDriveSession.vehicle = faker.datatype.array(2);
       await expect(new DriveSession(newDriveSession).validate()).rejects.toThrow();
     });
 

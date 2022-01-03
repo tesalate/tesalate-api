@@ -44,7 +44,7 @@ const getChargeSessionAggregateById = async (_id, user) => {
     },
     {
       $lookup: {
-        from: 'completevehicledatapoints',
+        from: 'vehicledata',
         let: { locator: '$dataPoints' },
         pipeline: [
           { $match: { $expr: { $eq: ['$_id', '$$locator'] } } },

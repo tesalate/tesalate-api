@@ -60,8 +60,8 @@ describe('ChargeSession model', () => {
       await expect(new ChargeSession(newChargeSession).validate()).rejects.toThrow();
     });
 
-    test('should throw a validation error if vid is not a objectId', async () => {
-      newChargeSession.vid = faker.datatype.array(2);
+    test('should throw a validation error if vehicle is not a objectId', async () => {
+      newChargeSession.vehicle = faker.datatype.array(2);
       await expect(new ChargeSession(newChargeSession).validate()).rejects.toThrow();
     });
 

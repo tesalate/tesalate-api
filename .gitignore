@@ -10,3 +10,8 @@ yarn-error.log
 
 # Code coverage
 coverage
+
+# db scripts
+scripts/db
+
+.debug

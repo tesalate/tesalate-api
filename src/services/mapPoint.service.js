@@ -29,12 +29,12 @@ const getMapPointById = async (_id, user) => {
 
 /**
  * Get map point by vehicle id
- * @param {ObjectId} vid
+ * @param {ObjectId} vehicle
  * @param {ObjectId} user
  * @returns {Promise<MapPoint>}
  */
-const getMapPointByVid = async (vid, user) => {
-  return MapPoint.find({ vid, user });
+const getMapPointByVid = async (vehicle, user) => {
+  return MapPoint.find({ vehicle, user });
 };
 
 /**
@@ -55,11 +55,11 @@ const deleteMapPointById = async (mapPointPointId, user) => {
 /**
  * Get map point data by id
  * @param {number} km
- * @param {ObjectId} vid
+ * @param {ObjectId} vehicle
  * @returns {Promise<MapPoint[]>}
  */
-const getMapPointsByDistanceApart = async (km, vid, user) => {
-  const mapPoints = await getMapPointByVid(vid, user);
+const getMapPointsByDistanceApart = async (km, vehicle, user) => {
+  const mapPoints = await getMapPointByVid(vehicle, user);
   const geoPoints = [];
   return mapPoints
     .sort((a, b) => a.updatedAt - b.updatedAt)

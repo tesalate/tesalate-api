@@ -29,6 +29,7 @@ const envVarsSchema = Joi.object()
     MAX_COOKIE_AGE: Joi.number()
       .default(86400 * 1000 * 60)
       .description('minutes after which cookies expire'),
+    ACCEPTED_CORS: Joi.string().description('allowed urls for cors').required(),
   })
   .unknown();
 
@@ -72,5 +73,8 @@ module.exports = {
   },
   tesla: {
     oauthUrl: envVars.TESLA_OAUTH_V3_URL,
+  },
+  cors: {
+    allowedUrls: envVars.ACCEPTED_CORS,
   },
 };

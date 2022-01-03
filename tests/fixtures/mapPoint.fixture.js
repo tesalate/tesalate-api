@@ -37,11 +37,13 @@ const mapPoint = {
     {
       type: 'Polygon',
       coordinates: [
-        [lowLong, lowLat],
-        [lowLong, highLat],
-        [highLong, highLat],
-        [highLong, lowLat],
-        [lowLong, lowLat],
+        [
+          [lowLong, lowLat],
+          [lowLong, highLat],
+          [highLong, highLat],
+          [highLong, lowLat],
+          [lowLong, lowLat],
+        ],
       ],
     },
   ]),
@@ -51,21 +53,21 @@ const mapPointForVehicleOneForAdmin = {
   ...mapPoint,
   _id: mongoose.Types.ObjectId(),
   user: vehicleOneForAdmin.user,
-  vid: vehicleOneForAdmin._id,
+  vehicle: vehicleOneForAdmin._id,
 };
 
 const mapPointForVehicleOneForUser = {
   ...mapPoint,
   _id: mongoose.Types.ObjectId(),
   user: vehicleOneForUser.user,
-  vid: vehicleOneForUser._id,
+  vehicle: vehicleOneForUser._id,
 };
 
 const mapPointForVehicleTwoForUser = {
   ...mapPoint,
   _id: mongoose.Types.ObjectId(),
   user: vehicleTwoForUser.user,
-  vid: vehicleTwoForUser._id,
+  vehicle: vehicleTwoForUser._id,
 };
 
 const insertMapPoints = async (mapPoints) => {

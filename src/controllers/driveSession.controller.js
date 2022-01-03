@@ -7,7 +7,7 @@ const pick = require('../utils/pick');
 const getDriveSessions = catchAsync(async (req, res) => {
   const filter = {
     ...pick(req.query, [
-      'vid',
+      'vehicle',
       'startDate',
       'endDate',
       'maxSpeed',

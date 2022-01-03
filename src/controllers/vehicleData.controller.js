@@ -6,7 +6,7 @@ const pick = require('../utils/pick');
 
 const getVehicleDataPoints = catchAsync(async (req, res) => {
   const filter = {
-    ...pick(req.query, ['vin', 'vehicle_id', 'id_s', 'display_name', 'state', 'vid']),
+    ...pick(req.query, ['vin', 'vehicle_id', 'id_s', 'display_name', 'state', 'vehicle']),
     user: req.user._id,
   };
 

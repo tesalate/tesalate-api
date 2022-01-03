@@ -7,7 +7,7 @@ const getMapPoints = {
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
 
-    vid: Joi.string().custom(objectId),
+    vehicle: Joi.string().custom(objectId),
     latLongString: Joi.string(),
     visitCount: Joi.number().integer(),
   }),
@@ -15,7 +15,7 @@ const getMapPoints = {
 
 const getMapPointsByDistanceApart = {
   params: {
-    vid: Joi.string().custom(objectId).required(),
+    vehicle: Joi.string().custom(objectId).required(),
   },
   query: Joi.object().keys({
     km: Joi.number(),

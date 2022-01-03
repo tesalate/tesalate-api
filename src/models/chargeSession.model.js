@@ -7,7 +7,7 @@ const chargeSession = mongoose.Schema(
       type: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'CompleteVehicleDataPoint',
+          ref: 'VehicleData',
           autopopulate: false,
         },
       ],
@@ -36,25 +36,17 @@ const chargeSession = mongoose.Schema(
     flags: {
       type: [
         {
-          type: {
-            type: String,
-            enum: ['warning', 'error', 'info'],
-            default: 'info',
-            required: [true, 'Type is required'],
-          },
-          message: {
-            type: String,
-            default: '',
-            required: [true, 'Message is required'],
-          },
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Flag',
+          autopopulate: true,
         },
       ],
       default: [],
     },
-    vid: {
+    vehicle: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Vehicle',
-      required: [true, 'Vid is required'],
+      required: [true, 'vehicle is required'],
       autopopulate: false,
     },
     user: {
@@ -72,16 +64,17 @@ const chargeSession = mongoose.Schema(
 // add plugin that converts mongoose to json
 chargeSession.plugin(toJSON);
 chargeSession.plugin(paginate);
+chargeSession.plugin(require('mongoose-autopopulate'));
 
-chargeSession.index({ vid: 'text', user: 1 });
+chargeSession.index({ vehicle: 'text', user: 1 });
 chargeSession.index({ user: 1 });
 
 chargeSession.post('remove', { query: false, document: true }, async (session) => {
   try {
-    await mongoose.model('CompleteVehicleDataPoint').deleteMany({ charge_session_id: session._id });
+    await mongoose.model('VehicleData').deleteMany({ charge_session_id: session._id });
     return;
   } catch (err) {
-    throw new Error('something went wrong', err);
+    throw new Error('something went wrong post save for charge session', err);
   }
 });
 

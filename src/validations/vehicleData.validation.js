@@ -8,7 +8,7 @@ const getVehicleDataPoints = {
     page: Joi.number().integer(),
 
     vin: Joi.string(),
-    vid: Joi.string(),
+    vehicle: Joi.string(),
     vehicle_id: Joi.number(),
     id_s: Joi.string(),
     display_name: Joi.string(),

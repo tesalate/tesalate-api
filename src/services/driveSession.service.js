@@ -44,7 +44,7 @@ const getDriveSessionAggregateById = async (_id, user) => {
     },
     {
       $lookup: {
-        from: 'completevehicledatapoints',
+        from: 'vehicledata',
         let: { locator: '$dataPoints' },
         pipeline: [
           { $match: { $expr: { $eq: ['$_id', '$$locator'] } } },
@@ -91,7 +91,7 @@ const getDriveSessionAggregateById = async (_id, user) => {
         inTemp: { $push: '$populated.climate_state.inside_temp' },
         mapData: {
           $push: {
-            vid: '$vid',
+            vehicle: '$vehicle',
             dataPoints: [
               {
                 _id: '$populated._id',

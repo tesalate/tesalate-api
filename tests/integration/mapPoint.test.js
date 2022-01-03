@@ -41,7 +41,7 @@ describe('MapPoint routes', () => {
       expect(res.body.results[0]).toEqual({
         ...mapPointForVehicleOneForAdmin,
         _id: mapPointForVehicleOneForAdmin._id.toHexString(),
-        vid: mapPointForVehicleOneForAdmin.vid.toHexString(),
+        vehicle: mapPointForVehicleOneForAdmin.vehicle.toHexString(),
         user: mapPointForVehicleOneForAdmin.user.toHexString(),
         dataPoints: expect.anything(),
       });
@@ -75,14 +75,14 @@ describe('MapPoint routes', () => {
       await request(app).get('/v1/map-points').send().expect(httpStatus.UNAUTHORIZED);
     });
 
-    test('should correctly apply filter on vid field for map point', async () => {
+    test('should correctly apply filter on vehicle field for map point', async () => {
       await insertUsers([userOne]);
       await insertMapPoints([mapPointForVehicleOneForUser, mapPointForVehicleTwoForUser]);
 
       const res = await request(app)
         .get('/v1/map-points')
         .set('Cookie', `token=${userOneAccessToken}`)
-        .query({ vid: mapPointForVehicleOneForUser.vid.toHexString() })
+        .query({ vehicle: mapPointForVehicleOneForUser.vehicle.toHexString() })
         .send()
         .expect(httpStatus.OK);
 
@@ -97,14 +97,14 @@ describe('MapPoint routes', () => {
       expect(res.body.results[0]._id).toBe(mapPointForVehicleOneForUser._id.toHexString());
     });
 
-    test('should return 0 map points when searching for vid that the user does not own', async () => {
+    test('should return 0 map points when searching for vehicle that the user does not own', async () => {
       await insertUsers([userOne]);
       await insertMapPoints([mapPointForVehicleOneForAdmin, mapPointForVehicleTwoForUser]);
 
       const res = await request(app)
         .get('/v1/map-points')
         .set('Cookie', `token=${userOneAccessToken}`)
-        .query({ vid: mapPointForVehicleOneForAdmin.vid.toHexString() })
+        .query({ vehicle: mapPointForVehicleOneForAdmin.vehicle.toHexString() })
         .send()
         .expect(httpStatus.OK);
 
@@ -259,7 +259,7 @@ describe('MapPoint routes', () => {
         ...mapPointForVehicleOneForUser,
         _id: mapPointForVehicleOneForUser._id.toHexString(),
         user: mapPointForVehicleOneForUser.user.toHexString(),
-        vid: mapPointForVehicleOneForUser.vid.toHexString(),
+        vehicle: mapPointForVehicleOneForUser.vehicle.toHexString(),
         dataPoints: expect.anything(),
       });
     });
@@ -307,7 +307,7 @@ describe('MapPoint routes', () => {
       ]);
 
       const res = await request(app)
-        .get(`/v1/map-points/distance/${mapPointForVehicleOneForUser.vid}`)
+        .get(`/v1/map-points/distance/${mapPointForVehicleOneForUser.vehicle}`)
         .query({ km: 100 })
         .set('Cookie', `token=${userOneAccessToken}`)
         .send()
@@ -333,7 +333,7 @@ describe('MapPoint routes', () => {
           ],
           latLongString: mapPointForVehicleOneForUser.latLongString,
           visitCount: mapPointForVehicleOneForUser.visitCount,
-          vid: mapPointForVehicleOneForUser.vid.toHexString(),
+          vehicle: mapPointForVehicleOneForUser.vehicle.toHexString(),
         },
       ]);
     });

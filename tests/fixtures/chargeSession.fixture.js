@@ -3,34 +3,14 @@ const faker = require('faker');
 const { ChargeSession, VehicleData } = require('../../src/models');
 const { vehicleOneForAdmin, vehicleOneForUser, vehicleTwoForUser } = require('./vehicle.fixture');
 const { dataPointForVehicleOneForAdmin } = require('./vehicleData.fixture');
+const { infoFlag, warningFlag, errorFlag } = require('./flag.fixture');
 
 const chargeSession = {
   dataPoints: Array.from({ length: faker.datatype.number(100) }, () => mongoose.Types.ObjectId()),
   maxChargeRate: faker.datatype.number(),
   energyAdded: faker.datatype.float({ min: 0, max: 100, precision: 2 }),
   charger: mongoose.Types.ObjectId(),
-  flags: faker.random.arrayElement([
-    [
-      {
-        _id: mongoose.Types.ObjectId(),
-        type: faker.random.arrayElement(['warning', 'error', 'info']),
-        message: faker.lorem.sentence(),
-      },
-    ],
-    [
-      {
-        _id: mongoose.Types.ObjectId(),
-        type: faker.random.arrayElement(['warning', 'error', 'info']),
-        message: faker.lorem.sentence(),
-      },
-      {
-        _id: mongoose.Types.ObjectId(),
-        type: faker.random.arrayElement(['warning', 'error', 'info']),
-        message: faker.lorem.sentence(),
-      },
-    ],
-    [],
-  ]),
+  flags: faker.random.arrayElement([[infoFlag], [infoFlag, warningFlag], [errorFlag], []]),
   geoJSON: faker.random.arrayElement([
     {
       type: 'Point',
@@ -44,21 +24,21 @@ const chargeSession = {
 const chargeSessionForVehicleOneForAdmin = {
   _id: mongoose.Types.ObjectId(),
   user: vehicleOneForAdmin.user,
-  vid: vehicleOneForAdmin._id,
+  vehicle: vehicleOneForAdmin._id,
   ...chargeSession,
 };
 
 const chargeSessionForVehicleOneForUser = {
   _id: mongoose.Types.ObjectId(),
   user: vehicleOneForUser.user,
-  vid: vehicleOneForUser._id,
+  vehicle: vehicleOneForUser._id,
   ...chargeSession,
 };
 
 const chargeSessionForVehicleTwoForUser = {
   _id: mongoose.Types.ObjectId(),
   user: vehicleTwoForUser.user,
-  vid: vehicleTwoForUser._id,
+  vehicle: vehicleTwoForUser._id,
   ...chargeSession,
 };
 
@@ -69,7 +49,7 @@ const insertChargeSessions = async (chargeSessions) => {
       const { _id, ...rest } = dataPointForVehicleOneForAdmin;
       const arr = Array.from({ length: faker.datatype.number({ min: 1, max: 12 }) }, (_, i) => ({
         ...rest,
-        vid: data.vid,
+        vehicle: data.vehicle,
         charge_session_id: data._id,
         charge_state: {
           ...rest.charge_state,
