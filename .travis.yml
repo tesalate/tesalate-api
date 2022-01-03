@@ -21,6 +21,7 @@ env:
     - JWT_REFRESH_EXPIRATION_DAYS=30
     - TESLA_OAUTH_V3_URL=https://auth.tesla.com/oauth2/v3
     - PUBLIC_URL=http://localhost
+    - ACCEPTED_CORS=http://localhost:4400
   matrix:
     - MONGODB=4.2.8
 
