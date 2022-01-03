@@ -40,8 +40,8 @@ describe('MapPoint model', () => {
       await expect(new MapPoint(newMapPoint).validate()).rejects.toThrow();
     });
 
-    test('should throw a validation error if vid is not a objectId', async () => {
-      newMapPoint.vid = faker.datatype.array(2);
+    test('should throw a validation error if vehicle is not a objectId', async () => {
+      newMapPoint.vehicle = faker.datatype.array(2);
       await expect(new MapPoint(newMapPoint).validate()).rejects.toThrow();
     });
   });

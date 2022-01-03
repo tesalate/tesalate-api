@@ -241,7 +241,7 @@ const dataPointForVehicleOneForAdmin = {
   in_service: vehicleOneForAdmin.in_service,
   id_s: vehicleOneForAdmin.id_s,
   calendar_enabled: vehicleOneForAdmin.calendar_enabled,
-  vid: vehicleOneForAdmin._id,
+  vehicle: vehicleOneForAdmin._id,
   api_version: vehicleOneForAdmin.api_version,
   ...vehicleData,
 };
@@ -263,7 +263,7 @@ const dataPointForVehicleOneForUser = {
   in_service: vehicleOneForUser.in_service,
   id_s: vehicleOneForUser.id_s,
   calendar_enabled: vehicleOneForUser.calendar_enabled,
-  vid: vehicleOneForUser._id,
+  vehicle: vehicleOneForUser._id,
   api_version: vehicleOneForUser.api_version,
   ...vehicleData,
 };
@@ -285,7 +285,7 @@ const dataPointForVehicleTwoForUser = {
   in_service: vehicleTwoForUser.in_service,
   id_s: vehicleTwoForUser.id_s,
   calendar_enabled: vehicleTwoForUser.calendar_enabled,
-  vid: vehicleTwoForUser._id,
+  vehicle: vehicleTwoForUser._id,
   api_version: vehicleTwoForUser.api_version,
   ...vehicleData,
 };

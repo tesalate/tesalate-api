@@ -7,7 +7,7 @@ const getDriveSessions = {
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
 
-    vid: Joi.string(),
+    vehicle: Joi.string(),
     startDate: Joi.date(),
     endDate: Joi.date(),
     maxSpeed: Joi.string(),

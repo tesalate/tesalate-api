@@ -15,13 +15,13 @@ const { adminAccessToken, userOneAccessToken } = require('../fixtures/token.fixt
 setupTestDB();
 
 describe('VehicleData routes', () => {
-  describe('GET /v1/vehicle-data-points', () => {
+  describe('GET /v1/vehicle-data', () => {
     test('should return 200 and apply the default query options', async () => {
       await insertUsers([admin, userOne]);
       await insertVehicleDataPoints([dataPointForVehicleOneForAdmin, dataPointForVehicleOneForUser]);
 
       const res = await request(app)
-        .get('/v1/vehicle-data-points')
+        .get('/v1/vehicle-data')
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.OK);
@@ -40,7 +40,7 @@ describe('VehicleData routes', () => {
         user: dataPointForVehicleOneForAdmin.user.toHexString(),
         id: dataPointForVehicleOneForAdmin.id,
         _id: dataPointForVehicleOneForAdmin._id.toHexString(),
-        vid: dataPointForVehicleOneForAdmin.vid.toHexString(),
+        vehicle: dataPointForVehicleOneForAdmin.vehicle.toHexString(),
         drive_session_id: dataPointForVehicleOneForAdmin.drive_session_id
           ? dataPointForVehicleOneForAdmin.drive_session_id.toHexString()
           : null,
@@ -59,7 +59,7 @@ describe('VehicleData routes', () => {
       ]);
 
       const res = await request(app)
-        .get('/v1/vehicle-data-points')
+        .get('/v1/vehicle-data')
         .set('Cookie', `token=${adminAccessToken}`)
         .expect(httpStatus.OK);
       expect(res.body.results).toHaveLength(1);
@@ -75,7 +75,7 @@ describe('VehicleData routes', () => {
       ]);
 
       const res = await request(app)
-        .get(`/v1/vehicle-data-points`)
+        .get(`/v1/vehicle-data`)
         .set('Cookie', `token=${userOneAccessToken}`)
         .expect(httpStatus.OK);
 
@@ -86,7 +86,7 @@ describe('VehicleData routes', () => {
     test('should return 401 if access token is missing', async () => {
       await insertVehicleDataPoints([dataPointForVehicleOneForAdmin]);
 
-      await request(app).get('/v1/vehicle-data-points').send().expect(httpStatus.UNAUTHORIZED);
+      await request(app).get('/v1/vehicle-data').send().expect(httpStatus.UNAUTHORIZED);
     });
 
     test('should correctly apply filter on vin field', async () => {
@@ -94,7 +94,7 @@ describe('VehicleData routes', () => {
       await insertVehicleDataPoints([dataPointForVehicleOneForUser, dataPointForVehicleTwoForUser]);
 
       const res = await request(app)
-        .get('/v1/vehicle-data-points')
+        .get('/v1/vehicle-data')
         .set('Cookie', `token=${userOneAccessToken}`)
         .query({ vin: dataPointForVehicleOneForUser.vin })
         .send()
@@ -116,7 +116,7 @@ describe('VehicleData routes', () => {
       await insertVehicleDataPoints([dataPointForVehicleOneForAdmin, dataPointForVehicleTwoForUser]);
 
       const res = await request(app)
-        .get('/v1/vehicle-data-points')
+        .get('/v1/vehicle-data')
         .set('Cookie', `token=${userOneAccessToken}`)
         .query({ vin: dataPointForVehicleOneForAdmin.vin })
         .send()
@@ -137,7 +137,7 @@ describe('VehicleData routes', () => {
       await insertVehicleDataPoints([dataPointForVehicleOneForUser, dataPointForVehicleTwoForUser]);
 
       const res = await request(app)
-        .get('/v1/vehicle-data-points')
+        .get('/v1/vehicle-data')
         .set('Cookie', `token=${userOneAccessToken}`)
         .query({ sortBy: '_id:asc' })
         .send()
@@ -160,7 +160,7 @@ describe('VehicleData routes', () => {
       await insertVehicleDataPoints([dataPointForVehicleOneForUser, dataPointForVehicleTwoForUser]);
 
       const res = await request(app)
-        .get('/v1/vehicle-data-points')
+        .get('/v1/vehicle-data')
         .set('Cookie', `token=${userOneAccessToken}`)
         .query({ sortBy: '_id:desc' })
         .send()
@@ -183,7 +183,7 @@ describe('VehicleData routes', () => {
       await insertVehicleDataPoints([dataPointForVehicleOneForUser, dataPointForVehicleTwoForUser]);
 
       const res = await request(app)
-        .get('/v1/vehicle-data-points')
+        .get('/v1/vehicle-data')
         .set('Cookie', `token=${userOneAccessToken}`)
         .query({ sortBy: 'vin:desc,color:asc' })
         .send()
@@ -218,7 +218,7 @@ describe('VehicleData routes', () => {
       await insertVehicleDataPoints([dataPointForVehicleOneForUser, dataPointForVehicleTwoForUser]);
 
       const res = await request(app)
-        .get('/v1/vehicle-data-points')
+        .get('/v1/vehicle-data')
         .set('Cookie', `token=${userOneAccessToken}`)
         .query({ limit: 1 })
         .send()
@@ -244,7 +244,7 @@ describe('VehicleData routes', () => {
       ]);
 
       const res = await request(app)
-        .get('/v1/vehicle-data-points')
+        .get('/v1/vehicle-data')
         .set('Cookie', `token=${userOneAccessToken}`)
         .query({ page: 2, limit: 1 })
         .send()
@@ -262,13 +262,13 @@ describe('VehicleData routes', () => {
     });
   });
 
-  describe('GET /v1/vehicle-data-points/:vehicleDataId', () => {
+  describe('GET /v1/vehicle-data/:vehicleDataId', () => {
     test('should return 200 and the vehicle object if data is ok', async () => {
       await insertUsers([admin]);
       await insertVehicleDataPoints([dataPointForVehicleOneForAdmin]);
 
       const res = await request(app)
-        .get(`/v1/vehicle-data-points/${dataPointForVehicleOneForAdmin._id}`)
+        .get(`/v1/vehicle-data/${dataPointForVehicleOneForAdmin._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.OK);
@@ -277,7 +277,7 @@ describe('VehicleData routes', () => {
         ...rest,
         _id: dataPointForVehicleOneForAdmin._id.toHexString(),
         id: dataPointForVehicleOneForAdmin.id,
-        vid: dataPointForVehicleOneForAdmin.vid.toHexString(),
+        vehicle: dataPointForVehicleOneForAdmin.vehicle.toHexString(),
         user: dataPointForVehicleOneForAdmin.user.toHexString(),
         drive_session_id: dataPointForVehicleOneForAdmin.drive_session_id
           ? dataPointForVehicleOneForAdmin.drive_session_id.toHexString()
@@ -292,7 +292,7 @@ describe('VehicleData routes', () => {
       await insertVehicleDataPoints([dataPointForVehicleOneForAdmin]);
 
       await request(app)
-        .get(`/v1/vehicle-data-points/${dataPointForVehicleOneForAdmin._id}`)
+        .get(`/v1/vehicle-data/${dataPointForVehicleOneForAdmin._id}`)
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -301,7 +301,7 @@ describe('VehicleData routes', () => {
       await insertUsers([admin]);
 
       await request(app)
-        .get('/v1/vehicle-data-points/invalidId')
+        .get('/v1/vehicle-data/invalidId')
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.BAD_REQUEST);
@@ -311,20 +311,20 @@ describe('VehicleData routes', () => {
       await insertUsers([admin]);
 
       await request(app)
-        .get(`/v1/vehicle-data-points/${dataPointForVehicleOneForAdmin._id}`)
+        .get(`/v1/vehicle-data/${dataPointForVehicleOneForAdmin._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);
     });
   });
 
-  describe('DELETE /v1/vehicle-data-points/:vehicleDataId', () => {
+  describe('DELETE /v1/vehicle-data/:vehicleDataId', () => {
     test('should return 204 if vehicle data is deleted', async () => {
       await insertUsers([userOne]);
       await insertVehicleDataPoints([dataPointForVehicleOneForUser]);
 
       await request(app)
-        .delete(`/v1/vehicle-data-points/${dataPointForVehicleOneForUser._id}`)
+        .delete(`/v1/vehicle-data/${dataPointForVehicleOneForUser._id}`)
         .set('Cookie', `token=${userOneAccessToken}`)
         .send()
         .expect(httpStatus.NO_CONTENT);
@@ -337,7 +337,7 @@ describe('VehicleData routes', () => {
       await insertVehicleDataPoints([dataPointForVehicleOneForAdmin]);
 
       await request(app)
-        .delete(`/v1/vehicle-data-points/${dataPointForVehicleOneForAdmin._id}`)
+        .delete(`/v1/vehicle-data/${dataPointForVehicleOneForAdmin._id}`)
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -346,7 +346,7 @@ describe('VehicleData routes', () => {
       await insertUsers([admin]);
 
       await request(app)
-        .delete('/v1/vehicle-data-points/invalidId')
+        .delete('/v1/vehicle-data/invalidId')
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.BAD_REQUEST);
@@ -356,7 +356,7 @@ describe('VehicleData routes', () => {
       await insertUsers([admin]);
 
       await request(app)
-        .delete(`/v1/vehicle-data-points/${dataPointForVehicleOneForAdmin._id}`)
+        .delete(`/v1/vehicle-data/${dataPointForVehicleOneForAdmin._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);

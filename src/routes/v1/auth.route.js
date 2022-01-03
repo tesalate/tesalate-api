@@ -28,45 +28,10 @@ module.exports = router;
  * @swagger
  * /auth/register:
  *   post:
- *     summary: Register as user
+ *     summary: Register a user
  *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - username
- *               - firstName
- *               - lastName
- *               - email
- *               - password
- *             properties:
- *               username:
- *                 type: string
- *                 description: must be unique
- *               firstName:
- *                 type: string
- *               lastName:
- *                 type: string
- *               email:
- *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
- *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *             example:
- *               username: fake_name
- *               firstName: fake
- *               lastName: name
- *               email: fake@example.com
- *               password: password1
  *     responses:
- *       "201":
+ *       '201':
  *         description: Created
  *         content:
  *           application/json:
@@ -74,9 +39,53 @@ module.exports = router;
  *               type: object
  *               properties:
  *                 user:
- *                   $ref: '#/components/schemas/User'
- *       "400":
- *         $ref: '#/components/responses/DuplicateEmail'
+ *                   type: object
+ *                   properties:
+ *                     role:
+ *                       type: string
+ *                       example: user
+ *                     isEmailVerified:
+ *                       type: boolean
+ *                       example: false
+ *                     teslaAccount:
+ *                       example: null
+ *                       nullable: true
+ *                     vehicles:
+ *                       type: array
+ *                       items: {}
+ *                       example:
+ *                         - null
+ *                     _id:
+ *                       type: string
+ *                       example: 61cb977d920b494e14d59f74
+ *                     firstName:
+ *                       type: string
+ *                       example: Nicklaus
+ *                     lastName:
+ *                       type: string
+ *                       example: Champlin
+ *                     username:
+ *                       type: string
+ *                       example: cleora97
+ *                     displayName:
+ *                       type: string
+ *                       example: CLEORA97
+ *                     email:
+ *                       type: string
+ *                       example: rahul92@gmail.com
+ *       '400':
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: '"email" must be a valid email'
  */
 
 /**

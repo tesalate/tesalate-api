@@ -24,10 +24,10 @@ const reminder = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    vid: {
+    vehicle: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Vehicle',
-      required: [true, 'Vid is required'],
+      required: [true, 'vehicle is required'],
       autopopulate: false,
     },
     user: {
@@ -46,7 +46,7 @@ const reminder = mongoose.Schema(
 reminder.plugin(toJSON);
 reminder.plugin(paginate);
 
-reminder.index({ vid: 'text', user: 1 });
+reminder.index({ vehicle: 'text', user: 1 });
 reminder.index({ user: 1 });
 
 /**

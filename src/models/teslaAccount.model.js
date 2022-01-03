@@ -51,7 +51,7 @@ teslaAccountSchema.post('save', async (account) => {
     user.teslaAccount = account._id;
     return user.save();
   } catch (err) {
-    throw new Error('something went wrong', err);
+    throw new Error('something went wrong post save of tesla account', err.message);
   }
 });
 
@@ -61,7 +61,7 @@ teslaAccountSchema.post('remove', { query: false, document: true }, async (accou
     user.teslaAccount = null;
     return user.save();
   } catch (err) {
-    throw new Error('something went wrong', err);
+    throw new Error('something went wrong post remove of testa account', err);
   }
 });
 

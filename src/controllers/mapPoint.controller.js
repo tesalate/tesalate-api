@@ -6,7 +6,7 @@ const pick = require('../utils/pick');
 
 const getMapPoints = catchAsync(async (req, res) => {
   const filter = {
-    ...pick(req.query, ['vid', 'latLongString', 'visitCount']),
+    ...pick(req.query, ['vehicle', 'latLongString', 'visitCount']),
     user: req.user._id,
   };
 
@@ -16,7 +16,7 @@ const getMapPoints = catchAsync(async (req, res) => {
 });
 
 const getMapPointsByDistanceApart = catchAsync(async (req, res) => {
-  const result = await mapPointService.getMapPointsByDistanceApart(req.query.km, req.params.vid, req.user._id);
+  const result = await mapPointService.getMapPointsByDistanceApart(req.query.km, req.params.vehicle, req.user._id);
   res.send(result);
 });
 

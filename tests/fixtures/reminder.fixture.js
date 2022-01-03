@@ -14,21 +14,21 @@ const reminder = {
 const reminderForVehicleOneForAdmin = {
   _id: mongoose.Types.ObjectId(),
   user: vehicleOneForAdmin.user,
-  vid: vehicleOneForAdmin._id,
+  vehicle: vehicleOneForAdmin._id,
   ...reminder,
 };
 
 const reminderForVehicleOneForUser = {
   _id: mongoose.Types.ObjectId(),
   user: vehicleOneForUser.user,
-  vid: vehicleOneForUser._id,
+  vehicle: vehicleOneForUser._id,
   ...reminder,
 };
 
 const reminderForVehicleTwoForUser = {
   _id: mongoose.Types.ObjectId(),
   user: vehicleTwoForUser.user,
-  vid: vehicleTwoForUser._id,
+  vehicle: vehicleTwoForUser._id,
   ...reminder,
 };
 

@@ -11,6 +11,7 @@ const {
 const { insertUsers, admin, userOne } = require('../fixtures/user.fixture');
 const { adminAccessToken, userOneAccessToken } = require('../fixtures/token.fixture');
 const { VehicleData, DriveSession } = require('../../src/models');
+const { insertFlags, infoFlag, warningFlag, errorFlag } = require('../fixtures/flag.fixture');
 
 setupTestDB();
 
@@ -18,6 +19,7 @@ describe('DriveSession routes', () => {
   describe('GET /v1/drive-sessions', () => {
     test('should return 200 and apply the default query options for drive sessions', async () => {
       await insertUsers([admin, userOne]);
+      await insertFlags([infoFlag, warningFlag, errorFlag]);
       await insertDriveSessions([driveSessionForVehicleOneForAdmin, driveSessionForVehicleOneForUser]);
 
       const res = await request(app)
@@ -37,7 +39,7 @@ describe('DriveSession routes', () => {
       expect(res.body.results[0]).toEqual({
         ...driveSessionForVehicleOneForAdmin,
         _id: driveSessionForVehicleOneForAdmin._id.toHexString(),
-        vid: driveSessionForVehicleOneForAdmin.vid.toHexString(),
+        vehicle: driveSessionForVehicleOneForAdmin.vehicle.toHexString(),
         user: driveSessionForVehicleOneForAdmin.user.toHexString(),
         flags: driveSessionForVehicleOneForAdmin.flags.map((el) => ({ ...el, _id: el._id.toHexString() })),
         dataPoints: driveSessionForVehicleOneForAdmin.dataPoints.map((el) => el._id.toHexString()),
@@ -85,14 +87,14 @@ describe('DriveSession routes', () => {
       await request(app).get('/v1/drive-sessions').send().expect(httpStatus.UNAUTHORIZED);
     });
 
-    test('should correctly apply filter on vid field for drive session', async () => {
+    test('should correctly apply filter on vehicle field for drive session', async () => {
       await insertUsers([userOne]);
       await insertDriveSessions([driveSessionForVehicleOneForUser, driveSessionForVehicleTwoForUser]);
 
       const res = await request(app)
         .get('/v1/drive-sessions')
         .set('Cookie', `token=${userOneAccessToken}`)
-        .query({ vid: driveSessionForVehicleOneForUser.vid.toHexString() })
+        .query({ vehicle: driveSessionForVehicleOneForUser.vehicle.toHexString() })
         .send()
         .expect(httpStatus.OK);
 
@@ -107,14 +109,14 @@ describe('DriveSession routes', () => {
       expect(res.body.results[0]._id).toBe(driveSessionForVehicleOneForUser._id.toHexString());
     });
 
-    test('should return 0 drive sessions when searching for vid that the user does not own', async () => {
+    test('should return 0 drive sessions when searching for vehicle that the user does not own', async () => {
       await insertUsers([userOne]);
       await insertDriveSessions([driveSessionForVehicleOneForAdmin, driveSessionForVehicleTwoForUser]);
 
       const res = await request(app)
         .get('/v1/drive-sessions')
         .set('Cookie', `token=${userOneAccessToken}`)
-        .query({ vid: driveSessionForVehicleOneForAdmin.vid.toHexString() })
+        .query({ vehicle: driveSessionForVehicleOneForAdmin.vehicle.toHexString() })
         .send()
         .expect(httpStatus.OK);
 
@@ -290,7 +292,7 @@ describe('DriveSession routes', () => {
       expect(res.body).toMatchObject({
         _id: _id.toHexString(),
         mapData: dbVehicleData.map((el) => ({
-          vid: el.vid.toHexString(),
+          vehicle: el.vehicle.toHexString(),
           dataPoints: [
             {
               _id: el._id.toHexString(),

@@ -26,11 +26,11 @@ const defaultRoutes = [
     route: vehicleRoute,
   },
   {
-    path: '/tesla-account',
+    path: '/tesla-accounts',
     route: teslaRoute,
   },
   {
-    path: '/vehicle-data-points',
+    path: '/vehicle-data',
     route: vehicleDataPointRoute,
   },
   {

@@ -6,7 +6,7 @@ const pick = require('../utils/pick');
 
 const getChargeSessions = catchAsync(async (req, res) => {
   const filter = {
-    ...pick(req.query, ['vid', 'startDate', 'endDate', 'maxChargeRate', 'energyAdded', 'charger', 'geoJSON', 'flags']),
+    ...pick(req.query, ['vehicle', 'startDate', 'endDate', 'maxChargeRate', 'energyAdded', 'charger', 'geoJSON', 'flags']),
     user: req.user._id,
   };
 

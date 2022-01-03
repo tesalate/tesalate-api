@@ -11,6 +11,7 @@ const {
 const { insertUsers, admin, userOne } = require('../fixtures/user.fixture');
 const { adminAccessToken, userOneAccessToken } = require('../fixtures/token.fixture');
 const { VehicleData, ChargeSession } = require('../../src/models');
+const { insertFlags, infoFlag, warningFlag, errorFlag } = require('../fixtures/flag.fixture');
 
 setupTestDB();
 
@@ -18,6 +19,7 @@ describe('ChargeSession routes', () => {
   describe('GET /v1/charge-sessions', () => {
     test('should return 200 and apply the default query options for charge sessions', async () => {
       await insertUsers([admin, userOne]);
+      await insertFlags([infoFlag, warningFlag, errorFlag]);
       await insertChargeSessions([chargeSessionForVehicleOneForAdmin, chargeSessionForVehicleOneForUser]);
 
       const res = await request(app)
@@ -38,7 +40,7 @@ describe('ChargeSession routes', () => {
         ...chargeSessionForVehicleOneForAdmin,
         _id: chargeSessionForVehicleOneForAdmin._id.toHexString(),
         charger: chargeSessionForVehicleOneForAdmin.charger.toHexString(),
-        vid: chargeSessionForVehicleOneForAdmin.vid.toHexString(),
+        vehicle: chargeSessionForVehicleOneForAdmin.vehicle.toHexString(),
         user: chargeSessionForVehicleOneForAdmin.user.toHexString(),
         flags: chargeSessionForVehicleOneForAdmin.flags.map((el) => ({ ...el, _id: el._id.toHexString() })),
         dataPoints: chargeSessionForVehicleOneForAdmin.dataPoints.map((el) => el._id.toHexString()),
@@ -86,14 +88,14 @@ describe('ChargeSession routes', () => {
       await request(app).get('/v1/charge-sessions').send().expect(httpStatus.UNAUTHORIZED);
     });
 
-    test('should correctly apply filter on vid field for charge session', async () => {
+    test('should correctly apply filter on vehicle field for charge session', async () => {
       await insertUsers([userOne]);
       await insertChargeSessions([chargeSessionForVehicleOneForUser, chargeSessionForVehicleTwoForUser]);
 
       const res = await request(app)
         .get('/v1/charge-sessions')
         .set('Cookie', `token=${userOneAccessToken}`)
-        .query({ vid: chargeSessionForVehicleOneForUser.vid.toHexString() })
+        .query({ vehicle: chargeSessionForVehicleOneForUser.vehicle.toHexString() })
         .send()
         .expect(httpStatus.OK);
 
@@ -108,14 +110,14 @@ describe('ChargeSession routes', () => {
       expect(res.body.results[0]._id).toBe(chargeSessionForVehicleOneForUser._id.toHexString());
     });
 
-    test('should return 0 charge sessions when searching for vid that the user does not own', async () => {
+    test('should return 0 charge sessions when searching for vehicle that the user does not own', async () => {
       await insertUsers([userOne]);
       await insertChargeSessions([chargeSessionForVehicleOneForAdmin, chargeSessionForVehicleTwoForUser]);
 
       const res = await request(app)
         .get('/v1/charge-sessions')
         .set('Cookie', `token=${userOneAccessToken}`)
-        .query({ vid: chargeSessionForVehicleOneForAdmin.vid.toHexString() })
+        .query({ vehicle: chargeSessionForVehicleOneForAdmin.vehicle.toHexString() })
         .send()
         .expect(httpStatus.OK);
 

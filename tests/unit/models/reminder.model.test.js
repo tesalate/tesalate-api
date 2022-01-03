@@ -60,13 +60,13 @@ describe('Reminder model', () => {
       await expect(new Reminder(newReminder).validate()).rejects.toThrow();
     });
 
-    test('should throw a validation error if vid is not a objectId', async () => {
-      newReminder.vid = faker.datatype.array(2);
+    test('should throw a validation error if vehicle is not a objectId', async () => {
+      newReminder.vehicle = faker.datatype.array(2);
       await expect(new Reminder(newReminder).validate()).rejects.toThrow();
     });
 
-    test('should throw a validation error if vid is missing from obj', async () => {
-      delete newReminder.vid;
+    test('should throw a validation error if vehicle is missing from obj', async () => {
+      delete newReminder.vehicle;
       await expect(new Reminder(newReminder).validate()).rejects.toThrow();
     });
 

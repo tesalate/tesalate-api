@@ -92,9 +92,23 @@ vehicleSchema.post('save', async (vehicle) => {
     }
     return user.save();
   } catch (err) {
-    throw new Error('something went wrong', err);
+    throw new Error('something went wrong post save of vehicle', err.message);
   }
 });
+
+// vehicleSchema.post('save', async (vehicle) => {
+//   try {
+//     if (!vehicle.teslaAccount) {
+//       const updatedVehicle = vehicle;
+//       const teslaAccount = await mongoose.model('TeslaAccount').findOne({ user: vehicle.user });
+//       updatedVehicle.teslaAccount = teslaAccount._id;
+//       return updatedVehicle.save();
+//     }
+//     return;
+//   } catch (err) {
+//     throw new Error('something went wrong', err.message);
+//   }
+// });
 
 vehicleSchema.post('remove', { query: false, document: true }, async (vehicle) => {
   try {
@@ -102,7 +116,7 @@ vehicleSchema.post('remove', { query: false, document: true }, async (vehicle) =
     user.vehicles.pull(vehicle._id);
     return user.save();
   } catch (err) {
-    throw new Error('something went wrong', err);
+    throw new Error('something went wrong post remove of vehicle', err);
   }
 });
 
