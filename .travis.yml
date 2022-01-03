@@ -43,7 +43,8 @@ script:
   - yarn lint
   - yarn test
 
-after_success: yarn coverage:coveralls
+## No need to run coverage as I do not have a coveralls plan
+# after_success: yarn coverage:coveralls
 
 after_script:
   - pkill mongod
