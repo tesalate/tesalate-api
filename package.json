@@ -52,6 +52,7 @@
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
+    "cookie": "^0.4.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.0",
@@ -76,11 +77,13 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "pm2": "^5.1.0",
+    "query-string": "^7.0.1",
     "set-cookie-parser": "^2.4.8",
     "swagger-jsdoc": "^6.0.8",
     "swagger-ui-express": "^4.1.6",
     "validator": "^13.0.0",
     "winston": "^3.2.1",
+    "ws": "^8.4.0",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
