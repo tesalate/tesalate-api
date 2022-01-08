@@ -20,13 +20,12 @@ const ApiError = require('./utils/ApiError');
 const modelNames = mongoose.modelNames();
 
 const app = express();
-
 expressOasGenerator.handleResponses(app, {
   predefinedSpec(spec) {
     return spec;
   },
   specOutputPath: './swagger/test_spec.json',
-  ignoredNodeEnvironments: ['production'],
+  ignoredNodeEnvironments: ['production', 'test'],
   mongooseModels: modelNames,
   alwaysServeDocs: true,
   specOutputFileBehavior: 'PRESERVE',
