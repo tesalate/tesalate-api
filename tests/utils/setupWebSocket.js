@@ -16,7 +16,9 @@ async function setupWebSocket() {
     await dbHandler.connect();
     server.listen(config.port);
   });
-  afterEach(async () => await dbHandler.clearDatabase());
+  afterEach(async () => {
+    await dbHandler.clearDatabase();
+  });
   afterAll(async () => {
     await server.close();
     await dbHandler.closeDatabase();
@@ -38,7 +40,7 @@ function waitForSocketState(socket, state) {
 async function createSocketClient(port, token, closeAfter, clientState) {
   const client = new WebSocket(`ws://localhost:${port}/socket`, {
     headers: {
-      ['Cookie']: `token=${token}`,
+      Cookie: `token=${token}`,
     },
   });
 

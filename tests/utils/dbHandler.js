@@ -1,6 +1,6 @@
+const { MongoMemoryReplSet } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const config = require('../../src/config/config');
-const { MongoMemoryReplSet } = require('mongodb-memory-server');
 
 let replset;
 
@@ -30,10 +30,8 @@ module.exports.closeDatabase = async () => {
  * Remove all the data for all db collections.
  */
 module.exports.clearDatabase = async () => {
-  const collections = mongoose.connection.collections;
-
-  for (const key in collections) {
-    const collection = collections[key];
+  Object.keys(mongoose.connection.collections).forEach(async (key) => {
+    const collection = mongoose.connection.collections[key];
     await collection.deleteMany();
-  }
+  });
 };

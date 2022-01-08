@@ -9,7 +9,7 @@ module.exports = async function (db, sockets) {
   });
 
   db.once('open', () => {
-    let changeStream = db.watch({ fullDocument: 'updateLookup' });
+    const changeStream = db.watch({ fullDocument: 'updateLookup' });
     changeStream.on('change', async (change) => {
       const user = change.fullDocument?.user;
 
