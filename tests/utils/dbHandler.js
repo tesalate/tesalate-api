@@ -10,6 +10,7 @@ let replset;
 module.exports.connect = async () => {
   replset = await MongoMemoryReplSet.create({
     replSet: { count: 1, storageEngine: 'wiredTiger' },
+    binary: { version: '5.0.3' },
   });
   const uri = replset.getUri();
 
