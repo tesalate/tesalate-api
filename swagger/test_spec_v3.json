@@ -18,7 +18,8 @@
     },
     "/v1/auth/register": {
       "post": {
-        "summary": "/v1/auth/register",
+        "summary": "Register a User",
+        "tags": ["Auth"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -27,19 +28,19 @@
                 "properties": {
                   "firstName": {
                     "type": "string",
-                    "example": "Terrell"
+                    "example": "Jeramy"
                   },
                   "lastName": {
                     "type": "string",
-                    "example": "Carter"
+                    "example": "Walsh"
                   },
                   "username": {
                     "type": "string",
-                    "example": "MELANY_KAUTZER"
+                    "example": "Jeramy_Walsh"
                   },
                   "displayName": {
                     "type": "string",
-                    "example": "MELANY_KAUTZER"
+                    "example": "Jeramy_Walsh"
                   },
                   "email": {
                     "type": "string",
@@ -57,7 +58,21 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Successfully registered user. The authentication and refresh tokens are returned in cookies named `token` and `refreshToken` respectively.\n",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "token=abcde12345; Path=/; HttpOnly"
+                }
+              },
+              "\u0000Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=abcde123456789; Path=/v1/auth; HttpOnly"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -81,9 +96,7 @@
                         "vehicles": {
                           "type": "array",
                           "items": {},
-                          "example": [
-                            null
-                          ]
+                          "example": [null]
                         },
                         "_id": {
                           "type": "string",
@@ -136,9 +149,7 @@
                         "vehicles": {
                           "type": "array",
                           "items": {},
-                          "example": [
-                            null
-                          ]
+                          "example": [null]
                         },
                         "_id": {
                           "type": "string",
@@ -206,16 +217,30 @@
               }
             }
           }
-        },
-        "tags": []
+        }
       }
     },
     "/v1/auth/login": {
       "post": {
-        "summary": "/v1/auth/login",
+        "summary": "Logs in and returns the authentication cookies",
+        "tags": ["Auth"],
         "responses": {
           "200": {
             "description": "OK",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "token=abcde12345; Path=/; HttpOnly"
+                }
+              },
+              "\u0000Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=abcde123456789; Path=/v1/auth; HttpOnly"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -239,9 +264,7 @@
                         "vehicles": {
                           "type": "array",
                           "items": {},
-                          "example": [
-                            null
-                          ]
+                          "example": [null]
                         },
                         "_id": {
                           "type": "string",
@@ -294,9 +317,7 @@
                         "vehicles": {
                           "type": "array",
                           "items": {},
-                          "example": [
-                            null
-                          ]
+                          "example": [null]
                         },
                         "_id": {
                           "type": "string",
@@ -364,13 +385,18 @@
               }
             }
           }
-        },
-        "tags": []
+        }
       }
     },
     "/v1/auth/logout": {
       "post": {
-        "summary": "/v1/auth/logout",
+        "summary": "Logout",
+        "tags": ["Auth"],
+        "security": [
+          {
+            "cookieRefreshToken": []
+          }
+        ],
         "responses": {
           "204": {
             "description": ""
@@ -410,16 +436,32 @@
               }
             }
           }
-        },
-        "tags": []
+        }
       }
     },
     "/v1/auth/refresh-tokens": {
       "post": {
-        "summary": "/v1/auth/refresh-tokens",
+        "summary": "Refresh auth tokens and returns the authentication cookies",
+        "tags": ["Auth"],
+        "security": [
+          {
+            "cookieRefreshToken": []
+          },
+          {
+            "cookieToken": []
+          }
+        ],
         "responses": {
           "204": {
-            "description": ""
+            "description": "Successfully refreshed tokens. The authentication and refresh tokens are returned in cookies named `token` and `refreshToken` respectively.\n",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "token=abcde12345; Path=/; HttpOnly"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request",
@@ -491,15 +533,34 @@
               }
             }
           }
-        },
-        "tags": [
-          "Token"
-        ]
+        }
       }
     },
     "/v1/auth/forgot-password": {
       "post": {
-        "summary": "/v1/auth/forgot-password",
+        "summary": "Forgot password",
+        "description": "An email will be sent to reset password.",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                },
+                "example": {
+                  "email": "fake@example.com"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": ""
@@ -574,30 +635,50 @@
               }
             }
           }
-        },
-        "tags": []
+        }
       }
     },
     "/v1/auth/reset-password": {
       "post": {
-        "summary": "/v1/auth/reset-password",
+        "summary": "Reset password",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The reset password token"
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["password"],
                 "properties": {
                   "password": {
                     "type": "string",
-                    "example": "******"
+                    "format": "password",
+                    "minLength": 8,
+                    "description": "At least one number and one letter"
                   }
+                },
+                "example": {
+                  "password": "password1234"
                 }
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
+          "204": {
+            "description": "No content"
+          },
           "400": {
             "description": "Bad Request",
             "content": {
@@ -617,17 +698,6 @@
                 }
               }
             }
-          }
-        },
-        "tags": []
-      }
-    },
-    "/v1/auth/send-verification-email": {
-      "post": {
-        "summary": "/v1/auth/send-verification-email",
-        "responses": {
-          "204": {
-            "description": ""
           },
           "401": {
             "description": "Unauthorized",
@@ -649,14 +719,63 @@
               }
             }
           }
-        },
-        "tags": []
+        }
+      }
+    },
+    "/v1/auth/send-verification-email": {
+      "post": {
+        "summary": "Send verification email",
+        "description": "An email will be sent to verify email.",
+        "tags": ["Auth"],
+        "security": [
+          {
+            "cookieToken": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please authenticate"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/auth/verify-email": {
       "post": {
-        "summary": "/v1/auth/verify-email",
+        "summary": "verify email",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The verify email token"
+          }
+        ],
         "responses": {
+          "204": { "description": "No content" },
           "400": {
             "description": "Bad Request",
             "content": {
@@ -677,12 +796,12 @@
               }
             }
           }
-        },
-        "tags": []
+        }
       }
     },
     "/v1/users": {
       "post": {
+        "tags": ["Users"],
         "summary": "/v1/users",
         "requestBody": {
           "content": {
@@ -747,9 +866,7 @@
                     "vehicles": {
                       "type": "array",
                       "items": {},
-                      "example": [
-                        null
-                      ]
+                      "example": [null]
                     },
                     "_id": {
                       "type": "string",
@@ -797,9 +914,7 @@
                     "vehicles": {
                       "type": "array",
                       "items": {},
-                      "example": [
-                        null
-                      ]
+                      "example": [null]
                     },
                     "_id": {
                       "type": "string",
@@ -935,10 +1050,7 @@
               }
             }
           }
-        },
-        "tags": [
-          "User"
-        ]
+        }
       },
       "get": {
         "summary": "/v1/users",
@@ -1195,9 +1307,7 @@
             }
           }
         },
-        "tags": [
-          "User"
-        ]
+        "tags": ["User"]
       }
     },
     "/v1/users/{userId}": {
@@ -1214,9 +1324,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "User"
-        ]
+        "tags": ["User"]
       },
       "patch": {
         "summary": "/v1/users/{userId}",
@@ -1231,9 +1339,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "User"
-        ]
+        "tags": ["User"]
       },
       "delete": {
         "summary": "/v1/users/{userId}",
@@ -1248,9 +1354,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "User"
-        ]
+        "tags": ["User"]
       }
     },
     "/v1/vehicles": {
@@ -1267,9 +1371,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "example": [
-                      "5dl9rl"
-                    ]
+                    "example": ["5dl9rl"]
                   },
                   "id": {
                     "type": "number",
@@ -1366,9 +1468,7 @@
                       "items": {
                         "type": "string"
                       },
-                      "example": [
-                        "9laa1e"
-                      ]
+                      "example": ["9laa1e"]
                     },
                     "_id": {
                       "type": "string",
@@ -1454,9 +1554,7 @@
                       "items": {
                         "type": "string"
                       },
-                      "example": [
-                        "9laa1e"
-                      ]
+                      "example": ["9laa1e"]
                     },
                     "_id": {
                       "type": "string",
@@ -1594,9 +1692,7 @@
             }
           }
         },
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       },
       "get": {
         "summary": "/v1/vehicles",
@@ -1680,10 +1776,7 @@
                           "teslaAccount": "61cb978f4274294e145681f1",
                           "collectData": false,
                           "display_name": "Ivory_Baumbach",
-                          "tokens": [
-                            "2xukrg",
-                            "swah81"
-                          ],
+                          "tokens": ["2xukrg", "swah81"],
                           "_id": "61cb978f4274294e145681f0",
                           "access_type": "OWNER",
                           "user": "61cb978f4274294e145681ec",
@@ -1744,9 +1837,7 @@
             }
           }
         },
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       }
     },
     "/v1/vehicles/{vehicleId}": {
@@ -1763,9 +1854,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       },
       "patch": {
         "summary": "/v1/vehicles/{vehicleId}",
@@ -1780,9 +1869,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       },
       "delete": {
         "summary": "/v1/vehicles/{vehicleId}",
@@ -1797,9 +1884,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       }
     },
     "/v1/tesla-accounts": {
@@ -2079,9 +2164,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "TeslaAccount"
-        ]
+        "tags": ["TeslaAccount"]
       },
       "patch": {
         "summary": "/v1/tesla-accounts/{teslaAccountId}",
@@ -2096,9 +2179,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "TeslaAccount"
-        ]
+        "tags": ["TeslaAccount"]
       },
       "delete": {
         "summary": "/v1/tesla-accounts/{teslaAccountId}",
@@ -2113,9 +2194,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "TeslaAccount"
-        ]
+        "tags": ["TeslaAccount"]
       }
     },
     "/v1/tesla-accounts/link": {
@@ -2415,9 +2494,7 @@
             }
           }
         },
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       }
     },
     "/v1/vehicle-data/{vehicleDataId}": {
@@ -2434,10 +2511,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle",
-          "VehicleData"
-        ]
+        "tags": ["Vehicle", "VehicleData"]
       },
       "delete": {
         "summary": "/v1/vehicle-data/{vehicleDataId}",
@@ -2452,10 +2526,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle",
-          "VehicleData"
-        ]
+        "tags": ["Vehicle", "VehicleData"]
       }
     },
     "/v1/charge-sessions": {
@@ -2527,11 +2598,7 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "type",
-                                "message",
-                                "_id"
-                              ]
+                              "required": ["type", "message", "_id"]
                             }
                           },
                           "startDate": {
@@ -2545,15 +2612,10 @@
                       "example": [
                         {
                           "geoJSON": {
-                            "coordinates": [
-                              34,
-                              -83
-                            ],
+                            "coordinates": [34, -83],
                             "type": "Point"
                           },
-                          "dataPoints": [
-                            "61cb9785fbd13d4e1458aae4"
-                          ],
+                          "dataPoints": ["61cb9785fbd13d4e1458aae4"],
                           "maxChargeRate": 60363,
                           "energyAdded": 86,
                           "charger": "61cb9785fbd13d4e1458aab8",
@@ -2636,9 +2698,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "ChargeSession"
-        ]
+        "tags": ["ChargeSession"]
       },
       "delete": {
         "summary": "/v1/charge-sessions/{chargeSessionId}",
@@ -2653,9 +2713,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "ChargeSession"
-        ]
+        "tags": ["ChargeSession"]
       }
     },
     "/v1/drive-sessions": {
@@ -2757,17 +2815,11 @@
                       "example": [
                         {
                           "startLocation": {
-                            "coordinates": [
-                              61,
-                              -100
-                            ],
+                            "coordinates": [61, -100],
                             "type": "Point"
                           },
                           "endLocation": {
-                            "coordinates": [
-                              86,
-                              -11
-                            ],
+                            "coordinates": [86, -11],
                             "type": "Point"
                           },
                           "dataPoints": [
@@ -2861,9 +2913,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "DriveSession"
-        ]
+        "tags": ["DriveSession"]
       },
       "delete": {
         "summary": "/v1/drive-sessions/{driveSessionId}",
@@ -2878,9 +2928,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "DriveSession"
-        ]
+        "tags": ["DriveSession"]
       }
     },
     "/v1/map-points": {
@@ -2960,26 +3008,11 @@
                         {
                           "geoJSON": {
                             "coordinates": [
-                              [
-                                173.38,
-                                -82.47
-                              ],
-                              [
-                                173.38,
-                                -82.47999999999999
-                              ],
-                              [
-                                173.39,
-                                -82.47999999999999
-                              ],
-                              [
-                                173.39,
-                                -82.47
-                              ],
-                              [
-                                173.38,
-                                -82.47
-                              ]
+                              [173.38, -82.47],
+                              [173.38, -82.47999999999999],
+                              [173.39, -82.47999999999999],
+                              [173.39, -82.47],
+                              [173.38, -82.47]
                             ],
                             "type": "Polygon"
                           },
@@ -3060,9 +3093,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       }
     },
     "/v1/map-points/{mapPointId}": {
@@ -3079,9 +3110,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "MapPoint"
-        ]
+        "tags": ["MapPoint"]
       },
       "delete": {
         "summary": "/v1/map-points/{mapPointId}",
@@ -3096,9 +3125,7 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "MapPoint"
-        ]
+        "tags": ["MapPoint"]
       }
     },
     "/v1/docs": {
@@ -3160,12 +3187,7 @@
     "schemas": {
       "Token": {
         "title": "Token",
-        "required": [
-          "token",
-          "user",
-          "type",
-          "expiresAt"
-        ],
+        "required": ["token", "user", "type", "expiresAt"],
         "properties": {
           "token": {
             "type": "string"
@@ -3175,11 +3197,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "refresh",
-              "resetPassword",
-              "verifyEmail"
-            ]
+            "enum": ["refresh", "resetPassword", "verifyEmail"]
           },
           "expiresAt": {
             "type": "string",
@@ -3203,14 +3221,7 @@
       },
       "User": {
         "title": "User",
-        "required": [
-          "username",
-          "displayName",
-          "firstName",
-          "lastName",
-          "email",
-          "password"
-        ],
+        "required": ["username", "displayName", "firstName", "lastName", "email", "password"],
         "properties": {
           "username": {
             "type": "string"
@@ -3232,10 +3243,7 @@
           },
           "role": {
             "type": "string",
-            "enum": [
-              "user",
-              "admin"
-            ]
+            "enum": ["user", "admin"]
           },
           "isEmailVerified": {
             "type": "boolean"
@@ -3264,11 +3272,7 @@
       },
       "Vehicle": {
         "title": "Vehicle",
-        "required": [
-          "user",
-          "vin",
-          "id_s"
-        ],
+        "required": ["user", "vin", "id_s"],
         "properties": {
           "user": {
             "type": "string"
@@ -3344,10 +3348,7 @@
       },
       "TeslaAccount": {
         "title": "TeslaAccount",
-        "required": [
-          "user",
-          "email"
-        ],
+        "required": ["user", "email"],
         "properties": {
           "user": {
             "type": "string"
@@ -3379,10 +3380,7 @@
       },
       "VehicleData": {
         "title": "VehicleData",
-        "required": [
-          "vehicle",
-          "user"
-        ],
+        "required": ["vehicle", "user"],
         "properties": {
           "user_id": {
             "type": "number"
@@ -3531,10 +3529,7 @@
       },
       "ChargeSession": {
         "title": "ChargeSession",
-        "required": [
-          "vehicle",
-          "user"
-        ],
+        "required": ["vehicle", "user"],
         "properties": {
           "dataPoints": {
             "type": "array",
@@ -3589,10 +3584,7 @@
       },
       "DriveSession": {
         "title": "DriveSession",
-        "required": [
-          "vehicle",
-          "user"
-        ],
+        "required": ["vehicle", "user"],
         "properties": {
           "dataPoints": {
             "type": "array",
@@ -3653,11 +3645,7 @@
       },
       "MapPoint": {
         "title": "MapPoint",
-        "required": [
-          "latLongString",
-          "vehicle",
-          "user"
-        ],
+        "required": ["latLongString", "vehicle", "user"],
         "properties": {
           "dataPoints": {
             "type": "array",
@@ -3695,20 +3683,11 @@
       },
       "Reminder": {
         "title": "Reminder",
-        "required": [
-          "type",
-          "message",
-          "when",
-          "vehicle",
-          "user"
-        ],
+        "required": ["type", "message", "when", "vehicle", "user"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "odometer",
-              "date"
-            ]
+            "enum": ["odometer", "date"]
           },
           "message": {
             "type": "string"
@@ -3743,9 +3722,7 @@
       },
       "Charger": {
         "title": "Charger",
-        "required": [
-          "title"
-        ],
+        "required": ["title"],
         "properties": {
           "address_line_1": {
             "type": "string"
@@ -3891,22 +3868,14 @@
       },
       "Flag": {
         "title": "Flag",
-        "required": [
-          "systemName",
-          "type",
-          "message"
-        ],
+        "required": ["systemName", "type", "message"],
         "properties": {
           "systemName": {
             "type": "string"
           },
           "type": {
             "type": "string",
-            "enum": [
-              "info",
-              "warning",
-              "error"
-            ]
+            "enum": ["info", "warning", "error"]
           },
           "message": {
             "type": "string"

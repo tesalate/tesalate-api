@@ -43,18 +43,17 @@ module.exports = async function (db, sockets) {
 
   db.on('error', function (err) {
     logger.error('Mongoose default connection has encountered an error', err);
-    // process.exit(1);
+    process.exit(1);
   });
 
   db.on('disconnected', function () {
     logger.info('Mongoose default connection is disconnected');
-    // process.exit(1);
   });
 
   process.on('SIGINT', function () {
     db.close(function () {
       logger.error('Mongoose default connection is disconnected due to application termination');
-      // process.exit(0);
+      process.exit(0);
     });
   });
 };

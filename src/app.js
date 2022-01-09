@@ -24,8 +24,8 @@ expressOasGenerator.handleResponses(app, {
   predefinedSpec(spec) {
     return spec;
   },
-  specOutputPath: './swagger/test_spec.json',
-  ignoredNodeEnvironments: ['production', 'test'],
+  specOutputPath: './swagger/NEW_test_spec.json',
+  ignoredNodeEnvironments: ['production', 'test', 'development'],
   mongooseModels: modelNames,
   alwaysServeDocs: true,
   specOutputFileBehavior: 'PRESERVE',

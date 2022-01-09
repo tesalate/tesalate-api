@@ -7,6 +7,9 @@ const setupTestDB = () => {
   beforeEach(async () => {
     await dbHandler.clearDatabase();
   });
+  afterEach(async () => {
+    await dbHandler.clearDatabase();
+  });
   afterAll(async () => {
     await dbHandler.closeDatabase();
   });

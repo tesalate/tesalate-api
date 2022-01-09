@@ -85,7 +85,7 @@ module.exports = router;
  *     description: Only admins can retrieve all vehicles.
  *     tags: [Vehicles]
  *     security:
- *       - bearerAuth: []
+ *       - cookieToken: []
  *     parameters:
  *       - in: query
  *         name: vehiclename

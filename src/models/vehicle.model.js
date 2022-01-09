@@ -81,7 +81,7 @@ const vehicleSchema = mongoose.Schema(
 vehicleSchema.plugin(toJSON);
 vehicleSchema.plugin(paginate);
 
-vehicleSchema.index({ vin: 'text', user: 1 }, { unique: true });
+vehicleSchema.index({ vin: 'text', user: 1 });
 vehicleSchema.index({ user: 1 });
 
 vehicleSchema.post('save', async (vehicle) => {
