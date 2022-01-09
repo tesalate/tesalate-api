@@ -64,7 +64,7 @@ const getMapPointsByDistanceApart = async (km, vehicle, user) => {
   return mapPoints
     .sort((a, b) => a.updatedAt - b.updatedAt)
     .reduce((acc, curr) => {
-      const { geoJSON, user: _user, ...rest } = curr.toJSON();
+      const { geoJSON: _geoJSON, user: _user, ...rest } = curr.toJSON();
       const latLong = rest.dataPoints[0].drive_state;
       if (geoPoints.length === 0) {
         geoPoints.push(latLong);

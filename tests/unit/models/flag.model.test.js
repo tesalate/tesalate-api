@@ -35,7 +35,7 @@ describe('Flag model', () => {
     });
 
     test('should throw a validation error if message is missing', async () => {
-      const { message, ...rest } = newFlag;
+      const { message: _, ...rest } = newFlag;
       await expect(new Flag(rest).validate()).rejects.toThrow();
     });
 
@@ -45,7 +45,7 @@ describe('Flag model', () => {
     });
 
     test('should throw a validation error if systemName is missing', async () => {
-      const { systemName, ...rest } = newFlag;
+      const { systemName: _, ...rest } = newFlag;
       await expect(new Flag(rest).validate()).rejects.toThrow();
     });
   });

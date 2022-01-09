@@ -28,11 +28,47 @@ module.exports = router;
  * @swagger
  * /auth/register:
  *   post:
- *     summary: Register a user
+ *     summary: Register a User
  *     tags: [Auth]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 example: Jeramy
+ *               lastName:
+ *                 type: string
+ *                 example: Walsh
+ *               username:
+ *                 type: string
+ *                 example: Jeramy_Walsh
+ *               displayName:
+ *                 type: string
+ *                 example: Jeramy_Walsh
+ *               email:
+ *                 type: string
+ *                 example: jeramy.walsh20@hotmail.com
+ *               password:
+ *                 type: string
+ *                 example: password1234
+ *       required: true
  *     responses:
  *       '201':
- *         description: Created
+ *         description: >
+ *           Successfully registered user. The authentication and refresh tokens are
+ *           returned in cookies named `token` and `refreshToken` respectively.
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
+ *           "\0Set-Cookie":
+ *             schema:
+ *               type: string
+ *               example: refreshToken=abcde123456789; Path=/v1/auth; HttpOnly
  *         content:
  *           application/json:
  *             schema:
@@ -55,6 +91,44 @@ module.exports = router;
  *                       items: {}
  *                       example:
  *                         - null
+ *                     _id:
+ *                       type: string
+ *                       example: 61cb977d920b494e14d59f74
+ *                     firstName:
+ *                       type: string
+ *                       example: Jeramy
+ *                     lastName:
+ *                       type: string
+ *                       example: Walsh
+ *                     username:
+ *                       type: string
+ *                       example: jeramy_walsh
+ *                     displayName:
+ *                       type: string
+ *                       example: Jeramy_Walsh
+ *                     email:
+ *                       type: string
+ *                       example: jeramy.walsh20@hotmail.com
+ *           text/html:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     role:
+ *                       type: string
+ *                       example: user
+ *                     isEmailVerified:
+ *                       type: boolean
+ *                       example: false
+ *                     teslaAccount:
+ *                       example: null
+ *                       nullable: true
+ *                     vehicles:
+ *                       type: array
+ *                       items: {}
+ *                       example:
  *                     _id:
  *                       type: string
  *                       example: 61cb977d920b494e14d59f74
@@ -86,6 +160,18 @@ module.exports = router;
  *                 message:
  *                   type: string
  *                   example: '"email" must be a valid email'
+ *           text/html:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: '"email" must be a valid email'
+ *
+ *
  */
 
 /**
@@ -116,6 +202,15 @@ module.exports = router;
  *     responses:
  *       "200":
  *         description: OK
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
+ *           "\0Set-Cookie":
+ *             schema:
+ *               type: string
+ *               example: refreshToken=abcde123456789; Path=/v1/auth; HttpOnly
  *         content:
  *           application/json:
  *             schema:
@@ -138,38 +233,131 @@ module.exports = router;
  * @swagger
  * /auth/logout:
  *   post:
- *     summary: Logout
- *     tags: [Auth]
- *     security:
- *      - cookieRefreshToken: []
+ *     tags:
+ *       - Auth
+ *     summary: Logs a user out and removes refresh token from database
  *     responses:
- *       "204":
- *         description: No content
- *       "404":
- *         $ref: '#/components/responses/NotFound'
+ *       '204':
+ *         description: >
+ *           Successfully refreshed tokens. The authentication and refresh tokens are
+ *           returned in cookies named `token` and `refreshToken` respectively.
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
+ *       '400':
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: '"refreshToken" is required'
+ *           text/html:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: '"refreshToken" is required'
+ *       '401':
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 401
+ *                 message:
+ *                   type: string
+ *                   example: Please authenticate
+ *           text/html:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 401
+ *                 message:
+ *                   type: string
+ *                   example: Please authenticate
+ *
  */
 
 /**
  * @swagger
  * /auth/refresh-tokens:
  *   post:
+ *     tags:
+ *       - Auth
  *     summary: Refresh auth tokens and returns the authentication cookies
- *     tags: [Auth]
- *     security:
- *       - cookieRefreshToken: []
- *       - cookieToken: []
  *     responses:
- *       "200":
- *        description: >
- *          Successfully refreshed tokens.
- *          The authentication and refresh tokens are returned in cookies named `token` and `refreshToken` respectively.
- *        headers:
- *          Set-Cookie:
- *            schema:
- *              type: string
- *              example: token=abcde12345; Path=/; HttpOnly
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
+ *       '204':
+ *         description: >
+ *           Successfully refreshed tokens. The authentication and refresh tokens are
+ *           returned in cookies named `token` and `refreshToken` respectively.
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
+ *       '400':
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: '"refreshToken" is required'
+ *           text/html:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: '"refreshToken" is required'
+ *       '401':
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 401
+ *                 message:
+ *                   type: string
+ *                   example: Please authenticate
+ *           text/html:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 401
+ *                 message:
+ *                   type: string
+ *                   example: Please authenticate
  */
 
 /**
@@ -178,9 +366,8 @@ module.exports = router;
  *   post:
  *     summary: Forgot password
  *     description: An email will be sent to reset password.
- *     tags: [Auth]
- *     security:
- *       - cookieToken: []
+ *     tags:
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:
@@ -196,53 +383,117 @@ module.exports = router;
  *             example:
  *               email: fake@example.com
  *     responses:
- *       "204":
- *         description: No content
- *       "404":
- *         $ref: '#/components/responses/NotFound'
+ *       '204':
+ *         description: ''
+ *       '400':
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: '"email" is required'
+ *           text/html:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: '"email" is required'
+ *       '404':
+ *         description: Not Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: No users found with this email
+ *           text/html:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: No users found with this email
+ *
  */
 
 /**
  * @swagger
  * /auth/reset-password:
  *   post:
- *     summary: Reset password
- *     tags: [Auth]
- *     parameters:
- *       - in: query
- *         name: token
- *         required: true
- *         schema:
- *           type: string
- *         description: The reset password token
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - password
- *             properties:
- *               password:
- *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *             example:
- *               password: password1
- *     responses:
- *       "204":
- *         description: No content
- *       "401":
- *         description: Password reset failed
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *             example:
- *               code: 401
- *               message: Password reset failed
+ *    summary: Reset password
+ *    tags:
+ *      - Auth
+ *    parameters:
+ *      - in: query
+ *        name: token
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: The reset password token
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - password
+ *            properties:
+ *              password:
+ *                type: string
+ *                format: password
+ *                minLength: 8
+ *                description: At least one number and one letter
+ *            example:
+ *              password: password1234
+ *    responses:
+ *      '204':
+ *        description: No content
+ *      '400':
+ *        description: Bad Request
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                code:
+ *                  type: number
+ *                  example: 400
+ *                message:
+ *                  type: string
+ *                  example: '"token" is required'
+ *      '401':
+ *        description: Unauthorized
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                code:
+ *                  type: number
+ *                  example: 401
+ *                message:
+ *                  type: string
+ *                  example: Please authenticate
+ *
  */
 
 /**
@@ -251,39 +502,56 @@ module.exports = router;
  *   post:
  *     summary: Send verification email
  *     description: An email will be sent to verify email.
- *     tags: [Auth]
+ *     tags:
+ *       - Auth
  *     security:
- *       - bearerAuth: []
+ *       - cookieToken: []
  *     responses:
- *       "204":
+ *       '204':
  *         description: No content
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
+ *       '401':
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 401
+ *                 message:
+ *                   type: string
+ *                   example: Please authenticate
  */
 
 /**
  * @swagger
  * /auth/verify-email:
  *   post:
- *     summary: verify email
- *     tags: [Auth]
- *     parameters:
- *       - in: query
- *         name: token
- *         required: true
- *         schema:
- *           type: string
- *         description: The verify email token
- *     responses:
- *       "204":
+ *    summary: verify email
+ *    tags:
+ *      - Auth
+ *    parameters:
+ *      - in: query
+ *        name: token
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: The verify email token
+ *    responses:
+ *      '204':
  *         description: No content
- *       "401":
- *         description: verify email failed
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *             example:
- *               code: 401
- *               message: verify email failed
+ *      '400':
+ *        description: Bad Request
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                code:
+ *                  type: number
+ *                  example: 400
+ *                message:
+ *                  type: string
+ *                  example: '"token" is required'
  */

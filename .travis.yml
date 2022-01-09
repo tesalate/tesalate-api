@@ -1,3 +1,4 @@
+dist: bionic
 language: node_js
 node_js:
   - '15'
@@ -15,7 +16,7 @@ env:
   global:
     - APP_NAME=teslog-travis
     - PORT=4400
-    - MONGODB_URL=mongodb://localhost:27017/node-boilerplate
+    - MONGODB_URL=mongodb://localhost:27017/test
     - JWT_SECRET=thisisasamplesecret
     - JWT_ACCESS_EXPIRATION_MINUTES=30
     - JWT_REFRESH_EXPIRATION_DAYS=30
@@ -23,7 +24,7 @@ env:
     - PUBLIC_URL=http://localhost
     - ACCEPTED_CORS=http://localhost:4400
   matrix:
-    - MONGODB=4.2.8
+    - MONGODB=5.0.3
 
 matrix:
   fast_finish: true
