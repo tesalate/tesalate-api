@@ -5,8 +5,20 @@ const catchAsync = require('../utils/catchAsync');
 const { teslaAccountService } = require('../services');
 
 const linkTeslaAccount = catchAsync(async (req, res) => {
-  const teslaAccount = await teslaAccountService.linkTeslaAccount({ ...req.body, user: req.user });
-  res.status(teslaAccount.createdAt === teslaAccount.updatedAt ? httpStatus.CREATED : httpStatus.OK).send(teslaAccount);
+  // eslint-disable-next-line camelcase
+  const { access_token, refresh_token, linked, email, user, _id, createdAt, updatedAt } =
+    await teslaAccountService.linkTeslaAccount({
+      ...req.body,
+      user: req.user,
+    });
+  const vehicles = await teslaAccountService.getAndSetVehiclesFromTesla({
+    teslaAccount: _id,
+    accessToken: access_token,
+    user: req.user,
+  });
+  res
+    .status(createdAt === updatedAt ? httpStatus.CREATED : httpStatus.OK)
+    .send({ teslaAccount: { linked, email, user, _id }, vehicles });
 });
 
 const unlinkTeslaAccount = catchAsync(async (req, res) => {

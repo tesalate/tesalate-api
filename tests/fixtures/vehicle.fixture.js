@@ -5,10 +5,10 @@ const { admin, userOne } = require('./user.fixture');
 
 const vehicleOneForAdmin = {
   _id: mongoose.Types.ObjectId(),
-  access_type: 'OWNER',
   user: admin._id,
   teslaAccount: mongoose.Types.ObjectId(),
   collectData: faker.datatype.boolean(),
+  access_type: 'OWNER',
   tokens: [faker.random.alphaNumeric(6), faker.random.alphaNumeric(6)],
   id: faker.datatype.number(),
   vehicle_id: faker.datatype.number(),

@@ -42,7 +42,7 @@ const getVehicleById = async (id, user) => {
 /**
  * Get vehicle by user id
  * @param {string} userId
- * @returns {Promise<Vehicle>}
+ * @returns {Promise<Vehicle[]>}
  */
 const getVehiclesByUserId = async (user) => {
   return Vehicle.find({ user });

@@ -24,7 +24,8 @@ const envVarsSchema = Joi.object()
     SMTP_USERNAME: Joi.string().description('username for email server'),
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
-    TESLA_OAUTH_V3_URL: Joi.string().description('tesla own api url').required(),
+    TESLA_OAUTH_V3_URL: Joi.string().description('tesla oauth v3 api url').default('https://auth.tesla.com/oauth2/v3'),
+    TESLA_OWNER_API_URL: Joi.string().description('tesla owner api url').default('https://owner-api.teslamotors.com/api/1'),
     PUBLIC_URL: Joi.string().description('the url for the site').required(),
     MAX_COOKIE_AGE: Joi.number()
       .default(86400 * 1000 * 60)
@@ -73,6 +74,7 @@ module.exports = {
   },
   tesla: {
     oauthUrl: envVars.TESLA_OAUTH_V3_URL,
+    ownerUrl: envVars.TESLA_OWNER_API_URL,
   },
   cors: {
     allowedUrls: envVars.ACCEPTED_CORS,

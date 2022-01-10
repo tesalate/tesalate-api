@@ -1,9 +1,10 @@
 /* eslint-disable camelcase */
 const httpStatus = require('http-status');
 const axios = require('axios');
-const { TeslaAccount } = require('../models');
+const { TeslaAccount, Vehicle } = require('../models');
 const ApiError = require('../utils/ApiError');
 const config = require('../config/config');
+const { vehicleService } = require('.');
 
 /**
  * Create a teslaAccount
@@ -116,9 +117,53 @@ const linkTeslaAccount = async ({ email, refreshToken, user }) => {
     }
 
     Object.assign(teslaAccount, account);
-    await teslaAccount.save();
+    const updatedAccount = await teslaAccount.save();
 
-    return teslaAccount;
+    return updatedAccount;
+  } catch (error) {
+    throw new ApiError(httpStatus.BAD_REQUEST, error.message);
+  }
+};
+
+/**
+ * Get and Set Vehicles from Tesla
+ * @param {Object} linkTeslaAccountObject
+ * @returns {Promise<TeslaAccount>}
+ */
+const getAndSetVehiclesFromTesla = async ({ accessToken, user, teslaAccount }) => {
+  const {
+    data: { response: vehicles },
+  } = await axios
+    .get(`${config.tesla.ownerUrl}/vehicles`, { headers: { Authorization: `Bearer ${accessToken}` } })
+    .catch((error) => {
+      throw new ApiError(httpStatus.BAD_GATEWAY, `Request to Tesla Failed ${error}`);
+    });
+
+  try {
+    const userVehicles = await vehicleService.getVehiclesByUserId(user._id);
+
+    // Loop through userVehicles
+    // If vehicle not in tesla vehicle response =>  teslaAccount = null collectData = false
+    const vehiclesFromDBToUpdate = userVehicles
+      .filter((curr) => !vehicles.find((teslaVehicle) => teslaVehicle.vin === curr.vin) && curr.teslaAccount)
+      .map((vehicle) => ({
+        updateOne: {
+          filter: { vin: vehicle.vin, user },
+          update: { teslaAccount: null, collectData: false },
+          upsert: false,
+        },
+      }));
+    const vehiclesFromTeslaToUpdate = vehicles.map((vehicle) => ({
+      updateOne: {
+        filter: { vin: vehicle.vin, user, teslaAccount },
+        update: vehicle,
+        upsert: true,
+      },
+    }));
+
+    await Vehicle.bulkWrite([...vehiclesFromDBToUpdate, ...vehiclesFromTeslaToUpdate]);
+    const updatedVehicles = await vehicleService.getVehiclesByUserId(user._id);
+    return updatedVehicles;
   } catch (error) {
     throw new ApiError(httpStatus.BAD_REQUEST, error.message);
   }
@@ -126,6 +171,7 @@ const linkTeslaAccount = async ({ email, refreshToken, user }) => {
 
 module.exports = {
   linkTeslaAccount,
+  getAndSetVehiclesFromTesla,
   createTeslaAccount,
   queryTeslaAccounts,
   getTeslaAccountById,

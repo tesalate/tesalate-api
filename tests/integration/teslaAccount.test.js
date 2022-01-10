@@ -1,11 +1,13 @@
+/* eslint-disable camelcase */
 const request = require('supertest');
 const faker = require('faker');
 const httpStatus = require('http-status');
 const axios = require('axios');
 const app = require('../../src/app');
 const setupTestDB = require('../utils/setupTestDB');
-const { TeslaAccount } = require('../../src/models');
+const { TeslaAccount, Vehicle } = require('../../src/models');
 const { admin, insertUsers, userOne } = require('../fixtures/user.fixture');
+const { vehicleOneForAdmin } = require('../fixtures/vehicle.fixture');
 const { teslaAccountAdmin, insertTeslaAccounts, teslaAccountOne } = require('../fixtures/teslaAccount.fixture');
 const { userOneAccessToken, adminAccessToken } = require('../fixtures/token.fixture');
 
@@ -319,7 +321,7 @@ describe('TeslaAccount routes', () => {
   describe('POST /v1/tesla-accounts/link', () => {
     let body;
 
-    const tokens = {
+    const teslaResponseTokens = {
       access_token: faker.random.alphaNumeric(26),
       refresh_token: faker.random.alphaNumeric(66),
     };
@@ -331,10 +333,49 @@ describe('TeslaAccount routes', () => {
       };
     });
 
-    test('should return 201 and successfully create and link new teslaAccount if data is ok', async () => {
+    test('should return 201 and successfully create and link new teslaAccount with vehicles if data is ok', async () => {
       axios.post.mockResolvedValue({
         data: {
-          ...tokens,
+          ...teslaResponseTokens,
+        },
+      });
+      const {
+        tokens,
+        id,
+        vehicle_id,
+        vin,
+        display_name,
+        option_codes,
+        color,
+        state,
+        in_service,
+        id_s,
+        calendar_enabled,
+        api_version,
+        backseat_token,
+        backseat_token_updated_at,
+      } = vehicleOneForAdmin;
+
+      axios.get.mockResolvedValue({
+        data: {
+          response: [
+            {
+              tokens,
+              id,
+              vehicle_id,
+              vin,
+              display_name,
+              option_codes,
+              color,
+              state,
+              in_service,
+              id_s,
+              calendar_enabled,
+              api_version,
+              backseat_token,
+              backseat_token_updated_at,
+            },
+          ],
         },
       });
 
@@ -347,30 +388,115 @@ describe('TeslaAccount routes', () => {
         .expect(httpStatus.CREATED);
 
       expect(res.body).toEqual({
-        _id: expect.anything(),
-        user: teslaAccountAdmin.user.toHexString(),
-        email: body.email,
-        access_token: tokens.access_token,
-        refresh_token: tokens.refresh_token,
-        linked: true,
+        teslaAccount: {
+          _id: expect.anything(),
+          user: teslaAccountAdmin.user.toHexString(),
+          email: body.email,
+          linked: true,
+        },
+        vehicles: [
+          {
+            tokens,
+            id,
+            vehicle_id,
+            vin,
+            display_name,
+            option_codes,
+            color,
+            state,
+            in_service,
+            id_s,
+            calendar_enabled,
+            api_version,
+            backseat_token,
+            backseat_token_updated_at,
+            _id: expect.anything(),
+            user: teslaAccountAdmin.user.toHexString(),
+            collectData: false,
+            teslaAccount: res.body.teslaAccount._id,
+          },
+        ],
       });
 
-      const dbTeslaAccount = await TeslaAccount.findById(res.body._id);
+      const dbTeslaAccount = await TeslaAccount.findById(res.body.teslaAccount._id);
       expect(dbTeslaAccount).toBeDefined();
-      expect(dbTeslaAccount.toJSON()).toMatchObject({
+      expect(dbTeslaAccount).toMatchObject({
         _id: expect.anything(),
         user: teslaAccountAdmin.user,
         email: body.email,
-        access_token: tokens.access_token,
-        refresh_token: tokens.refresh_token,
+        access_token: teslaResponseTokens.access_token,
+        refresh_token: teslaResponseTokens.refresh_token,
         linked: true,
+      });
+
+      const dbVehicles = await Vehicle.find({ user: teslaAccountAdmin.user });
+      expect(dbVehicles).toBeDefined();
+      expect(dbVehicles).toHaveLength(1);
+      expect(dbVehicles[0].toJSON()).toMatchObject({
+        tokens,
+        id,
+        vehicle_id,
+        vin,
+        display_name,
+        option_codes,
+        color,
+        state,
+        in_service,
+        id_s,
+        calendar_enabled,
+        api_version,
+        backseat_token,
+        backseat_token_updated_at,
+        _id: expect.anything(),
+        user: teslaAccountAdmin.user,
+        collectData: false,
+        teslaAccount: dbTeslaAccount._id,
       });
     });
 
-    test('should return 200 and successfully link teslaAccount if data is ok', async () => {
+    test('should return 200 and successfully relink teslaAccount if data is ok', async () => {
       axios.post.mockResolvedValue({
         data: {
-          ...tokens,
+          ...teslaResponseTokens,
+        },
+      });
+      const {
+        tokens,
+        id,
+        vehicle_id,
+        vin,
+        display_name,
+        option_codes,
+        color,
+        state,
+        in_service,
+        id_s,
+        calendar_enabled,
+        api_version,
+        backseat_token,
+        backseat_token_updated_at,
+      } = vehicleOneForAdmin;
+
+      axios.get.mockResolvedValue({
+        data: {
+          response: [
+            {
+              tokens,
+              id,
+              vehicle_id,
+              vin,
+              display_name,
+              option_codes,
+              color,
+              state,
+              in_service,
+              id_s,
+              calendar_enabled,
+              api_version,
+              backseat_token,
+              backseat_token_updated_at,
+            },
+          ],
         },
       });
 
@@ -384,23 +510,67 @@ describe('TeslaAccount routes', () => {
         .expect(httpStatus.OK);
 
       expect(res.body).toEqual({
-        _id: teslaAccountAdmin._id.toHexString(),
-        user: teslaAccountAdmin.user.toHexString(),
-        email: body.email,
-        access_token: tokens.access_token,
-        refresh_token: tokens.refresh_token,
-        linked: true,
+        teslaAccount: {
+          _id: expect.anything(),
+          user: teslaAccountAdmin.user.toHexString(),
+          email: body.email,
+          linked: true,
+        },
+        vehicles: [
+          {
+            tokens,
+            id,
+            vehicle_id,
+            vin,
+            display_name,
+            option_codes,
+            color,
+            state,
+            in_service,
+            id_s,
+            calendar_enabled,
+            api_version,
+            backseat_token,
+            backseat_token_updated_at,
+            _id: expect.anything(),
+            user: teslaAccountAdmin.user.toHexString(),
+            collectData: false,
+            teslaAccount: res.body.teslaAccount._id,
+          },
+        ],
       });
 
-      const dbTeslaAccount = await TeslaAccount.findById(res.body._id);
+      const dbTeslaAccount = await TeslaAccount.findById(res.body.teslaAccount._id);
       expect(dbTeslaAccount).toBeDefined();
       expect(dbTeslaAccount.toJSON()).toMatchObject({
         _id: teslaAccountAdmin._id,
         user: teslaAccountAdmin.user,
         email: body.email,
-        access_token: tokens.access_token,
-        refresh_token: tokens.refresh_token,
         linked: true,
+      });
+
+      const dbVehicles = await Vehicle.find({ user: teslaAccountAdmin.user });
+      expect(dbVehicles).toBeDefined();
+      expect(dbVehicles).toHaveLength(1);
+      expect(dbVehicles[0].toJSON()).toMatchObject({
+        tokens,
+        id,
+        vehicle_id,
+        vin,
+        display_name,
+        option_codes,
+        color,
+        state,
+        in_service,
+        id_s,
+        calendar_enabled,
+        api_version,
+        backseat_token,
+        backseat_token_updated_at,
+        _id: expect.anything(),
+        user: teslaAccountAdmin.user,
+        collectData: false,
+        teslaAccount: dbTeslaAccount._id,
       });
     });
 
