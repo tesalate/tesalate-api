@@ -1,6 +1,7 @@
 const dbHandler = require('./dbHandler');
 
 const setupTestDB = () => {
+  jest.setTimeout(15000);
   beforeAll(async () => {
     await dbHandler.connect();
   });
