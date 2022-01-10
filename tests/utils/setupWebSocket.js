@@ -16,9 +16,6 @@ async function setupWebSocket() {
     await dbHandler.connect();
     server.listen(config.port);
   });
-  beforeEach(async () => {
-    await dbHandler.clearDatabase();
-  });
   afterEach(async () => {
     await dbHandler.clearDatabase();
   });
