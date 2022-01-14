@@ -3,6 +3,7 @@ module.exports.emailService = require('./email.service');
 module.exports.tokenService = require('./token.service');
 module.exports.userService = require('./user.service');
 module.exports.vehicleService = require('./vehicle.service');
+module.exports.reminderService = require('./reminder.service');
 module.exports.teslaAccountService = require('./teslaAccount.service');
 module.exports.vehicleDataService = require('./vehicleData.service');
 module.exports.chargeSessionService = require('./chargeSession.service');

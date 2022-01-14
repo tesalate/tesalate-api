@@ -6,7 +6,7 @@ const reminder = mongoose.Schema(
     type: {
       type: String,
       required: true,
-      enum: ['odometer', 'date'],
+      enum: ['odometer'],
     },
     message: {
       type: String,
@@ -14,7 +14,7 @@ const reminder = mongoose.Schema(
       default: '',
     },
     when: {
-      type: Number || Date,
+      type: Number,
       required: true,
     },
     remindWithin: {

@@ -84,7 +84,7 @@ const deleteTeslaAccountById = async (teslaAccountId, user) => {
 };
 
 /**
- * Link a Tesla Account
+ * login a Tesla Account
  * @param {Object} linkTeslaAccountObject
  * @returns {Promise<TeslaAccount>}
  */
