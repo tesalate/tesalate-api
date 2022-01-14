@@ -10,6 +10,8 @@ const allRoles = {
     'manageSessions',
     'getMapPoints',
     'manageMapPoints',
+    'getReminders',
+    'manageReminders',
   ],
   admin: [
     'getUsers',
@@ -24,6 +26,8 @@ const allRoles = {
     'manageSessions',
     'getMapPoints',
     'manageMapPoints',
+    'getReminders',
+    'manageReminders',
   ],
 };
 

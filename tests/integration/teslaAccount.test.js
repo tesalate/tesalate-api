@@ -16,7 +16,7 @@ setupTestDB();
 jest.mock('axios');
 
 describe('TeslaAccount routes', () => {
-  describe('POST /v1/tesla-accounts', () => {
+  describe('POST /v1/tesla-account', () => {
     let newTeslaAccount;
     beforeEach(() => {
       newTeslaAccount = {
@@ -31,7 +31,7 @@ describe('TeslaAccount routes', () => {
       await insertUsers([admin]);
 
       const res = await request(app)
-        .post('/v1/tesla-accounts')
+        .post('/v1/tesla-account')
         .set('Cookie', `token=${adminAccessToken}`)
         .send(newTeslaAccount)
         .expect(httpStatus.CREATED);
@@ -52,7 +52,7 @@ describe('TeslaAccount routes', () => {
     });
 
     test('should return 401 error if access token is missing', async () => {
-      await request(app).post('/v1/tesla-accounts').send(newTeslaAccount).expect(httpStatus.UNAUTHORIZED);
+      await request(app).post('/v1/tesla-account').send(newTeslaAccount).expect(httpStatus.UNAUTHORIZED);
     });
 
     test('should return 400 error if email is invalid', async () => {
@@ -60,7 +60,7 @@ describe('TeslaAccount routes', () => {
       newTeslaAccount.email = 'invalidEmail';
 
       await request(app)
-        .post('/v1/tesla-accounts')
+        .post('/v1/tesla-account')
         .set('Cookie', `token=${adminAccessToken}`)
         .send(newTeslaAccount)
         .expect(httpStatus.BAD_REQUEST);
@@ -72,19 +72,19 @@ describe('TeslaAccount routes', () => {
       newTeslaAccount.email = teslaAccountAdmin.email;
 
       await request(app)
-        .post('/v1/tesla-accounts')
+        .post('/v1/tesla-account')
         .set('Cookie', `token=${adminAccessToken}`)
         .send(newTeslaAccount)
         .expect(httpStatus.BAD_REQUEST);
     });
   });
 
-  describe('GET /v1/tesla-accounts', () => {
+  describe('GET /v1/tesla-account', () => {
     test('should return 200 and apply the default query options', async () => {
       await insertUsers([admin, userOne]);
       await insertTeslaAccounts([teslaAccountAdmin, teslaAccountOne]);
 
-      const res = await request(app).get('/v1/tesla-accounts').set('Cookie', `token=${adminAccessToken}`).send();
+      const res = await request(app).get('/v1/tesla-account').set('Cookie', `token=${adminAccessToken}`).send();
 
       expect(res.body).toEqual({
         results: expect.any(Array),
@@ -105,17 +105,17 @@ describe('TeslaAccount routes', () => {
     });
 
     test('should return 401 if access token is missing', async () => {
-      await request(app).get('/v1/tesla-accounts').send().expect(httpStatus.UNAUTHORIZED);
+      await request(app).get('/v1/tesla-account').send().expect(httpStatus.UNAUTHORIZED);
     });
   });
 
-  describe('GET /v1/tesla-accounts/:teslaAccountId', () => {
+  describe('GET /v1/tesla-account/:teslaAccountId', () => {
     test('should return 200 and the teslaAccount object if data is ok', async () => {
       await insertUsers([admin]);
       await insertTeslaAccounts([teslaAccountAdmin]);
 
       const res = await request(app)
-        .get(`/v1/tesla-accounts/${teslaAccountAdmin._id}`)
+        .get(`/v1/tesla-account/${teslaAccountAdmin._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.OK);
@@ -134,7 +134,7 @@ describe('TeslaAccount routes', () => {
       await insertUsers([admin]);
       await insertTeslaAccounts([teslaAccountAdmin]);
 
-      await request(app).get(`/v1/tesla-accounts/${teslaAccountAdmin._id}`).send().expect(httpStatus.UNAUTHORIZED);
+      await request(app).get(`/v1/tesla-account/${teslaAccountAdmin._id}`).send().expect(httpStatus.UNAUTHORIZED);
     });
 
     test('should return 404 error if teslaAccount is trying to get another teslaAccount', async () => {
@@ -142,7 +142,7 @@ describe('TeslaAccount routes', () => {
       await insertTeslaAccounts([teslaAccountAdmin, teslaAccountOne]);
 
       await request(app)
-        .get(`/v1/tesla-accounts/${teslaAccountAdmin._id}`)
+        .get(`/v1/tesla-account/${teslaAccountAdmin._id}`)
         .set('Cookie', `token=${userOneAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);
@@ -153,20 +153,20 @@ describe('TeslaAccount routes', () => {
       await insertTeslaAccounts([teslaAccountAdmin]);
 
       await request(app)
-        .get('/v1/tesla-accounts/invalidId')
+        .get('/v1/tesla-account/invalidId')
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.BAD_REQUEST);
     });
   });
 
-  describe('DELETE /v1/tesla-accounts/:teslaAccountId', () => {
+  describe('DELETE /v1/tesla-account/:teslaAccountId', () => {
     test('should return 204 if data is ok', async () => {
       await insertUsers([admin]);
       await insertTeslaAccounts([teslaAccountAdmin]);
 
       await request(app)
-        .delete(`/v1/tesla-accounts/${teslaAccountAdmin._id}`)
+        .delete(`/v1/tesla-account/${teslaAccountAdmin._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.NO_CONTENT);
@@ -176,7 +176,7 @@ describe('TeslaAccount routes', () => {
     });
 
     test('should return 401 error if access token is missing', async () => {
-      await request(app).delete(`/v1/tesla-accounts/${teslaAccountAdmin._id}`).send().expect(httpStatus.UNAUTHORIZED);
+      await request(app).delete(`/v1/tesla-account/${teslaAccountAdmin._id}`).send().expect(httpStatus.UNAUTHORIZED);
     });
 
     test('should return 404 error if teslaAccount is trying to delete another teslaAccount', async () => {
@@ -184,7 +184,7 @@ describe('TeslaAccount routes', () => {
       await insertTeslaAccounts([teslaAccountAdmin, teslaAccountOne]);
 
       await request(app)
-        .delete(`/v1/tesla-accounts/${teslaAccountOne._id}`)
+        .delete(`/v1/tesla-account/${teslaAccountOne._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);
@@ -195,7 +195,7 @@ describe('TeslaAccount routes', () => {
       await insertTeslaAccounts([teslaAccountAdmin]);
 
       await request(app)
-        .delete('/v1/tesla-accounts/invalidId')
+        .delete('/v1/tesla-account/invalidId')
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.BAD_REQUEST);
@@ -205,14 +205,14 @@ describe('TeslaAccount routes', () => {
       await insertUsers([admin]);
 
       await request(app)
-        .delete(`/v1/tesla-accounts/${teslaAccountAdmin._id}`)
+        .delete(`/v1/tesla-account/${teslaAccountAdmin._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);
     });
   });
 
-  describe('PATCH /v1/tesla-accounts/:teslaAccountId', () => {
+  describe('PATCH /v1/tesla-account/:teslaAccountId', () => {
     test('should return 200 and successfully update teslaAccount if data is ok', async () => {
       await insertUsers([admin]);
       await insertTeslaAccounts([teslaAccountAdmin]);
@@ -225,7 +225,7 @@ describe('TeslaAccount routes', () => {
       };
 
       const res = await request(app)
-        .patch(`/v1/tesla-accounts/${teslaAccountAdmin._id}`)
+        .patch(`/v1/tesla-account/${teslaAccountAdmin._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.OK);
@@ -252,7 +252,7 @@ describe('TeslaAccount routes', () => {
       const updateBody = { email: faker.internet.email().toLowerCase() };
 
       await request(app)
-        .patch(`/v1/tesla-accounts/${teslaAccountAdmin._id}`)
+        .patch(`/v1/tesla-account/${teslaAccountAdmin._id}`)
         .send(updateBody)
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -263,7 +263,7 @@ describe('TeslaAccount routes', () => {
       const updateBody = { email: faker.internet.email().toLowerCase() };
 
       await request(app)
-        .patch(`/v1/tesla-accounts/${teslaAccountOne._id}`)
+        .patch(`/v1/tesla-account/${teslaAccountOne._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.NOT_FOUND);
@@ -275,7 +275,7 @@ describe('TeslaAccount routes', () => {
       const updateBody = { email: faker.internet.email().toLowerCase() };
 
       await request(app)
-        .patch(`/v1/tesla-accounts/${teslaAccountOne._id}`)
+        .patch(`/v1/tesla-account/${teslaAccountOne._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.NOT_FOUND);
@@ -287,7 +287,7 @@ describe('TeslaAccount routes', () => {
       const updateBody = { email: faker.internet.email().toLowerCase() };
 
       await request(app)
-        .patch(`/v1/tesla-accounts/invalidId`)
+        .patch(`/v1/tesla-account/invalidId`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);
@@ -299,7 +299,7 @@ describe('TeslaAccount routes', () => {
       const updateBody = { email: 'invalidEmail' };
 
       await request(app)
-        .patch(`/v1/tesla-accounts/${teslaAccountAdmin._id}`)
+        .patch(`/v1/tesla-account/${teslaAccountAdmin._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);
@@ -311,14 +311,14 @@ describe('TeslaAccount routes', () => {
       const updateBody = { email: teslaAccountOne.email };
 
       await request(app)
-        .patch(`/v1/tesla-accounts/${teslaAccountAdmin._id}`)
+        .patch(`/v1/tesla-account/${teslaAccountAdmin._id}`)
         .set('Cookie', `token=${adminAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);
     });
   });
 
-  describe('POST /v1/tesla-accounts/link', () => {
+  describe('POST /v1/tesla-account/login', () => {
     let body;
 
     const teslaResponseTokens = {
@@ -333,7 +333,7 @@ describe('TeslaAccount routes', () => {
       };
     });
 
-    test('should return 201 and successfully create and link new teslaAccount with vehicles if data is ok', async () => {
+    test('should return 201 and successfully create and login new teslaAccount with vehicles if data is ok', async () => {
       axios.post.mockResolvedValue({
         data: {
           ...teslaResponseTokens,
@@ -382,7 +382,7 @@ describe('TeslaAccount routes', () => {
       await insertUsers([admin]);
 
       const res = await request(app)
-        .post('/v1/tesla-accounts/link')
+        .post('/v1/tesla-account/login')
         .set('Cookie', `token=${adminAccessToken}`)
         .send(body)
         .expect(httpStatus.CREATED);
@@ -504,7 +504,7 @@ describe('TeslaAccount routes', () => {
       await insertTeslaAccounts([teslaAccountAdmin, teslaAccountOne]);
 
       const res = await request(app)
-        .post('/v1/tesla-accounts/link')
+        .post('/v1/tesla-account/login')
         .set('Cookie', `token=${adminAccessToken}`)
         .send(body)
         .expect(httpStatus.OK);
@@ -581,14 +581,14 @@ describe('TeslaAccount routes', () => {
       await insertTeslaAccounts([teslaAccountAdmin]);
 
       await request(app)
-        .post('/v1/tesla-accounts/link')
+        .post('/v1/tesla-account/login')
         .set('Cookie', `token=${adminAccessToken}`)
         .send(body)
         .expect(httpStatus.BAD_GATEWAY);
     });
 
     test('should return 401 error if access token is missing', async () => {
-      await request(app).post('/v1/tesla-accounts/link').send(body).expect(httpStatus.UNAUTHORIZED);
+      await request(app).post('/v1/tesla-account/login').send(body).expect(httpStatus.UNAUTHORIZED);
     });
 
     test('should return 400 error if email is invalid', async () => {
@@ -596,7 +596,7 @@ describe('TeslaAccount routes', () => {
       body.email = 'invalidEmail';
 
       await request(app)
-        .post('/v1/tesla-accounts/link')
+        .post('/v1/tesla-account/login')
         .set('Cookie', `token=${adminAccessToken}`)
         .send(body)
         .expect(httpStatus.BAD_REQUEST);
@@ -607,7 +607,7 @@ describe('TeslaAccount routes', () => {
       body.refreshToken = null;
 
       await request(app)
-        .post('/v1/tesla-accounts/link')
+        .post('/v1/tesla-account/login')
         .set('Cookie', `token=${adminAccessToken}`)
         .send(body)
         .expect(httpStatus.BAD_REQUEST);

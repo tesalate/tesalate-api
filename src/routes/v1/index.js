@@ -3,6 +3,7 @@ const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
 const vehicleRoute = require('./vehicle.route');
+const reminderRoute = require('./reminder.route');
 const vehicleDataPointRoute = require('./vehicleData.route');
 const teslaRoute = require('./teslaAccount.route');
 const chargeSessionRoute = require('./chargeSession.route');
@@ -26,7 +27,11 @@ const defaultRoutes = [
     route: vehicleRoute,
   },
   {
-    path: '/tesla-accounts',
+    path: '/reminders',
+    route: reminderRoute,
+  },
+  {
+    path: '/tesla-account',
     route: teslaRoute,
   },
   {

@@ -1,63 +1,38 @@
 const express = require('express');
 const auth = require('../../middleware/auth');
 const validate = require('../../middleware/validate');
-const teslaAccountValidation = require('../../validations/teslaAccount.validation');
-const teslaAccountController = require('../../controllers/teslaAccount.controller');
+const reminderValidation = require('../../validations/reminder.validation');
+const reminderController = require('../../controllers/reminder.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(
-    auth('manageTeslaAccounts'),
-    validate(teslaAccountValidation.createTeslaAccount),
-    teslaAccountController.createTeslaAccount
-  )
-  .get(auth('getTeslaAccounts'), validate(teslaAccountValidation.getTeslaAccounts), teslaAccountController.getTeslaAccounts);
+  .post(auth('manageReminders'), validate(reminderValidation.createReminder), reminderController.createReminder)
+  .get(auth('getReminders'), validate(reminderValidation.getReminders), reminderController.getReminders);
 
 router
-  .route('/:teslaAccountId')
-  .get(auth('getTeslaAccounts'), validate(teslaAccountValidation.getTeslaAccount), teslaAccountController.getTeslaAccount)
-  .patch(
-    auth('manageTeslaAccounts'),
-    validate(teslaAccountValidation.updateTeslaAccount),
-    teslaAccountController.updateTeslaAccount
-  )
-  .delete(
-    auth('manageTeslaAccounts'),
-    validate(teslaAccountValidation.deleteTeslaAccount),
-    teslaAccountController.deleteTeslaAccount
-  );
-
-router
-  .route('/login')
-  .post(
-    auth('manageTeslaAccounts'),
-    validate(teslaAccountValidation.linkTeslaAccount),
-    teslaAccountController.linkTeslaAccount
-  )
-  .delete(
-    auth('manageTeslaAccounts'),
-    validate(teslaAccountValidation.unlinkTeslaAccount),
-    teslaAccountController.unlinkTeslaAccount
-  );
+  .route('/:reminderId')
+  .get(auth('getReminders'), validate(reminderValidation.getReminder), reminderController.getReminder)
+  .patch(auth('manageReminders'), validate(reminderValidation.updateReminder), reminderController.updateReminder)
+  .delete(auth('manageReminders'), validate(reminderValidation.deleteReminder), reminderController.deleteReminder);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: TeslaAccounts
- *   description: TeslaAccount management and retrieval
+ *   name: Reminders
+ *   description: Reminder management and retrieval
  */
 
 /**
  * @swagger
- * /teslaAccounts:
+ * /reminders:
  *   post:
- *     summary: Create a teslaAccount
- *     description: Only admins can create other teslaAccounts.
- *     tags: [TeslaAccounts]
+ *     summary: Create a reminder
+ *     description: Users and admins can create reminders.
+ *     tags: [Reminders]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -67,70 +42,61 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - teslaAccountname
- *               - firstName
- *               - lastName
- *               - email
- *               - password
- *               - role
+ *               - user
+ *               - vin
+ *               - teslaAccount
+ *               - reminder_id
+ *               - id_s
  *             properties:
- *               teslaAccountname:
+ *               user:
  *                 type: string
- *                 description: must be unique
- *               firstName:
+ *                 description: the id of the user creating the reminder
+ *               vin:
  *                 type: string
- *               lastName:
+ *               teslaAccount:
  *                 type: string
- *               email:
+ *                 description: the id of the tesla account that belongs to this reminder
+ *               reminder_id:
+ *                 type: number
+ *               id_s:
  *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
- *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *               role:
- *                  type: string
- *                  enum: [teslaAccount, admin]
  *             example:
- *               teslaAccountname: fake_name
- *               firstName: fake
- *               lastName: name
- *               email: fake@example.com
- *               password: password1
- *               role: teslaAccount
+ *               user: 618dbb89a85101633aeff5e7
+ *               vin: 6f12345678912M125N
+ *               teslaAccount: J618dbb89b85101633aeff5e8
+ *               reminder_id: 12345678,
+ *               id_s: "22446688"
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/TeslaAccount'
+ *                $ref: '#/components/schemas/Reminder'
  *       "400":
- *         $ref: '#/components/responses/DuplicateEmail'
+ *         $ref: '#/components/responses/DuplicateReminder'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all teslaAccounts
- *     description: Only admins can retrieve all teslaAccounts.
- *     tags: [TeslaAccounts]
+ *     summary: Get all reminders
+ *     description: Only admins can retrieve all reminders.
+ *     tags: [Reminders]
  *     security:
- *       - bearerAuth: []
+ *       - cookieToken: []
  *     parameters:
  *       - in: query
- *         name: teslaAccountname
+ *         name: remindername
  *         schema:
  *           type: string
- *         description: TeslaAccountname
+ *         description: Remindername
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: TeslaAccount role
+ *         description: Reminder role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -142,7 +108,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of teslaAccounts
+ *         description: Maximum number of reminders
  *       - in: query
  *         name: page
  *         schema:
@@ -161,7 +127,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/TeslaAccount'
+ *                     $ref: '#/components/schemas/Reminder'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -182,11 +148,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /teslaAccounts/{id}:
+ * /reminders/{id}:
  *   get:
- *     summary: Get a teslaAccount
- *     description: Logged in teslaAccounts can fetch only their own teslaAccount information. Only admins can fetch other teslaAccounts.
- *     tags: [TeslaAccounts]
+ *     summary: Get a reminder
+ *     description: Logged in reminders can fetch only their own reminder information. Only admins can fetch other reminders.
+ *     tags: [Reminders]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -195,14 +161,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: TeslaAccount id
+ *         description: Reminder id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/TeslaAccount'
+ *                $ref: '#/components/schemas/Reminder'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -211,9 +177,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a teslaAccount
- *     description: Logged in teslaAccounts can only update their own information. Only admins can update other teslaAccounts.
- *     tags: [TeslaAccounts]
+ *     summary: Update a reminder
+ *     description: Logged in reminders can only update their own information. Only admins can update other reminders.
+ *     tags: [Reminders]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -222,7 +188,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: TeslaAccount id
+ *         description: Reminder id
  *     requestBody:
  *       required: true
  *       content:
@@ -251,7 +217,7 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/TeslaAccount'
+ *                $ref: '#/components/schemas/Reminder'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -262,9 +228,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a teslaAccount
- *     description: Logged in teslaAccounts can delete only themselves. Only admins can delete other teslaAccounts.
- *     tags: [TeslaAccounts]
+ *     summary: Delete a reminder
+ *     description: Logged in reminders can delete only themselves. Only admins can delete other reminders.
+ *     tags: [Reminders]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -273,7 +239,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: TeslaAccount id
+ *         description: Reminder id
  *     responses:
  *       "200":
  *         description: No content

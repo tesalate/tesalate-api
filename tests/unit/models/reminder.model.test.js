@@ -1,22 +1,17 @@
 const faker = require('faker');
 const { Reminder } = require('../../../src/models');
-const { reminderForVehicleOneForAdmin } = require('../../fixtures/reminder.fixture');
+const { reminderOneForAdmin } = require('../../fixtures/reminder.fixture');
 
 let newReminder;
 
 describe('Reminder model', () => {
   describe('Reminder validation', () => {
     beforeEach(() => {
-      const { _id, ...rest } = reminderForVehicleOneForAdmin;
+      const { _id, ...rest } = reminderOneForAdmin;
       newReminder = rest;
     });
 
     test('should correctly validate a valid reminder obj', async () => {
-      await expect(new Reminder(newReminder).validate()).resolves.toBeUndefined();
-    });
-
-    test('should correctly validate a valid reminder obj when "when" is a date', async () => {
-      newReminder.when = new Date();
       await expect(new Reminder(newReminder).validate()).resolves.toBeUndefined();
     });
 

@@ -1,4 +1,8 @@
+const fs = require('fs');
+const path = require('path');
+const moment = require('moment');
 const nodemailer = require('nodemailer');
+const handlebars = require('handlebars');
 const config = require('../config/config');
 const logger = require('../config/logger');
 
@@ -19,7 +23,7 @@ if (config.env !== 'test') {
  * @returns {Promise}
  */
 const sendEmail = async (to, subject, html) => {
-  const msg = { sender: config.email.SMTP_USERNAME, from: config.email.from, to, subject, html: `<pre>${html}</pre>` };
+  const msg = { sender: config.email.SMTP_USERNAME, from: config.email.from, to, subject, html };
   await transport.sendMail(msg);
 };
 
@@ -30,13 +34,20 @@ const sendEmail = async (to, subject, html) => {
  * @returns {Promise}
  */
 const sendResetPasswordEmail = async (to, token) => {
+  const filePath = path.join(__dirname, '../templates/forgot-password.html');
+  const source = fs.readFileSync(filePath, 'utf-8').toString();
+  const template = handlebars.compile(source);
+  const replacements = {
+    appName: config.appName,
+    copyrightYear: new Date().getFullYear(),
+    privacyPolicyLink: `${config.publicUrl}/privacy`,
+    resetPasswordUrl: `${config.publicUrl}/reset-password?token=${token}`,
+    validFor: moment.duration(config.jwt.resetPasswordExpirationMinutes * 60000).humanize(),
+  };
+  const htmlToSend = template(replacements);
   const subject = 'Reset password';
-  // replace this url with the link to the reset password page of your front-end app
-  const resetPasswordUrl = `${config.publicUrl}/reset-password?token=${token}`;
-  const html = `Dear user,
-To reset your password, <a href="${resetPasswordUrl}">click here</a>
-If you did not request any password resets, then ignore this email.`;
-  await sendEmail(to, subject, html);
+
+  await sendEmail(to, subject, htmlToSend);
 };
 
 /**
@@ -46,13 +57,19 @@ If you did not request any password resets, then ignore this email.`;
  * @returns {Promise}
  */
 const sendVerificationEmail = async (to, token) => {
+  const filePath = path.join(__dirname, '../templates/verify-email.html');
+  const source = fs.readFileSync(filePath, 'utf-8').toString();
+  const template = handlebars.compile(source);
+  const replacements = {
+    appName: config.appName,
+    copyrightYear: new Date().getFullYear(),
+    privacyPolicyLink: `${config.publicUrl}/privacy`,
+    verificationEmailUrl: `${config.publicUrl}/verify-email?token=${token}`,
+    validFor: moment.duration(config.jwt.verifyEmailExpirationMinutes * 60000).humanize(),
+  };
+  const htmlToSend = template(replacements);
   const subject = 'Email Verification';
-  // replace this url with the link to the email verification page of your front-end app
-  const verificationEmailUrl = `${config.publicUrl}/verify-email?token=${token}`;
-  const html = `Dear user,
-To verify your email, <a href="${verificationEmailUrl}">click here</a>
-If you did not create an account, then ignore this email.`;
-  await sendEmail(to, subject, html);
+  await sendEmail(to, subject, htmlToSend);
 };
 
 module.exports = {

@@ -1887,9 +1887,9 @@
         "tags": ["Vehicle"]
       }
     },
-    "/v1/tesla-accounts": {
+    "/v1/tesla-account": {
       "post": {
-        "summary": "/v1/tesla-accounts",
+        "summary": "/v1/tesla-account",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2060,7 +2060,7 @@
         "tags": []
       },
       "get": {
-        "summary": "/v1/tesla-accounts",
+        "summary": "/v1/tesla-account",
         "responses": {
           "200": {
             "description": "OK",
@@ -2150,9 +2150,9 @@
         "tags": []
       }
     },
-    "/v1/tesla-accounts/{teslaAccountId}": {
+    "/v1/tesla-account/{teslaAccountId}": {
       "get": {
-        "summary": "/v1/tesla-accounts/{teslaAccountId}",
+        "summary": "/v1/tesla-account/{teslaAccountId}",
         "parameters": [
           {
             "name": "teslaAccountId",
@@ -2167,7 +2167,7 @@
         "tags": ["TeslaAccount"]
       },
       "patch": {
-        "summary": "/v1/tesla-accounts/{teslaAccountId}",
+        "summary": "/v1/tesla-account/{teslaAccountId}",
         "parameters": [
           {
             "name": "teslaAccountId",
@@ -2182,7 +2182,7 @@
         "tags": ["TeslaAccount"]
       },
       "delete": {
-        "summary": "/v1/tesla-accounts/{teslaAccountId}",
+        "summary": "/v1/tesla-account/{teslaAccountId}",
         "parameters": [
           {
             "name": "teslaAccountId",
@@ -2197,9 +2197,9 @@
         "tags": ["TeslaAccount"]
       }
     },
-    "/v1/tesla-accounts/link": {
+    "/v1/tesla-account/login": {
       "post": {
-        "summary": "/v1/tesla-accounts/link",
+        "summary": "/v1/tesla-account/login",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2464,7 +2464,7 @@
         "tags": []
       },
       "delete": {
-        "summary": "/v1/tesla-accounts/link",
+        "summary": "/v1/tesla-account/login",
         "responses": {},
         "tags": []
       }

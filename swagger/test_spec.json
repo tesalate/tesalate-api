@@ -2,12 +2,7 @@
   "definitions": {
     "Token": {
       "title": "Token",
-      "required": [
-        "token",
-        "user",
-        "type",
-        "expiresAt"
-      ],
+      "required": ["token", "user", "type", "expiresAt"],
       "properties": {
         "token": {
           "type": "string"
@@ -17,11 +12,7 @@
         },
         "type": {
           "type": "string",
-          "enum": [
-            "refresh",
-            "resetPassword",
-            "verifyEmail"
-          ]
+          "enum": ["refresh", "resetPassword", "verifyEmail"]
         },
         "expiresAt": {
           "type": "string",
@@ -45,14 +36,7 @@
     },
     "User": {
       "title": "User",
-      "required": [
-        "username",
-        "displayName",
-        "firstName",
-        "lastName",
-        "email",
-        "password"
-      ],
+      "required": ["username", "displayName", "firstName", "lastName", "email", "password"],
       "properties": {
         "username": {
           "type": "string"
@@ -74,10 +58,7 @@
         },
         "role": {
           "type": "string",
-          "enum": [
-            "user",
-            "admin"
-          ]
+          "enum": ["user", "admin"]
         },
         "isEmailVerified": {
           "type": "boolean"
@@ -106,11 +87,7 @@
     },
     "Vehicle": {
       "title": "Vehicle",
-      "required": [
-        "user",
-        "vin",
-        "id_s"
-      ],
+      "required": ["user", "vin", "id_s"],
       "properties": {
         "user": {
           "type": "string"
@@ -186,10 +163,7 @@
     },
     "TeslaAccount": {
       "title": "TeslaAccount",
-      "required": [
-        "user",
-        "email"
-      ],
+      "required": ["user", "email"],
       "properties": {
         "user": {
           "type": "string"
@@ -221,10 +195,7 @@
     },
     "VehicleData": {
       "title": "VehicleData",
-      "required": [
-        "vehicle",
-        "user"
-      ],
+      "required": ["vehicle", "user"],
       "properties": {
         "user_id": {
           "type": "number"
@@ -373,10 +344,7 @@
     },
     "ChargeSession": {
       "title": "ChargeSession",
-      "required": [
-        "vehicle",
-        "user"
-      ],
+      "required": ["vehicle", "user"],
       "properties": {
         "dataPoints": {
           "type": "array",
@@ -431,10 +399,7 @@
     },
     "DriveSession": {
       "title": "DriveSession",
-      "required": [
-        "vehicle",
-        "user"
-      ],
+      "required": ["vehicle", "user"],
       "properties": {
         "dataPoints": {
           "type": "array",
@@ -495,11 +460,7 @@
     },
     "MapPoint": {
       "title": "MapPoint",
-      "required": [
-        "latLongString",
-        "vehicle",
-        "user"
-      ],
+      "required": ["latLongString", "vehicle", "user"],
       "properties": {
         "dataPoints": {
           "type": "array",
@@ -537,20 +498,11 @@
     },
     "Reminder": {
       "title": "Reminder",
-      "required": [
-        "type",
-        "message",
-        "when",
-        "vehicle",
-        "user"
-      ],
+      "required": ["type", "message", "when", "vehicle", "user"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "odometer",
-            "date"
-          ]
+          "enum": ["odometer", "date"]
         },
         "message": {
           "type": "string"
@@ -585,9 +537,7 @@
     },
     "Charger": {
       "title": "Charger",
-      "required": [
-        "title"
-      ],
+      "required": ["title"],
       "properties": {
         "address_line_1": {
           "type": "string"
@@ -733,22 +683,14 @@
     },
     "Flag": {
       "title": "Flag",
-      "required": [
-        "systemName",
-        "type",
-        "message"
-      ],
+      "required": ["systemName", "type", "message"],
       "properties": {
         "systemName": {
           "type": "string"
         },
         "type": {
           "type": "string",
-          "enum": [
-            "info",
-            "warning",
-            "error"
-          ]
+          "enum": ["info", "warning", "error"]
         },
         "message": {
           "type": "string"
@@ -780,9 +722,7 @@
     "*": {
       "options": {
         "summary": "*",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {},
         "tags": []
@@ -791,9 +731,7 @@
     "/v1/auth/register": {
       "post": {
         "summary": "/v1/auth/register",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -854,9 +792,7 @@
                     "vehicles": {
                       "type": "array",
                       "items": {},
-                      "example": [
-                        null
-                      ]
+                      "example": [null]
                     },
                     "_id": {
                       "type": "string",
@@ -905,18 +841,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "produces": ["application/json", "text/html"]
       }
     },
     "/v1/auth/login": {
       "post": {
         "summary": "/v1/auth/login",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "200": {
@@ -942,9 +873,7 @@
                     "vehicles": {
                       "type": "array",
                       "items": {},
-                      "example": [
-                        null
-                      ]
+                      "example": [null]
                     },
                     "_id": {
                       "type": "string",
@@ -993,18 +922,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "produces": ["application/json", "text/html"]
       }
     },
     "/v1/auth/logout": {
       "post": {
         "summary": "/v1/auth/logout",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "204": {},
@@ -1026,18 +950,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "produces": ["application/json", "text/html"]
       }
     },
     "/v1/auth/refresh-tokens": {
       "post": {
         "summary": "/v1/auth/refresh-tokens",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "204": {},
@@ -1074,21 +993,14 @@
             }
           }
         },
-        "tags": [
-          "Token"
-        ],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "tags": ["Token"],
+        "produces": ["application/json", "text/html"]
       }
     },
     "/v1/auth/forgot-password": {
       "post": {
         "summary": "/v1/auth/forgot-password",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "204": {},
@@ -1126,18 +1038,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "produces": ["application/json", "text/html"]
       }
     },
     "/v1/auth/reset-password": {
       "post": {
         "summary": "/v1/auth/reset-password",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -1173,17 +1080,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json"
-        ]
+        "produces": ["application/json"]
       }
     },
     "/v1/auth/send-verification-email": {
       "post": {
         "summary": "/v1/auth/send-verification-email",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "204": {},
@@ -1205,17 +1108,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json"
-        ]
+        "produces": ["application/json"]
       }
     },
     "/v1/auth/verify-email": {
       "post": {
         "summary": "/v1/auth/verify-email",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "400": {
@@ -1236,17 +1135,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json"
-        ]
+        "produces": ["application/json"]
       }
     },
     "/v1/users": {
       "post": {
         "summary": "/v1/users",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -1308,9 +1203,7 @@
                 "vehicles": {
                   "type": "array",
                   "items": {},
-                  "example": [
-                    null
-                  ]
+                  "example": [null]
                 },
                 "_id": {
                   "type": "string",
@@ -1388,19 +1281,12 @@
             }
           }
         },
-        "tags": [
-          "User"
-        ],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "tags": ["User"],
+        "produces": ["application/json", "text/html"]
       },
       "get": {
         "summary": "/v1/users",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "200": {
@@ -1525,21 +1411,14 @@
             }
           }
         },
-        "tags": [
-          "User"
-        ],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "tags": ["User"],
+        "produces": ["application/json", "text/html"]
       }
     },
     "/v1/users/{userId}": {
       "get": {
         "summary": "/v1/users/{userId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "userId",
@@ -1548,15 +1427,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "User"
-        ]
+        "tags": ["User"]
       },
       "patch": {
         "summary": "/v1/users/{userId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "userId",
@@ -1565,15 +1440,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "User"
-        ]
+        "tags": ["User"]
       },
       "delete": {
         "summary": "/v1/users/{userId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "userId",
@@ -1582,17 +1453,13 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "User"
-        ]
+        "tags": ["User"]
       }
     },
     "/v1/vehicles": {
       "post": {
         "summary": "/v1/vehicles",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -1606,9 +1473,7 @@
                   "items": {
                     "type": "string"
                   },
-                  "example": [
-                    "5dl9rl"
-                  ]
+                  "example": ["5dl9rl"]
                 },
                 "id": {
                   "type": "number",
@@ -1701,9 +1566,7 @@
                   "items": {
                     "type": "string"
                   },
-                  "example": [
-                    "9laa1e"
-                  ]
+                  "example": ["9laa1e"]
                 },
                 "_id": {
                   "type": "string",
@@ -1801,19 +1664,12 @@
             }
           }
         },
-        "tags": [
-          "Vehicle"
-        ],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "tags": ["Vehicle"],
+        "produces": ["application/json", "text/html"]
       },
       "get": {
         "summary": "/v1/vehicles",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "200": {
@@ -1893,10 +1749,7 @@
                       "teslaAccount": "61cb978f4274294e145681f1",
                       "collectData": false,
                       "display_name": "Ivory_Baumbach",
-                      "tokens": [
-                        "2xukrg",
-                        "swah81"
-                      ],
+                      "tokens": ["2xukrg", "swah81"],
                       "_id": "61cb978f4274294e145681f0",
                       "access_type": "OWNER",
                       "user": "61cb978f4274294e145681ec",
@@ -1951,20 +1804,14 @@
             }
           }
         },
-        "tags": [
-          "Vehicle"
-        ],
-        "produces": [
-          "application/json"
-        ]
+        "tags": ["Vehicle"],
+        "produces": ["application/json"]
       }
     },
     "/v1/vehicles/{vehicleId}": {
       "get": {
         "summary": "/v1/vehicles/{vehicleId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "vehicleId",
@@ -1973,15 +1820,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       },
       "patch": {
         "summary": "/v1/vehicles/{vehicleId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "vehicleId",
@@ -1990,15 +1833,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       },
       "delete": {
         "summary": "/v1/vehicles/{vehicleId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "vehicleId",
@@ -2007,17 +1846,13 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       }
     },
-    "/v1/tesla-accounts": {
+    "/v1/tesla-account": {
       "post": {
-        "summary": "/v1/tesla-accounts",
-        "consumes": [
-          "application/json"
-        ],
+        "summary": "/v1/tesla-account",
+        "consumes": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -2113,16 +1948,11 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "produces": ["application/json", "text/html"]
       },
       "get": {
-        "summary": "/v1/tesla-accounts",
-        "consumes": [
-          "application/json"
-        ],
+        "summary": "/v1/tesla-account",
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "200": {
@@ -2203,17 +2033,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json"
-        ]
+        "produces": ["application/json"]
       }
     },
-    "/v1/tesla-accounts/{teslaAccountId}": {
+    "/v1/tesla-account/{teslaAccountId}": {
       "get": {
-        "summary": "/v1/tesla-accounts/{teslaAccountId}",
-        "consumes": [
-          "application/json"
-        ],
+        "summary": "/v1/tesla-account/{teslaAccountId}",
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "teslaAccountId",
@@ -2222,15 +2048,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "TeslaAccount"
-        ]
+        "tags": ["TeslaAccount"]
       },
       "patch": {
-        "summary": "/v1/tesla-accounts/{teslaAccountId}",
-        "consumes": [
-          "application/json"
-        ],
+        "summary": "/v1/tesla-account/{teslaAccountId}",
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "teslaAccountId",
@@ -2239,15 +2061,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "TeslaAccount"
-        ]
+        "tags": ["TeslaAccount"]
       },
       "delete": {
-        "summary": "/v1/tesla-accounts/{teslaAccountId}",
-        "consumes": [
-          "application/json"
-        ],
+        "summary": "/v1/tesla-account/{teslaAccountId}",
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "teslaAccountId",
@@ -2256,17 +2074,13 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "TeslaAccount"
-        ]
+        "tags": ["TeslaAccount"]
       }
     },
-    "/v1/tesla-accounts/link": {
+    "/v1/tesla-account/login": {
       "post": {
-        "summary": "/v1/tesla-accounts/link",
-        "consumes": [
-          "application/json"
-        ],
+        "summary": "/v1/tesla-account/login",
+        "consumes": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -2402,16 +2216,11 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
+        "produces": ["application/json", "text/html"]
       },
       "delete": {
-        "summary": "/v1/tesla-accounts/link",
-        "consumes": [
-          "application/json"
-        ],
+        "summary": "/v1/tesla-account/login",
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {},
         "tags": []
@@ -2420,9 +2229,7 @@
     "/v1/vehicle-data": {
       "get": {
         "summary": "/v1/vehicle-data",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "401": {
@@ -2442,20 +2249,14 @@
             }
           }
         },
-        "tags": [
-          "Vehicle"
-        ],
-        "produces": [
-          "application/json"
-        ]
+        "tags": ["Vehicle"],
+        "produces": ["application/json"]
       }
     },
     "/v1/vehicle-data/{vehicleDataId}": {
       "get": {
         "summary": "/v1/vehicle-data/{vehicleDataId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "vehicleDataId",
@@ -2464,16 +2265,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle",
-          "VehicleData"
-        ]
+        "tags": ["Vehicle", "VehicleData"]
       },
       "delete": {
         "summary": "/v1/vehicle-data/{vehicleDataId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "vehicleDataId",
@@ -2482,18 +2278,13 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle",
-          "VehicleData"
-        ]
+        "tags": ["Vehicle", "VehicleData"]
       }
     },
     "/v1/charge-sessions": {
       "get": {
         "summary": "/v1/charge-sessions",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "200": {
@@ -2559,11 +2350,7 @@
                               "type": "string"
                             }
                           },
-                          "required": [
-                            "type",
-                            "message",
-                            "_id"
-                          ]
+                          "required": ["type", "message", "_id"]
                         }
                       },
                       "startDate": {
@@ -2577,15 +2364,10 @@
                   "example": [
                     {
                       "geoJSON": {
-                        "coordinates": [
-                          34,
-                          -83
-                        ],
+                        "coordinates": [34, -83],
                         "type": "Point"
                       },
-                      "dataPoints": [
-                        "61cb9785fbd13d4e1458aae4"
-                      ],
+                      "dataPoints": ["61cb9785fbd13d4e1458aae4"],
                       "maxChargeRate": 60363,
                       "energyAdded": 86,
                       "charger": "61cb9785fbd13d4e1458aab8",
@@ -2646,17 +2428,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json"
-        ]
+        "produces": ["application/json"]
       }
     },
     "/v1/charge-sessions/{chargeSessionId}": {
       "get": {
         "summary": "/v1/charge-sessions/{chargeSessionId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "chargeSessionId",
@@ -2665,15 +2443,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "ChargeSession"
-        ]
+        "tags": ["ChargeSession"]
       },
       "delete": {
         "summary": "/v1/charge-sessions/{chargeSessionId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "chargeSessionId",
@@ -2682,17 +2456,13 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "ChargeSession"
-        ]
+        "tags": ["ChargeSession"]
       }
     },
     "/v1/drive-sessions": {
       "get": {
         "summary": "/v1/drive-sessions",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "200": {
@@ -2788,17 +2558,11 @@
                   "example": [
                     {
                       "startLocation": {
-                        "coordinates": [
-                          61,
-                          -100
-                        ],
+                        "coordinates": [61, -100],
                         "type": "Point"
                       },
                       "endLocation": {
-                        "coordinates": [
-                          86,
-                          -11
-                        ],
+                        "coordinates": [86, -11],
                         "type": "Point"
                       },
                       "dataPoints": [
@@ -2870,17 +2634,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json"
-        ]
+        "produces": ["application/json"]
       }
     },
     "/v1/drive-sessions/{driveSessionId}": {
       "get": {
         "summary": "/v1/drive-sessions/{driveSessionId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "driveSessionId",
@@ -2889,15 +2649,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "DriveSession"
-        ]
+        "tags": ["DriveSession"]
       },
       "delete": {
         "summary": "/v1/drive-sessions/{driveSessionId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "driveSessionId",
@@ -2906,17 +2662,13 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "DriveSession"
-        ]
+        "tags": ["DriveSession"]
       }
     },
     "/v1/map-points": {
       "get": {
         "summary": "/v1/map-points",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {
           "200": {
@@ -2989,26 +2741,11 @@
                     {
                       "geoJSON": {
                         "coordinates": [
-                          [
-                            173.38,
-                            -82.47
-                          ],
-                          [
-                            173.38,
-                            -82.47999999999999
-                          ],
-                          [
-                            173.39,
-                            -82.47999999999999
-                          ],
-                          [
-                            173.39,
-                            -82.47
-                          ],
-                          [
-                            173.38,
-                            -82.47
-                          ]
+                          [173.38, -82.47],
+                          [173.38, -82.47999999999999],
+                          [173.39, -82.47999999999999],
+                          [173.39, -82.47],
+                          [173.38, -82.47]
                         ],
                         "type": "Polygon"
                       },
@@ -3067,17 +2804,13 @@
           }
         },
         "tags": [],
-        "produces": [
-          "application/json"
-        ]
+        "produces": ["application/json"]
       }
     },
     "/v1/map-points/distance/{vehicle}": {
       "get": {
         "summary": "/v1/map-points/distance/{vehicle}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "vehicle",
@@ -3086,17 +2819,13 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "Vehicle"
-        ]
+        "tags": ["Vehicle"]
       }
     },
     "/v1/map-points/{mapPointId}": {
       "get": {
         "summary": "/v1/map-points/{mapPointId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "mapPointId",
@@ -3105,15 +2834,11 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "MapPoint"
-        ]
+        "tags": ["MapPoint"]
       },
       "delete": {
         "summary": "/v1/map-points/{mapPointId}",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "mapPointId",
@@ -3122,17 +2847,13 @@
           }
         ],
         "responses": {},
-        "tags": [
-          "MapPoint"
-        ]
+        "tags": ["MapPoint"]
       }
     },
     "/v1/docs": {
       "get": {
         "summary": "/v1/docs",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {},
         "tags": []
@@ -3141,18 +2862,14 @@
     "/v1/docs/swagger.json": {
       "get": {
         "summary": "/v1/docs/swagger.json",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [],
         "responses": {},
         "tags": []
       }
     }
   },
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "swagger": "2.0",
   "tags": [
     {
