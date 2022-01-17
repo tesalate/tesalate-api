@@ -58,7 +58,6 @@ const unlinkTeslaAccount = {};
 
 const sendDataCollectionStoppedEmail = {
   query: Joi.object().keys({
-    displayName: Joi.string().required(),
     teslaAccountId: Joi.custom(objectId).required(),
     userId: Joi.custom(objectId).required(),
   }),

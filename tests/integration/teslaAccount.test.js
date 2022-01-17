@@ -629,19 +629,17 @@ describe('TeslaAccount routes', () => {
 
       await request(app)
         .post(
-          `/v1/tesla-account/send-data-collection-stopped-email?displayName=${vehicleName}&teslaAccountId=${teslaAccountOne._id.toHexString()}&userId=${userOne._id.toHexString()}`
+          `/v1/tesla-account/send-data-collection-stopped-email?teslaAccountId=${teslaAccountOne._id.toHexString()}&userId=${userOne._id.toHexString()}`
         )
         .expect(httpStatus.NO_CONTENT);
-      expect(sendDataCollectorStoppedEmailSpy).toHaveBeenCalledWith(teslaAccountOne.email, vehicleName);
+      expect(sendDataCollectorStoppedEmailSpy).toHaveBeenCalledWith(teslaAccountOne.email);
     });
 
     test('should return 400 error if teslaAccount is not a valid object id', async () => {
       await insertUsers([userOne]);
 
       await request(app)
-        .post(
-          `/v1/tesla-account/send-data-collection-stopped-email?displayName=${vehicleName}&teslaAccountId=1234&userId=${userOne._id.toHexString()}`
-        )
+        .post(`/v1/tesla-account/send-data-collection-stopped-email?teslaAccountId=1234&userId=${userOne._id.toHexString()}`)
         .expect(httpStatus.BAD_REQUEST);
     });
 
@@ -650,7 +648,7 @@ describe('TeslaAccount routes', () => {
 
       await request(app)
         .post(
-          `/v1/tesla-account/send-data-collection-stopped-email?displayName=${vehicleName}&teslaAccountId=${teslaAccountOne._id.toHexString()}&userId=1234`
+          `/v1/tesla-account/send-data-collection-stopped-email?teslaAccountId=${teslaAccountOne._id.toHexString()}&userId=1234`
         )
         .expect(httpStatus.BAD_REQUEST);
     });
@@ -660,7 +658,7 @@ describe('TeslaAccount routes', () => {
 
       await request(app)
         .post(
-          `/v1/tesla-account/send-data-collection-stopped-email?displayName=${vehicleName}&teslaAccountId=${teslaAccountOne._id.toHexString()}&userId=${userOne._id.toHexString()}`
+          `/v1/tesla-account/send-data-collection-stopped-email?teslaAccountId=${teslaAccountOne._id.toHexString()}&userId=${userOne._id.toHexString()}`
         )
         .expect(httpStatus.NOT_FOUND);
     });

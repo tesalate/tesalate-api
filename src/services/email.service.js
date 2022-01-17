@@ -82,7 +82,7 @@ const sendVerificationEmail = async (to, token) => {
  * @param {string} token
  * @returns {Promise}
  */
-const sendDataCollectorStoppedEmail = async (to, displayName) => {
+const sendDataCollectorStoppedEmail = async (to) => {
   const filePath = path.join(__dirname, '../templates/data-collecting-stopped.html');
   const source = fs.readFileSync(filePath, 'utf-8').toString();
   const template = handlebars.compile(source);
@@ -93,7 +93,7 @@ const sendDataCollectorStoppedEmail = async (to, displayName) => {
     teslaAccountEmail: to,
   };
   const htmlToSend = template(replacements);
-  const subject = `⚠️ Oops, we are no longer connected to ${displayName} 🚘`;
+  const subject = `⚠️ Oops, we are no longer connected to your Tesla account 🚘`;
   await sendEmail(to, subject, htmlToSend);
 };
 

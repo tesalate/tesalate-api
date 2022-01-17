@@ -72,7 +72,7 @@ const sendDataCollectionStoppedEmail = catchAsync(async (req, res) => {
   if (!teslaAccount) {
     throw new ApiError(httpStatus.NOT_FOUND, 'TeslaAccount not found');
   }
-  await emailService.sendDataCollectorStoppedEmail(teslaAccount.email, req.query.displayName);
+  await emailService.sendDataCollectorStoppedEmail(teslaAccount.email);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
