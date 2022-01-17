@@ -42,6 +42,12 @@ router
     teslaAccountController.unlinkTeslaAccount
   );
 
+router.post(
+  '/send-data-collection-stopped-email',
+  validate(teslaAccountValidation.sendDataCollectionStoppedEmail),
+  teslaAccountController.sendDataCollectionStoppedEmail
+);
+
 module.exports = router;
 
 /**
