@@ -6,6 +6,10 @@ const handlebars = require('handlebars');
 const config = require('../config/config');
 const logger = require('../config/logger');
 
+const { appName } = config;
+const copyrightYear = new Date().getFullYear();
+const privacyPolicyLink = `${config.publicUrl}/privacy`;
+
 const transport = nodemailer.createTransport(config.email.smtp);
 /* istanbul ignore next */
 if (config.env !== 'test') {
@@ -38,9 +42,9 @@ const sendResetPasswordEmail = async (to, token) => {
   const source = fs.readFileSync(filePath, 'utf-8').toString();
   const template = handlebars.compile(source);
   const replacements = {
-    appName: config.appName,
-    copyrightYear: new Date().getFullYear(),
-    privacyPolicyLink: `${config.publicUrl}/privacy`,
+    appName,
+    copyrightYear,
+    privacyPolicyLink,
     resetPasswordUrl: `${config.publicUrl}/reset-password?token=${token}`,
     validFor: moment.duration(config.jwt.resetPasswordExpirationMinutes * 60000).humanize(),
   };
@@ -61,8 +65,8 @@ const sendVerificationEmail = async (to, token) => {
   const source = fs.readFileSync(filePath, 'utf-8').toString();
   const template = handlebars.compile(source);
   const replacements = {
-    appName: config.appName,
-    copyrightYear: new Date().getFullYear(),
+    appName,
+    copyrightYear,
     privacyPolicyLink: `${config.publicUrl}/privacy`,
     verificationEmailUrl: `${config.publicUrl}/verify-email?token=${token}`,
     validFor: moment.duration(config.jwt.verifyEmailExpirationMinutes * 60000).humanize(),
@@ -72,9 +76,31 @@ const sendVerificationEmail = async (to, token) => {
   await sendEmail(to, subject, htmlToSend);
 };
 
+/**
+ * Send verification email
+ * @param {string} to
+ * @param {string} token
+ * @returns {Promise}
+ */
+const sendDataCollectorStoppedEmail = async (to, displayName) => {
+  const filePath = path.join(__dirname, '../templates/data-collecting-stopped.html');
+  const source = fs.readFileSync(filePath, 'utf-8').toString();
+  const template = handlebars.compile(source);
+  const replacements = {
+    appName,
+    copyrightYear,
+    teslaAccountLink: `${config.publicUrl}/settings/tesla-account`,
+    teslaAccountEmail: to,
+  };
+  const htmlToSend = template(replacements);
+  const subject = `⚠️ Oops, we are no longer connected to ${displayName} 🚘`;
+  await sendEmail(to, subject, htmlToSend);
+};
+
 module.exports = {
   transport,
   sendEmail,
   sendResetPasswordEmail,
   sendVerificationEmail,
+  sendDataCollectorStoppedEmail,
 };

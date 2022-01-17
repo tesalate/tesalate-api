@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { teslaAccountService } = require('../services');
+const { teslaAccountService, emailService } = require('../services');
 
 const linkTeslaAccount = catchAsync(async (req, res) => {
   // eslint-disable-next-line camelcase
@@ -67,6 +67,15 @@ const deleteTeslaAccount = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const sendDataCollectionStoppedEmail = catchAsync(async (req, res) => {
+  const teslaAccount = await teslaAccountService.getTeslaAccountById(req.query.teslaAccountId, req.query.userId);
+  if (!teslaAccount) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'TeslaAccount not found');
+  }
+  await emailService.sendDataCollectorStoppedEmail(teslaAccount.email, req.query.displayName);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   linkTeslaAccount,
   unlinkTeslaAccount,
@@ -75,4 +84,5 @@ module.exports = {
   getTeslaAccount,
   updateTeslaAccount,
   deleteTeslaAccount,
+  sendDataCollectionStoppedEmail,
 };

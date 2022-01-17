@@ -180,11 +180,14 @@
                             style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
                             <tr>
                               <td
-                                style="padding-bottom:10px;padding-left:30px;padding-right:30px;padding-top:10px;text-align:center;width:100%;">
-                                <h2
-                                  style="margin: 0; color: #000000; direction: ltr; font-family: 'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 22px; font-weight: normal; letter-spacing: normal; line-height: 150%; text-align: center; margin-top: 0; margin-bottom: 0;">
-                                  To verify your email, <a href="{{verificationEmailUrl}}">click here</a>.
-                                </h2>
+                                style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:10px;width:100%;">
+                                <p
+                                  style="margin: 0; color: #000000; direction: ltr; font-family: 'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; font-weight: normal; letter-spacing: normal; line-height: 150%; margin-top: 0; margin-bottom: 0;">
+                                  We are unable to gather data for your Tesla account with the email address of
+                                  {{teslaAccountEmail}}.<br />
+                                  Please log into <a href="{{teslaAccountLink}}">{{appName}}</a> and navigate to
+                                  "Tesla Account" under "Settings" and log back into your Tesla account.
+                                </p>
                               </td>
                             </tr>
                           </table>
@@ -236,19 +239,12 @@
                                     style="font-size: 10px; mso-line-height-alt: 14.399999999999999px; color: #000000; line-height: 1.2; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif;">
                                     <p style="margin: 0; font-size: 14px; text-align: center;"><span
                                         style="font-size:10px;">
-                                        The link above is valid for {{validFor}}.
-                                      </span></p>
-                                    <p style="margin: 0; font-size: 14px; text-align: center;"><span
-                                        style="font-size:10px;">
-                                        If you did not create an account with {{appName}}, then ignore this email.
-                                      </span></p>
-                                    <p style="margin: 0; font-size: 14px; text-align: center;"><span
-                                        style="font-size:10px;">
                                         If you have questions regarding your data, please visit our <a
                                           href="{{privacyPolicyLink}}" rel="noopener"
-                                          style="text-decoration: underline;" target="_blank">Privacy
+                                          style="text-decoration: underline; color: #8c8c8c;" target="_blank">Privacy
                                           Policy</a> .</span><span style="font-size:10px;"><span
-                                          style=""> </span></span></p>
+                                          style=""> </span></span>
+                                    </p>
                                     <p style="margin: 0; font-size: 14px; text-align: center;"><span
                                         style="font-size:10px;">© {{copyrightYear}} {{appName}}. All Rights
                                         Reserved.</span></p>

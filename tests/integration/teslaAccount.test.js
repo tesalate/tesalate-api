@@ -10,6 +10,7 @@ const { admin, insertUsers, userOne } = require('../fixtures/user.fixture');
 const { vehicleOneForAdmin } = require('../fixtures/vehicle.fixture');
 const { teslaAccountAdmin, insertTeslaAccounts, teslaAccountOne } = require('../fixtures/teslaAccount.fixture');
 const { userOneAccessToken, adminAccessToken } = require('../fixtures/token.fixture');
+const { emailService } = require('../../src/services');
 
 setupTestDB();
 
@@ -611,6 +612,57 @@ describe('TeslaAccount routes', () => {
         .set('Cookie', `token=${adminAccessToken}`)
         .send(body)
         .expect(httpStatus.BAD_REQUEST);
+    });
+  });
+
+  describe('POST /v1/tesla-account/send-data-collection-stopped-email', () => {
+    beforeEach(() => {
+      jest.spyOn(emailService.transport, 'sendMail').mockResolvedValue();
+    });
+
+    const vehicleName = 'tyl3r';
+
+    test('should return 204 and send data collection stopped email to the user', async () => {
+      await insertUsers([userOne]);
+      await insertTeslaAccounts([teslaAccountOne]);
+      const sendDataCollectorStoppedEmailSpy = jest.spyOn(emailService, 'sendDataCollectorStoppedEmail');
+
+      await request(app)
+        .post(
+          `/v1/tesla-account/send-data-collection-stopped-email?displayName=${vehicleName}&teslaAccountId=${teslaAccountOne._id.toHexString()}&userId=${userOne._id.toHexString()}`
+        )
+        .expect(httpStatus.NO_CONTENT);
+      expect(sendDataCollectorStoppedEmailSpy).toHaveBeenCalledWith(teslaAccountOne.email, vehicleName);
+    });
+
+    test('should return 400 error if teslaAccount is not a valid object id', async () => {
+      await insertUsers([userOne]);
+
+      await request(app)
+        .post(
+          `/v1/tesla-account/send-data-collection-stopped-email?displayName=${vehicleName}&teslaAccountId=1234&userId=${userOne._id.toHexString()}`
+        )
+        .expect(httpStatus.BAD_REQUEST);
+    });
+
+    test('should return 400 error if userId is not a valid object id', async () => {
+      await insertUsers([admin]);
+
+      await request(app)
+        .post(
+          `/v1/tesla-account/send-data-collection-stopped-email?displayName=${vehicleName}&teslaAccountId=${teslaAccountOne._id.toHexString()}&userId=1234`
+        )
+        .expect(httpStatus.BAD_REQUEST);
+    });
+
+    test('should return 404 error if tesla account is an object id', async () => {
+      await insertUsers([userOne]);
+
+      await request(app)
+        .post(
+          `/v1/tesla-account/send-data-collection-stopped-email?displayName=${vehicleName}&teslaAccountId=${teslaAccountOne._id.toHexString()}&userId=${userOne._id.toHexString()}`
+        )
+        .expect(httpStatus.NOT_FOUND);
     });
   });
 });
