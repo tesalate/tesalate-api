@@ -80,35 +80,26 @@ const vehicleSchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 vehicleSchema.plugin(toJSON);
 vehicleSchema.plugin(paginate);
+vehicleSchema.plugin(require('mongoose-autopopulate'));
 
 vehicleSchema.index({ vin: 'text', user: 1 });
 vehicleSchema.index({ user: 1 });
 
 vehicleSchema.post('save', async (vehicle) => {
   try {
-    const user = await mongoose.model('User').findById(vehicle.user);
-    if (!user.vehicles.map((v) => v.toString()).includes(vehicle._id.toString())) {
-      user.vehicles.push(vehicle._id);
-    }
-    return user.save();
+    await mongoose.model('User').updateOne({ _id: vehicle.user }, { $addToSet: { vehicles: vehicle._id } });
   } catch (err) {
     throw new Error('something went wrong post save of vehicle', err.message);
   }
 });
 
-// vehicleSchema.post('save', async (vehicle) => {
-//   try {
-//     if (!vehicle.teslaAccount) {
-//       const updatedVehicle = vehicle;
-//       const teslaAccount = await mongoose.model('TeslaAccount').findOne({ user: vehicle.user });
-//       updatedVehicle.teslaAccount = teslaAccount._id;
-//       return updatedVehicle.save();
-//     }
-//     return;
-//   } catch (err) {
-//     throw new Error('something went wrong', err.message);
-//   }
-// });
+vehicleSchema.post('save', async (vehicle) => {
+  try {
+    await mongoose.model('TeslaAccount').updateOne({ _id: vehicle.teslaAccount }, { $addToSet: { vehicles: vehicle._id } });
+  } catch (err) {
+    throw new Error('something went wrong post save of vehicle', err.message);
+  }
+});
 
 vehicleSchema.post('remove', { query: false, document: true }, async (vehicle) => {
   try {
@@ -116,7 +107,18 @@ vehicleSchema.post('remove', { query: false, document: true }, async (vehicle) =
     user.vehicles.pull(vehicle._id);
     return user.save();
   } catch (err) {
-    throw new Error('something went wrong post remove of vehicle', err);
+    throw new Error('something went wrong post remove of vehicle for user', err);
+  }
+});
+
+vehicleSchema.post('remove', { query: false, document: true }, async (vehicle) => {
+  try {
+    const teslaAccount = await mongoose.model('TeslaAccount').findById(vehicle.teslaAccount);
+
+    teslaAccount.vehicles.pull(vehicle._id);
+    return teslaAccount.save();
+  } catch (err) {
+    throw new Error('something went wrong post remove of vehicle for tesla account', err);
   }
 });
 

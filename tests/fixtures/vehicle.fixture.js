@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 const faker = require('faker');
 const Vehicle = require('../../src/models/vehicle.model');
 const { admin, userOne } = require('./user.fixture');
+const { teslaAccountOne, teslaAccountAdmin } = require('./teslaAccount.fixture');
 
 const vehicleOneForAdmin = {
   _id: mongoose.Types.ObjectId(),
   user: admin._id,
-  teslaAccount: mongoose.Types.ObjectId(),
+  teslaAccount: teslaAccountAdmin._id,
   collectData: faker.datatype.boolean(),
   access_type: 'OWNER',
   tokens: [faker.random.alphaNumeric(6), faker.random.alphaNumeric(6)],
@@ -29,7 +30,7 @@ const vehicleOneForUser = {
   _id: mongoose.Types.ObjectId(),
   access_type: 'OWNER',
   user: userOne._id,
-  teslaAccount: mongoose.Types.ObjectId(),
+  teslaAccount: teslaAccountOne._id,
   collectData: faker.datatype.boolean(),
   tokens: [faker.random.alphaNumeric(6), faker.random.alphaNumeric(6)],
   id: faker.datatype.number(),
@@ -51,7 +52,7 @@ const vehicleTwoForUser = {
   _id: mongoose.Types.ObjectId(),
   access_type: 'OWNER',
   user: userOne._id,
-  teslaAccount: mongoose.Types.ObjectId(),
+  teslaAccount: teslaAccountOne._id,
   collectData: faker.datatype.boolean(),
   tokens: [faker.random.alphaNumeric(6), faker.random.alphaNumeric(6)],
   id: faker.datatype.number(),

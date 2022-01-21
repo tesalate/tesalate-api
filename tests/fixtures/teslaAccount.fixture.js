@@ -10,6 +10,7 @@ const teslaAccountAdmin = {
   access_token: faker.random.alphaNumeric(26),
   refresh_token: faker.random.alphaNumeric(66),
   linked: faker.datatype.boolean(),
+  vehicles: [],
 };
 
 const teslaAccountOne = {
@@ -19,6 +20,7 @@ const teslaAccountOne = {
   access_token: faker.random.alphaNumeric(26),
   refresh_token: faker.random.alphaNumeric(66),
   linked: faker.datatype.boolean(),
+  vehicles: [],
 };
 
 const insertTeslaAccounts = async (teslaAccounts) => {

@@ -40,6 +40,7 @@ describe('TeslaAccount routes', () => {
       expect(res.body).toEqual({
         _id: expect.anything(),
         user: teslaAccountAdmin.user.toHexString(),
+        vehicles: [],
         ...newTeslaAccount,
       });
 
@@ -102,6 +103,7 @@ describe('TeslaAccount routes', () => {
         linked: teslaAccountAdmin.linked,
         refresh_token: teslaAccountAdmin.refresh_token,
         user: teslaAccountAdmin.user.toHexString(),
+        vehicles: [],
       });
     });
 
@@ -128,6 +130,7 @@ describe('TeslaAccount routes', () => {
         linked: teslaAccountAdmin.linked,
         refresh_token: teslaAccountAdmin.refresh_token,
         user: teslaAccountAdmin.user.toHexString(),
+        vehicles: [],
       });
     });
 
@@ -235,6 +238,7 @@ describe('TeslaAccount routes', () => {
         ...updateBody,
         _id: teslaAccountAdmin._id.toHexString(),
         user: teslaAccountAdmin.user.toHexString(),
+        vehicles: [],
       });
 
       const dbTeslaAccount = await TeslaAccount.findById(teslaAccountAdmin._id);

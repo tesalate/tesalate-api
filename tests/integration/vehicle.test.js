@@ -7,6 +7,7 @@ const { Vehicle } = require('../../src/models');
 const { vehicleOneForAdmin, insertVehicles, vehicleOneForUser, vehicleTwoForUser } = require('../fixtures/vehicle.fixture');
 const { admin, insertUsers, userOne } = require('../fixtures/user.fixture');
 const { adminAccessToken, userOneAccessToken } = require('../fixtures/token.fixture');
+const { insertTeslaAccounts, teslaAccountOne } = require('../fixtures/teslaAccount.fixture');
 
 setupTestDB();
 
@@ -401,11 +402,12 @@ describe('Vehicle routes', () => {
   });
 
   describe('DELETE /v1/vehicles/:vehicleId', () => {
-    test('should return 204 if data is ok', async () => {
+    test('should return 204 if data is ok for vehicle delete', async () => {
       await insertUsers([userOne]);
+      await insertTeslaAccounts([teslaAccountOne]);
       await insertVehicles([vehicleOneForUser]);
 
-      await request(app)
+      const res = await request(app)
         .delete(`/v1/vehicles/${vehicleOneForUser._id}`)
         .set('Cookie', `token=${userOneAccessToken}`)
         .send()
