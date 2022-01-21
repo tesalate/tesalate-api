@@ -150,7 +150,7 @@ const getAndSetVehiclesFromTesla = async ({ accessToken, user, teslaAccount }) =
         updateOne: {
           filter: { vin: vehicle.vin, user },
           update: { teslaAccount: null, collectData: false },
-          upsert: false,
+          upsert: true,
         },
       }));
     const vehiclesFromTeslaToUpdate = vehicles.map((vehicle) => ({

@@ -9,6 +9,16 @@ const teslaAccountSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    vehicles: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Vehicle',
+          autopopulate: false,
+        },
+      ],
+      default: [],
+    },
     email: {
       type: String,
       required: true,
@@ -42,6 +52,7 @@ const teslaAccountSchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 teslaAccountSchema.plugin(toJSON);
 teslaAccountSchema.plugin(paginate);
+teslaAccountSchema.plugin(require('mongoose-autopopulate'));
 
 teslaAccountSchema.index({ user: 1, email: 1 }, { unique: true });
 

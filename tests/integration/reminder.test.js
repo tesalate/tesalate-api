@@ -76,8 +76,8 @@ describe('Reminder routes', () => {
         .expect(httpStatus.BAD_REQUEST);
     });
 
-    test('should return 400 error if type is invalid', async () => {
-      await insertUsers([userOne]);
+    test('should return 400 error if reminder type is invalid', async () => {
+      await insertUsers([userOne, admin]);
       newReminder.type = { bad: true };
 
       await request(app)

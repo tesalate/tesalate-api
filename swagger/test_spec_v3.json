@@ -1,12 +1,12 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "mytesla-api",
+    "title": "tesalate-api",
     "version": "0.1.0",
     "license": {
       "name": "MIT"
     },
-    "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI for myTesla"
+    "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI for tesalate"
   },
   "paths": {
     "*": {
