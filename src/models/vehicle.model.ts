@@ -15,7 +15,7 @@ export interface IVehicle {
   option_codes: string;
   access_type: string;
   color: any;
-  tokens: Array<string>;
+  tokens: string[];
   state: string;
   in_service: boolean;
   id_s: string;

@@ -154,7 +154,7 @@ userSchema.pre('save', async function () {
   }
 });
 
-userSchema.post('remove', async function (user) {
+userSchema.post('remove', async (user) => {
   try {
     // if a user is deleted, remove all associated documents from all collections
     await mongoose.model('TeslaAccount').findOneAndDelete({ user: user._id });

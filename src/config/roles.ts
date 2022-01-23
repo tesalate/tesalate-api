@@ -2,7 +2,7 @@
 export enum UserRoles {
   admin = 'admin',
   user = 'user',
-} 
+}
 
 const allRoles = {
   user: [

@@ -5,7 +5,7 @@ export interface GeoJSONPoint {
 
 export interface GeoJSONPolygon {
   type: 'polygon';
-  coordinates: Array<Array<number[]>>;
+  coordinates: number[][][];
 }
 
 export interface IPaginator {

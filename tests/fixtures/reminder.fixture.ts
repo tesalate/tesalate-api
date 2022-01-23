@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import faker from 'faker';
 import Reminder from '../../src/models/reminder.model';
-const { vehicleOneForAdmin, vehicleOneForUser, vehicleTwoForUser } = require('./vehicle.fixture');
+import { vehicleOneForAdmin, vehicleOneForUser, vehicleTwoForUser } from './vehicle.fixture';
 
 const reminderOneForAdmin = {
   _id: mongoose.Types.ObjectId(),

@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import faker from 'faker';
 import DriveSession from '../../src/models/driveSession.model';
-const { vehicleOneForAdmin, vehicleOneForUser, vehicleTwoForUser } = require('./vehicle.fixture');
-const { dataPointForVehicleOneForAdmin } = require('./vehicleData.fixture');
-const { VehicleData } = require('../../src/models');
-const { infoFlag, warningFlag, errorFlag } = require('./flag.fixture');
+import { vehicleOneForAdmin, vehicleOneForUser, vehicleTwoForUser } from './vehicle.fixture';
+import { dataPointForVehicleOneForAdmin } from './vehicleData.fixture';
+import { VehicleData } from '../../src/models';
+import { infoFlag, warningFlag, errorFlag } from './flag.fixture';
 
 const driveSession = {
   dataPoints: Array.from({ length: faker.datatype.number(100) }, () => mongoose.Types.ObjectId()),

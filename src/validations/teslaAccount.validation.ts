@@ -1,5 +1,5 @@
 import Joi from 'joi';
-const { objectId } = require('./custom.validation');
+import { objectId } from './custom.validation';
 
 const createTeslaAccount = {
   body: Joi.object().keys({

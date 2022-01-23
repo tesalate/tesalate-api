@@ -1,5 +1,5 @@
 import Joi from 'joi';
-const { objectId } = require('./custom.validation');
+import { objectId } from './custom.validation';
 
 const getVehicleDataPoints = {
   query: Joi.object().keys({

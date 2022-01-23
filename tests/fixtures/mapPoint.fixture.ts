@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 import faker from 'faker';
 import MapPoint from '../../src/models/mapPoint.model';
-const { vehicleOneForAdmin, vehicleOneForUser, vehicleTwoForUser } = require('./vehicle.fixture');
-const { dataPointForVehicleOneForAdmin } = require('./vehicleData.fixture');
-const { VehicleData } = require('../../src/models');
+import { vehicleOneForAdmin, vehicleOneForUser, vehicleTwoForUser } from './vehicle.fixture';
+import { dataPointForVehicleOneForAdmin } from './vehicleData.fixture';
+import { VehicleData } from '../../src/models';
 import trunc from '../../src/utils/trunc';
-import { IVehicleData } from '../../src/models/vehicleData.model';
 
 const getLatLongObj = (vehicleData) => {
   const lat = trunc(vehicleData.drive_state.latitude, 2);

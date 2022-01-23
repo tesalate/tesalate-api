@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 import faker from 'faker';
-const { ChargeSession, VehicleData } = require('../../src/models');
-const { vehicleOneForAdmin, vehicleOneForUser, vehicleTwoForUser } = require('./vehicle.fixture');
-const { dataPointForVehicleOneForAdmin } = require('./vehicleData.fixture');
-const { infoFlag, warningFlag, errorFlag } = require('./flag.fixture');
+import { ChargeSession, VehicleData } from '../../src/models';
+import { vehicleOneForAdmin, vehicleOneForUser, vehicleTwoForUser } from './vehicle.fixture';
+import { dataPointForVehicleOneForAdmin } from './vehicleData.fixture';
+import { infoFlag, warningFlag, errorFlag } from './flag.fixture';
 
 const chargeSession = {
   dataPoints: Array.from({ length: faker.datatype.number(100) }, () => mongoose.Types.ObjectId()),

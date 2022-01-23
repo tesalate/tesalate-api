@@ -19,7 +19,7 @@ export interface ICharger extends IPaginator, IToJSON {
   destination_charger_logo: string;
   destination_website: string;
   directions_link: string;
-  emails: Array<string>;
+  emails: string[];
   geocode: string;
   hours: string;
   is_gallery: boolean;
@@ -29,7 +29,7 @@ export interface ICharger extends IPaginator, IToJSON {
   kiosk_zoom_pin_y: string;
   latitude: string;
   location_id: string;
-  location_type: Array<string>;
+  location_type: string[];
   longitude: string;
   nid: string;
   open_soon: string;
@@ -37,7 +37,7 @@ export interface ICharger extends IPaginator, IToJSON {
   postal_code: string;
   province_state: string;
   region: string;
-  sales_phone: Array<string>;
+  sales_phone: string[];
   sales_representative: boolean;
   sub_region: string;
   title: string;

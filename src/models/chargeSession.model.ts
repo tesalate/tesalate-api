@@ -79,6 +79,7 @@ const chargeSession = new Schema<IChargeSession>(
 // add plugin that converts mongoose to json
 chargeSession.plugin(toJSON);
 chargeSession.plugin(paginate);
+/* tslint-ignore */
 chargeSession.plugin(require('mongoose-autopopulate'));
 
 chargeSession.index({ vehicle: 'text', user: 1 });

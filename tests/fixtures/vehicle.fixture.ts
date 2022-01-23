@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import faker from 'faker';
 import Vehicle from '../../src/models/vehicle.model';
-const { admin, userOne } = require('./user.fixture');
-const { teslaAccountOne, teslaAccountAdmin } = require('./teslaAccount.fixture');
+import { admin, userOne } from './user.fixture';
+import { teslaAccountOne, teslaAccountAdmin } from './teslaAccount.fixture';
 
 const vehicleOneForAdmin = {
   _id: mongoose.Types.ObjectId(),

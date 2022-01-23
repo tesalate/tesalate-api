@@ -1,4 +1,4 @@
-const { MongoMemoryReplSet } = require('mongodb-memory-server');
+import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import config from '../../src/config/config';
 

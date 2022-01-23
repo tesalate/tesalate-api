@@ -310,9 +310,8 @@ describe('MapPoint routes', () => {
         .get(`/v1/map-points/distance/${mapPointForVehicleOneForUser.vehicle}`)
         .query({ km: 100 })
         .set('Cookie', `token=${userOneAccessToken}`)
-        .send();
-      console.log('RESSSS', res);
-      // .expect(httpStatus.OK);
+        .send()
+        .expect(httpStatus.OK);
 
       const dbVehicleData = await VehicleData.findOne({
         'drive_state.latitude': latitude,
