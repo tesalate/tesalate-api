@@ -1,4 +1,4 @@
-[![Build Status](https://app.travis-ci.com/teslog/main-api.svg?token=zzEoocrLRD3857ju7qrT&branch=main)](https://app.travis-ci.com/teslog/main-api)
+[![Build Status](https://app.travis-ci.com/tesalate/main-api.svg?token=zzEoocrLRD3857ju7qrT&branch=main)](https://app.travis-ci.com/tesalate/main-api)
 
 # RESTful API Node Server Boilerplate
 
