@@ -15,3 +15,7 @@ coverage
 scripts/db
 
 .debug
+
+out/
+# TS -incremental file
+tsconfig.tsbuildinfo
