@@ -48,7 +48,6 @@ describe('Auth routes', () => {
         role: 'user',
         isEmailVerified: false,
         teslaAccount: null,
-        vehicles: expect.anything(),
       });
 
       const cookies = cookieParser.parse(res as any, { map: true });
@@ -76,7 +75,6 @@ describe('Auth routes', () => {
         role: 'user',
         isEmailVerified: false,
         teslaAccount: null,
-        vehicles: [],
       });
     });
 
@@ -130,7 +128,7 @@ describe('Auth routes', () => {
         role: userOne.role,
         isEmailVerified: userOne.isEmailVerified,
         teslaAccount: null,
-        vehicles: userOne.vehicles,
+        vehicles: [],
       });
 
       const cookies = cookieParser.parse(res as any, { map: true });

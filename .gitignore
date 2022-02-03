@@ -15,7 +15,10 @@ coverage
 scripts/db
 
 .debug
-
-out/
 # TS -incremental file
 tsconfig.tsbuildinfo
+
+bin
+out/
+dist
+logs/

@@ -23,6 +23,7 @@ describe('WebSocket Server', () => {
     client2.close();
   });
 
+  jest.setTimeout(15000);
   test('Server authenticates multiple users', async () => {
     await insertUsers([admin, userOne, userTwo]);
     const [client1, _messages1] = await createSocketClient(config.port, userOneAccessToken, 1, 1);

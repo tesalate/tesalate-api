@@ -40,14 +40,15 @@ describe('TeslaAccount routes', () => {
       expect(res.body).toEqual({
         _id: expect.anything(),
         user: teslaAccountAdmin.user.toHexString(),
-        vehicles: [],
-        ...newTeslaAccount,
+        email: newTeslaAccount.email,
+        linked: newTeslaAccount.linked,
       });
 
       const dbTeslaAccount = await TeslaAccount.findById(res.body._id);
       expect(dbTeslaAccount).toBeDefined();
       expect(dbTeslaAccount!.toJSON()).toMatchObject({
-        ...newTeslaAccount,
+        email: newTeslaAccount.email,
+        linked: newTeslaAccount.linked,
         _id: expect.anything(),
         user: teslaAccountAdmin.user,
       });
@@ -98,10 +99,8 @@ describe('TeslaAccount routes', () => {
       expect(res.body.results).toHaveLength(1);
       expect(res.body.results[0]).toEqual({
         _id: teslaAccountAdmin._id.toHexString(),
-        access_token: teslaAccountAdmin.access_token,
         email: teslaAccountAdmin.email,
         linked: teslaAccountAdmin.linked,
-        refresh_token: teslaAccountAdmin.refresh_token,
         user: teslaAccountAdmin.user.toHexString(),
         vehicles: [],
       });
@@ -125,10 +124,8 @@ describe('TeslaAccount routes', () => {
 
       expect(res.body).toEqual({
         _id: teslaAccountAdmin._id.toHexString(),
-        access_token: teslaAccountAdmin.access_token,
         email: teslaAccountAdmin.email,
         linked: teslaAccountAdmin.linked,
-        refresh_token: teslaAccountAdmin.refresh_token,
         user: teslaAccountAdmin.user.toHexString(),
         vehicles: [],
       });
@@ -235,7 +232,8 @@ describe('TeslaAccount routes', () => {
         .expect(httpStatus.OK);
 
       expect(res.body).toEqual({
-        ...updateBody,
+        email: updateBody.email,
+        linked: updateBody.linked,
         _id: teslaAccountAdmin._id.toHexString(),
         user: teslaAccountAdmin.user.toHexString(),
         vehicles: [],
@@ -245,7 +243,8 @@ describe('TeslaAccount routes', () => {
       expect(dbTeslaAccount).toBeDefined();
 
       expect(dbTeslaAccount!.toJSON()).toMatchObject({
-        ...updateBody,
+        email: updateBody.email,
+        linked: updateBody.linked,
         _id: teslaAccountAdmin._id,
         user: teslaAccountAdmin.user,
       });
@@ -325,23 +324,41 @@ describe('TeslaAccount routes', () => {
 
   describe('POST /v1/tesla-account/login', () => {
     let body;
-
-    const teslaResponseTokens = {
-      access_token: faker.random.alphaNumeric(26),
-      refresh_token: faker.random.alphaNumeric(66),
-    };
+    let bearerTokenData;
+    let ownerTokenData;
 
     beforeEach(() => {
       body = {
         email: faker.internet.email().toLowerCase(),
         refreshToken: faker.random.alphaNumeric(66),
       };
+
+      bearerTokenData = {
+        access_token: faker.random.alphaNumeric(46),
+        refresh_token: faker.random.alphaNumeric(66),
+        expires_in: 300,
+        state: 'of the union',
+        token_type: 'Bearer',
+      };
+
+      ownerTokenData = {
+        access_token: faker.random.alphaNumeric(16),
+        refresh_token: faker.random.alphaNumeric(66),
+        token_type: 'bearer',
+        expires_in: 3888000,
+        created_at: parseInt((Date.now() / 1000).toFixed(0)),
+      };
     });
 
     test('should return 201 and successfully create and login new teslaAccount with vehicles if data is ok', async () => {
       mockedAxios.post.mockResolvedValue({
         data: {
-          ...teslaResponseTokens,
+          ...bearerTokenData,
+        },
+      });
+      mockedAxios.post.mockResolvedValue({
+        data: {
+          ...ownerTokenData,
         },
       });
       const {
@@ -429,8 +446,6 @@ describe('TeslaAccount routes', () => {
         _id: expect.anything(),
         user: teslaAccountAdmin.user,
         email: body.email,
-        access_token: teslaResponseTokens.access_token,
-        refresh_token: teslaResponseTokens.refresh_token,
         linked: true,
       });
 
@@ -462,7 +477,12 @@ describe('TeslaAccount routes', () => {
     test('should return 200 and successfully relink teslaAccount if data is ok', async () => {
       mockedAxios.post.mockResolvedValue({
         data: {
-          ...teslaResponseTokens,
+          ...bearerTokenData,
+        },
+      });
+      mockedAxios.post.mockResolvedValue({
+        data: {
+          ...ownerTokenData,
         },
       });
       const {
@@ -589,7 +609,7 @@ describe('TeslaAccount routes', () => {
         .post('/v1/tesla-account/login')
         .set('Cookie', `token=${adminAccessToken}`)
         .send(body)
-        .expect(httpStatus.BAD_GATEWAY);
+        .expect(httpStatus.NOT_FOUND);
     });
 
     test('should return 401 error if access token is missing', async () => {
@@ -624,8 +644,6 @@ describe('TeslaAccount routes', () => {
       /* @ts-ignore */
       jest.spyOn(emailService.transport, 'sendMail').mockResolvedValue();
     });
-
-    const vehicleName = 'tyl3r';
 
     test('should return 204 and send data collection stopped email to the user', async () => {
       await insertUsers([userOne]);

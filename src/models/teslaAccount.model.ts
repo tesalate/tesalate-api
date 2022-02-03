@@ -11,6 +11,8 @@ export interface ITeslaAccount {
   access_token: string;
   refresh_token: string;
   linked: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const teslaAccountSchema = new Schema<ITeslaAccount>(
@@ -19,16 +21,6 @@ const teslaAccountSchema = new Schema<ITeslaAccount>(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: true,
-    },
-    vehicles: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Vehicle',
-          autopopulate: false,
-        },
-      ],
-      default: [],
     },
     email: {
       type: String,
@@ -45,10 +37,12 @@ const teslaAccountSchema = new Schema<ITeslaAccount>(
     access_token: {
       type: String,
       trim: true,
+      private: true, // used by the toJSON plugin
     },
     refresh_token: {
       type: String,
       trim: true,
+      private: true, // used by the toJSON plugin
     },
     linked: {
       type: Boolean,
@@ -57,8 +51,17 @@ const teslaAccountSchema = new Schema<ITeslaAccount>(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    id: false,
   }
 );
+
+teslaAccountSchema.virtual('vehicles', {
+  ref: 'Vehicle',
+  localField: '_id',
+  foreignField: 'teslaAccount',
+});
 
 // add plugin that converts mongoose to json
 teslaAccountSchema.plugin(toJSON);

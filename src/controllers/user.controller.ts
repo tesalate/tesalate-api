@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import pick from '../utils/pick';
+import pick from 'lodash/pick';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
 import { userService } from '../services';

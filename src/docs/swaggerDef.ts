@@ -1,5 +1,4 @@
 import config from '../config/config';
-/* @ts-ignore */
 import packageJSON from '../../package.json';
 
 const swaggerDef = {

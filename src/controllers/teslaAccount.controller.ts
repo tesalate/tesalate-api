@@ -1,16 +1,14 @@
 import httpStatus from 'http-status';
-import pick from '../utils/pick';
+import pick from 'lodash/pick';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
 import { teslaAccountService, emailService } from '../services';
 
 const linkTeslaAccount = catchAsync(async (req, res) => {
-  /* @ts-ignore */
-  const { access_token, linked, email, user, _id, createdAt, updatedAt } =
-    await teslaAccountService.linkTeslaAccount({
-      ...req.body,
-      user: req.user,
-    });
+  const { access_token, linked, email, user, _id, createdAt, updatedAt } = await teslaAccountService.linkTeslaAccount({
+    ...req.body,
+    user: req.user,
+  });
   const vehicles = await teslaAccountService.getAndSetVehiclesFromTesla({
     teslaAccount: _id,
     accessToken: access_token,

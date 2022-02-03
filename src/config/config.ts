@@ -2,7 +2,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 import Joi from 'joi';
 
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+dotenv.config();
+// dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const envVarsSchema = Joi.object()
   .keys({
@@ -25,7 +26,9 @@ const envVarsSchema = Joi.object()
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
     TESLA_OAUTH_V3_URL: Joi.string().description('tesla oauth v3 api url').default('https://auth.tesla.com/oauth2/v3'),
-    TESLA_OWNER_API_URL: Joi.string().description('tesla owner api url').default('https://owner-api.teslamotors.com/api/1'),
+    TESLA_OWNER_API_URL: Joi.string().description('tesla owner api url').default('https://owner-api.teslamotors.com'),
+    TESLA_OWNERAPI_CLIENT_ID: Joi.string().required(),
+    TESLA_OWNERAPI_CLIENT_SECRET: Joi.string().required(),
     PUBLIC_URL: Joi.string().description('the url for the site').required(),
     MAX_COOKIE_AGE: Joi.number()
       .default(86400 * 1000 * 60)
@@ -75,8 +78,10 @@ export default {
   tesla: {
     oauthUrl: envVars.TESLA_OAUTH_V3_URL,
     ownerUrl: envVars.TESLA_OWNER_API_URL,
+    clientId: envVars.TESLA_OWNERAPI_CLIENT_ID,
+    clientSecret: envVars.TESLA_OWNERAPI_CLIENT_SECRET,
   },
   cors: {
-    allowedUrls: envVars.ACCEPTED_CORS,
+    allowedOrigins: JSON.parse(envVars.ACCEPTED_CORS),
   },
 };

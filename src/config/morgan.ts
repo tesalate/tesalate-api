@@ -1,9 +1,13 @@
+import { ServerResponse } from 'http';
 import morgan from 'morgan';
 import config from './config';
 import logger from './logger';
 
-/* @ts-ignore */ // complains about res.locals
-morgan.token('message', (_, res) => res.locals.errorMessage || '');
+interface MorganResponse extends ServerResponse {
+  locals: any;
+}
+
+morgan.token('message', (_, res: MorganResponse) => res.locals.errorMessage || '');
 
 const getIpFormat = () => (config.env === 'production' ? ':remote-addr - ' : '');
 const successResponseFormat = `${getIpFormat()}:method :url :status - :response-time ms`;

@@ -68,11 +68,6 @@ describe('User model', () => {
       await expect(new User(newUser).validate()).rejects.toThrow();
     });
 
-    test('should throw a validation error if vehicles is invalid', async () => {
-      newUser.vehicles = {};
-      await expect(new User(newUser).validate()).rejects.toThrow();
-    });
-
     test('should throw a validation error if email is invalid', async () => {
       newUser.email = 'invalidEmail';
       await expect(new User(newUser).validate()).rejects.toThrow();

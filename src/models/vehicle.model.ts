@@ -109,40 +109,6 @@ vehicleSchema.plugin(require('mongoose-autopopulate'));
 vehicleSchema.index({ vin: 'text', user: 1 });
 vehicleSchema.index({ user: 1 });
 
-vehicleSchema.post('save', async (vehicle) => {
-  try {
-    await mongoose.model('User').updateOne({ _id: vehicle.user }, { $addToSet: { vehicles: vehicle._id } });
-  } catch (err) {
-    throw new Error('something went wrong post save of vehicle');
-  }
-});
-
-vehicleSchema.post('save', async (vehicle) => {
-  try {
-    await mongoose.model('TeslaAccount').updateOne({ _id: vehicle.teslaAccount }, { $addToSet: { vehicles: vehicle._id } });
-  } catch (err) {
-    throw new Error('something went wrong post save of vehicle');
-  }
-});
-
-vehicleSchema.post('remove', { query: false, document: true }, async (vehicle) => {
-  try {
-    await mongoose.model<IUser>('User').updateOne({ _id: vehicle.user }, { $pull: { vehicles: vehicle._id } });
-  } catch (err) {
-    throw new Error('something went wrong post remove of vehicle for user');
-  }
-});
-
-vehicleSchema.post('remove', { query: false, document: true }, async (vehicle) => {
-  try {
-    await mongoose
-      .model<ITeslaAccount>('TeslaAccount')
-      .updateOne({ _id: vehicle.teslaAccount }, { $pull: { vehicles: vehicle._id } });
-  } catch (err) {
-    throw new Error('something went wrong post remove of vehicle for tesla account');
-  }
-});
-
 /**
  * Check if vehicle is already registered to user
  * @param {string} vin - The vehicles's vin
