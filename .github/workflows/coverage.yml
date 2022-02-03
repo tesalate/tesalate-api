@@ -4,12 +4,12 @@ on:
   pull_request:
     branches:
       - main
-with:
-  package-manager: yarn
 
 jobs:
   coverage:
     runs-on: ubuntu-latest
+    with:
+      package-manager: yarn
     steps:
       - uses: actions/checkout@v1
       - uses: ArtiomTr/jest-coverage-report-action@v2
