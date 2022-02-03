@@ -1,4 +1,4 @@
-name: Node.js CI
+name: CI
 
 on:
   push:
@@ -21,19 +21,27 @@ env:
   ACCEPTED_CORS: '["http://localhost:4400"]'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  ci:
+    name: Building, linting, testing on node ${{ matrix.node }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [16.x]
-
+        node: ['16.x']
+        os: [ubuntu-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use Node ${{ matrix.node }}
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node }}
+
       - name: Install dependencies
         run: yarn
-      - run: yarn coverage
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test -- --ci --coverage --maxWorkers=2
