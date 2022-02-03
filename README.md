@@ -1,4 +1,4 @@
-[![Node.js CI](https://github.com/tesalate/main-api/actions/workflows/test.yml/badge.svg)](https://github.com/tesalate/main-api/actions/workflows/test.yml)
+[![Tests](https://github.com/tesalate/main-api/actions/workflows/ci.yml/badge.svg)](https://github.com/tesalate/main-api/actions/workflows/ci.yml)
 
 # RESTful API Node Server Boilerplate
 
