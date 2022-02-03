@@ -18,7 +18,7 @@ env:
   TESLA_OAUTH_V3_URL: https://auth.tesla.com/oauth2/v3
   TESLA_OWNERAPI_CLIENT_ID: '12345'
   TESLA_OWNERAPI_CLIENT_SECRET: '54321'
-  ACCEPTED_CORS: "['http://localhost:4400']"
+  ACCEPTED_CORS: 'http://localhost:4400'
 
 jobs:
   build:
@@ -26,7 +26,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 15.x, 16.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
