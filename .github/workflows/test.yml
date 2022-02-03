@@ -6,6 +6,20 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  NODE_ENV: test
+  PORT: 4400
+  APP_NAME: tesalate-ci
+  PUBLIC_URL: http://localhost
+  MONGODB_URL: mongodb://localhost:27017/test
+  JWT_SECRET: thisisasamplesecret
+  JWT_ACCESS_EXPIRATION_MINUTES: 30
+  JWT_REFRESH_EXPIRATION_DAYS: 30
+  TESLA_OAUTH_V3_URL: https://auth.tesla.com/oauth2/v3
+  TESLA_OWNERAPI_CLIENT_ID: '12345'
+  TESLA_OWNERAPI_CLIENT_SECRET: '54321'
+  ACCEPTED_CORS: ['http://localhost:4400']
+
 jobs:
   build:
     runs-on: ubuntu-latest

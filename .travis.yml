@@ -15,13 +15,16 @@ branches:
 env:
   global:
     - APP_NAME=teslog-travis
+    - PUBLIC_URL=http://localhost
     - PORT=4400
     - MONGODB_URL=mongodb://localhost:27017/test
     - JWT_SECRET=thisisasamplesecret
     - JWT_ACCESS_EXPIRATION_MINUTES=30
     - JWT_REFRESH_EXPIRATION_DAYS=30
-    - TESLA_OAUTH_V3_URL=https://auth.tesla.com/oauth2/v3
-    - PUBLIC_URL=http://localhost
+      TESLA_OAUTH_V3_URL=https://auth.tesla.com/oauth2/v3
+      TESLA_OWNER_API_URL=https://owner-api.teslamotors.com
+      TESLA_OWNERAPI_CLIENT_ID = '81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384'
+      TESLA_OWNERAPI_CLIENT_SECRET = 'c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3'
     - ACCEPTED_CORS=http://localhost:4400
   matrix:
     - MONGODB=5.0.3
