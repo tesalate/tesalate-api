@@ -1,4 +1,5 @@
 [![Tests](https://github.com/tesalate/main-api/actions/workflows/ci.yml/badge.svg)](https://github.com/tesalate/main-api/actions/workflows/ci.yml)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 # RESTful API Node Server Boilerplate
 
