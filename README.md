@@ -1,8 +1,7 @@
-[![Build Status](https://app.travis-ci.com/tesalate/main-api.svg?token=zzEoocrLRD3857ju7qrT&branch=main)](https://app.travis-ci.com/tesalate/main-api)
+[![Node.js CI](https://github.com/tesalate/main-api/actions/workflows/test.yml/badge.svg)](https://github.com/tesalate/main-api/actions/workflows/test.yml)
 
 # RESTful API Node Server Boilerplate
 
-[![Build Status](https://travis-ci.org/hagopj13/node-express-boilerplate.svg?branch=master)](https://travis-ci.org/hagopj13/node-express-boilerplate)
 [![Coverage Status](https://coveralls.io/repos/github/hagopj13/node-express-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/hagopj13/node-express-boilerplate?branch=master)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
