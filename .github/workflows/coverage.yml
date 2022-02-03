@@ -6,10 +6,10 @@ on:
       - main
 
 jobs:
-  with:
-    package-manager: yarn
   coverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          package-manager: yarn
