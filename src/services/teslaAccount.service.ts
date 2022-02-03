@@ -28,7 +28,7 @@ const createTeslaAccount = async (teslaAccountBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryTeslaAccounts = async (filter, options) => {
-  const teslaAccounts = await TeslaAccount.paginate(filter, options);
+  const teslaAccounts = await TeslaAccount.paginate(filter, { ...options, populate: 'vehicles' });
   return teslaAccounts;
 };
 
@@ -38,7 +38,7 @@ const queryTeslaAccounts = async (filter, options) => {
  * @returns {Promise<TeslaAccount>}
  */
 const getTeslaAccountById = async (_id, user) => {
-  return TeslaAccount.findOne({ _id, user });
+  return TeslaAccount.findOne({ _id, user }).populate('vehicles');
 };
 
 /**
@@ -89,24 +89,34 @@ const deleteTeslaAccountById = async (teslaAccountId, user) => {
  * @returns {Promise<TeslaAccount>}
  */
 const linkTeslaAccount = async ({ email, refreshToken, user }) => {
-  const {
-    data: { access_token, refresh_token },
-  } = await axios
-    .post(`${config.tesla.oauthUrl}/token`, {
-      grant_type: 'refresh_token',
-      client_id: 'ownerapi',
-      refresh_token: refreshToken,
-      scope: 'openid email offline_access',
-    })
-    .catch(() => {
-      throw new ApiError(httpStatus.BAD_GATEWAY, 'Request to Tesla Failed');
-    });
+  const { data: bearerTokenData } = await axios.post(`${config.tesla.oauthUrl}/token`, {
+    grant_type: 'refresh_token',
+    client_id: 'ownerapi',
+    refresh_token: refreshToken,
+    scope: 'openid email offline_access',
+  });
+
+  const { data: ownerTokenData } = await axios.post(
+    `${config.tesla.ownerUrl}/oauth/token`,
+    {
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      client_id: config.tesla.clientId,
+      client_secret: config.tesla.clientSecret,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${bearerTokenData.access_token}`,
+        'Content-Type': 'application/json',
+        'User-Agent': 'TeslaAPI-proxy/2.0 (Node.js)',
+      },
+    }
+  );
 
   try {
     const account = {
       email,
-      access_token,
-      refresh_token,
+      access_token: ownerTokenData.access_token,
+      refresh_token: bearerTokenData.refresh_token,
       linked: true,
     };
 
@@ -134,7 +144,7 @@ const getAndSetVehiclesFromTesla = async ({ accessToken, user, teslaAccount }) =
   const {
     data: { response: vehicles },
   } = await axios
-    .get(`${config.tesla.ownerUrl}/vehicles`, { headers: { Authorization: `Bearer ${accessToken}` } })
+    .get(`${config.tesla.ownerUrl}/api/1/vehicles`, { headers: { Authorization: `Bearer ${accessToken}` } })
     .catch((error) => {
       throw new ApiError(httpStatus.BAD_GATEWAY, `Request to Tesla Failed ${error}`);
     });
@@ -144,24 +154,19 @@ const getAndSetVehiclesFromTesla = async ({ accessToken, user, teslaAccount }) =
 
     // Loop through userVehicles
     // If vehicle not in tesla vehicle response =>  teslaAccount = null collectData = false
-    const vehiclesFromDBToUpdate = userVehicles
-      .filter((curr) => !vehicles.find((teslaVehicle) => teslaVehicle.vin === curr.vin) && curr.teslaAccount)
-      .map((vehicle) => ({
-        updateOne: {
-          filter: { vin: vehicle.vin, user },
-          update: { teslaAccount: null, collectData: false },
-          upsert: true,
-        },
-      }));
-    const vehiclesFromTeslaToUpdate = vehicles.map((vehicle) => ({
-      updateOne: {
-        filter: { vin: vehicle.vin, user, teslaAccount },
-        update: vehicle,
-        upsert: true,
-      },
-    }));
+    await Promise.all(
+      userVehicles
+        .filter((curr) => !vehicles.find((teslaVehicle) => teslaVehicle.vin === curr.vin) && curr.teslaAccount)
+        .map((vehicle) =>
+          Vehicle.updateOne({ vin: vehicle.vin, user }, { teslaAccount: null, collectData: false }, { upsert: true })
+        )
+    );
+    await Promise.all(
+      vehicles.map((vehicle) =>
+        Vehicle.updateOne({ vin: vehicle.vin, user, teslaAccount }, { ...vehicle, collectData: false }, { upsert: true })
+      )
+    );
 
-    await Vehicle.bulkWrite([...vehiclesFromDBToUpdate, ...vehiclesFromTeslaToUpdate]);
     const updatedVehicles = await vehicleService.getVehiclesByUserId(user._id);
     return updatedVehicles;
   } catch (error) {

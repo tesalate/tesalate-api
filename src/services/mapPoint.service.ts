@@ -2,6 +2,8 @@ import httpStatus from 'http-status';
 import { getDistance } from 'geolib';
 import { MapPoint } from '../models';
 import ApiError from '../utils/ApiError';
+import { IMapPoint } from '../models/mapPoint.model';
+import { GeolibGeoJSONPoint } from 'geolib/es/types';
 
 /**
  * Query for map points
@@ -60,12 +62,12 @@ const deleteMapPointById = async (mapPointPointId, user) => {
  */
 const getMapPointsByDistanceApart = async (km, vehicle, user) => {
   const mapPoints = await getMapPointByVid(vehicle, user);
-  const geoPoints: any[] = [];
+  const geoPoints: Partial<IMapPoint>[] = [];
   return mapPoints
     .sort((a, b) => new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf())
-    .reduce((acc: any[], curr) => {
+    .reduce((acc: Partial<IMapPoint>[], curr) => {
       const { geoJSON: _geoJSON, user: _user, ...rest } = curr.toJSON();
-      const { drive_state: latLong } = rest?.dataPoints?.[0];
+      const { drive_state: latLong } = rest.dataPoints[0];
 
       if (geoPoints.length === 0) {
         geoPoints.push(latLong);
@@ -73,7 +75,7 @@ const getMapPointsByDistanceApart = async (km, vehicle, user) => {
       }
       let save = true;
       for (let i = geoPoints.length - 1; i >= 0; i -= 1) {
-        if (getDistance(geoPoints[i], latLong) <= parseInt(km, 10) * 1000) {
+        if (getDistance(geoPoints[i] as GeolibGeoJSONPoint, latLong) <= parseInt(km, 10) * 1000) {
           save = false;
           break;
         }

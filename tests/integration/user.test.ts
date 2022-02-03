@@ -46,7 +46,6 @@ describe('User routes', () => {
         role: newUser.role,
         isEmailVerified: false,
         teslaAccount: null,
-        vehicles: [],
       });
 
       const dbUser = await User.findById(res.body._id);
@@ -62,7 +61,6 @@ describe('User routes', () => {
         role: newUser.role,
         isEmailVerified: false,
         teslaAccount: null,
-        vehicles: [],
       });
     });
 
@@ -199,7 +197,7 @@ describe('User routes', () => {
         role: userOne.role,
         isEmailVerified: userOne.isEmailVerified,
         teslaAccount: null,
-        vehicles: userOne.vehicles.map((id: Types.ObjectId) => id.toHexString()),
+        vehicles: [],
       });
     });
 
@@ -551,7 +549,7 @@ describe('User routes', () => {
         role: 'user',
         isEmailVerified: false,
         teslaAccount: null,
-        vehicles: updateBody.vehicles.map((id) => id.toHexString()),
+        vehicles: [],
       });
 
       const dbUser = await User.findById(userOne._id);

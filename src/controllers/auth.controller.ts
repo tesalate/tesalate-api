@@ -58,7 +58,7 @@ const forgotPassword = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const resetPassword = catchAsync(async (req: TypedRequest<{ token: string}, {password: string }>, res) => {
+const resetPassword = catchAsync(async (req: TypedRequest<{ token: string }, { password: string }>, res) => {
   await authService.resetPassword(req.query.token, req.body.password);
   res.status(httpStatus.NO_CONTENT).send();
 });
@@ -69,8 +69,7 @@ const sendVerificationEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-
-const verifyEmail = catchAsync(async (req: TypedRequest<{ token: string },{}>, res) => {
+const verifyEmail = catchAsync(async (req: TypedRequest<{ token: string }, object>, res) => {
   await authService.verifyEmail(req.query.token);
   res.status(httpStatus.NO_CONTENT).send();
 });

@@ -1,6 +1,14 @@
+import { IUser } from '../models/user.model';
+import { IVehicleData } from '../models/vehicleData.model';
 import { chargeSessionService, driveSessionService } from '../services';
 
-const handleChange = async (change: { fullDocument: { [x: string]: any; _id?: string; user?: any; dataPoints?: any[]; }; ns: { coll: string; }; }, action: any) => {
+const handleChange = async (
+  change: {
+    fullDocument: { [x: string]: unknown; _id?: string; user?: IUser; dataPoints?: IVehicleData[] };
+    ns: { coll: string };
+  },
+  action: unknown
+) => {
   const { dataPoints, ...rest } = change.fullDocument;
   const { coll: collection } = change.ns;
 

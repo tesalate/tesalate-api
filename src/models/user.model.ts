@@ -6,6 +6,7 @@ import { roles, UserRoles } from '../config/roles';
 import { IPaginator, IToJSON } from './types';
 
 export interface IUser {
+  _id: string | Types.ObjectId;
   username: string;
   displayName: string;
   firstName: string;
@@ -28,7 +29,6 @@ const userSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
       validate(username: string) {
-        // eslint-disable-next-line security/detect-unsafe-regex
         if (!username.match(/^(?![0-9])(?=.{4,36}$)(?:[a-zA-Z_\d]+(?:(?:\.|-|_)[a-zA-Z])*)+$/)) {
           throw new Error('Invalid username');
         }
@@ -94,25 +94,34 @@ const userSchema = new Schema<IUser>(
         select: 'linked email _id vehicles',
       },
     },
-    vehicles: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Vehicle',
-          autopopulate: true,
-        },
-      ],
-      default: [],
-    },
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform(_, ret) {
+        delete ret.id;
+      },
+    },
+    toObject: {
+      virtuals: true,
+      transform(_, ret) {
+        delete ret.id;
+      },
+    },
   }
 );
+
+userSchema.virtual('vehicles', {
+  ref: 'Vehicle',
+  localField: '_id',
+  foreignField: 'user',
+});
 
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 userSchema.plugin(require('mongoose-autopopulate'));
 
 /**
@@ -122,7 +131,7 @@ userSchema.plugin(require('mongoose-autopopulate'));
  * @returns {Promise<boolean>}
  */
 userSchema.statics.isEmailTaken = async function (email: string, excludeUserId: Types.ObjectId): Promise<boolean> {
-  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+  const user: IUser = (await this.findOne({ email, _id: { $ne: excludeUserId } })) as IUser;
   return !!user;
 };
 
@@ -133,7 +142,7 @@ userSchema.statics.isEmailTaken = async function (email: string, excludeUserId: 
  * @returns {Promise<boolean>}
  */
 userSchema.statics.isUsernameTaken = async function (username: string, excludeUserId: Types.ObjectId): Promise<boolean> {
-  const user = await this.findOne({ username, _id: { $ne: excludeUserId } });
+  const user = (await this.findOne({ username, _id: { $ne: excludeUserId } })) as IUser;
   return !!user;
 };
 
@@ -143,18 +152,17 @@ userSchema.statics.isUsernameTaken = async function (username: string, excludeUs
  * @returns {Promise<boolean>}
  */
 userSchema.methods.isPasswordMatch = async function (password: string): Promise<boolean> {
-  const user = this;
+  const user = this as IUser;
   return bcrypt.compare(password, user.password);
 };
 
 userSchema.pre('save', async function () {
-  const user = this;
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8);
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 8);
   }
 });
 
-userSchema.post('remove', async (user) => {
+userSchema.post('remove', async (user: IUser) => {
   try {
     // if a user is deleted, remove all associated documents from all collections
     await mongoose.model('TeslaAccount').findOneAndDelete({ user: user._id });

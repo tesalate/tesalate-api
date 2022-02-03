@@ -1,5 +1,6 @@
 import httpStatus from 'http-status';
 import { User } from '../models';
+import { IUser } from '../models/user.model';
 import ApiError from '../utils/ApiError';
 
 /**
@@ -7,7 +8,7 @@ import ApiError from '../utils/ApiError';
  * @param {Object} userBody
  * @returns {Promise<User>}
  */
-const createUser = async (userBody) => {
+const createUser = async (userBody: IUser): Promise<IUser> => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
@@ -27,7 +28,7 @@ const createUser = async (userBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryUsers = async (filter, options) => {
-  const users = await User.paginate(filter, options);
+  const users = await User.paginate(filter, { ...options, populate: 'vehicles' });
   return users;
 };
 
@@ -37,7 +38,7 @@ const queryUsers = async (filter, options) => {
  * @returns {Promise<User>}
  */
 const getUserById = async (id) => {
-  return User.findById(id);
+  return User.findById(id).populate('vehicles');
 };
 
 /**
@@ -46,7 +47,7 @@ const getUserById = async (id) => {
  * @returns {Promise<User>}
  */
 const getUserByEmail = async (email) => {
-  return User.findOne({ email });
+  return User.findOne({ email }).populate('vehicles');
 };
 
 /**
@@ -55,8 +56,7 @@ const getUserByEmail = async (email) => {
  * @returns {Promise<User>}
  */
 const getUserByUsername = async (username) => {
-  // eslint-disable-next-line security/detect-non-literal-regexp
-  return User.findOne({ username: { $regex: new RegExp(username, 'i') } });
+  return User.findOne({ username: { $regex: new RegExp(username, 'i') } }).populate('vehicles');
 };
 
 /**

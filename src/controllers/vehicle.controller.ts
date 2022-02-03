@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
 import { vehicleService } from '../services';
-import pick from '../utils/pick';
+import pick from 'lodash/pick';
 
 const createVehicle = catchAsync(async (req, res) => {
   const vehicle = await vehicleService.createVehicle(req.body, req.user.id, req.user.teslaAccount);

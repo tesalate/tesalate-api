@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
 import { driveSessionService } from '../services';
-import pick from '../utils/pick';
+import pick from 'lodash/pick';
 
 const getDriveSessions = catchAsync(async (req, res) => {
   const filter = {

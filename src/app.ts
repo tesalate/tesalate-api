@@ -20,6 +20,19 @@ import ApiError from './utils/ApiError';
 // const modelNames = mongoose.modelNames();
 
 const app = express();
+
+const options = {
+  credentials: true,
+  origin: function (origin, callback) {
+    if (config.cors.allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  exposedHeaders: ['set-cookie'],
+};
+
 // expressOasGenerator.handleResponses(app, {
 //   predefinedSpec(spec) {
 //     return spec;
@@ -30,6 +43,7 @@ const app = express();
 //   alwaysServeDocs: true,
 //   specOutputFileBehavior: 'PRESERVE',
 // });
+app.use(cors(options));
 
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
@@ -52,20 +66,15 @@ app.use(mongoSanitize());
 // gzip compression
 app.use(compression());
 
-// enable cors
-app.use(cors());
-/* @ts-ignore */
-app.options('*', cors());
+// Then pass these options to cors:
 
 // jwt authentication
 app.use(cookieParser());
 app.use(passport.initialize());
-/* @ts-ignore */
 passport.use('jwt', jwtStrategy);
 
 // limit repeated failed requests to auth endpoints
 if (config.env === 'production') {
-  /* @ts-ignore */
   app.use('/v1/auth', authLimiter);
 }
 
@@ -77,6 +86,10 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
+
+app.get('/', (_, res) => {
+  res.send('ok');
+});
 
 // expressOasGenerator.handleRequests();
 
