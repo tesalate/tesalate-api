@@ -1,54 +1,40 @@
+```bash 
+___ ____ ____ ____ _    ____ ___ ____     ____ ___  _ 
+ |  |___ [__  |__| |    |__|  |  |___  __ |__| |__] | 
+ |  |___ ___] |  | |___ |  |  |  |___     |  | |    | 
+ ```
 [![Tests](https://github.com/tesalate/main-api/actions/workflows/ci.yml/badge.svg)](https://github.com/tesalate/main-api/actions/workflows/ci.yml)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+***
 
-# RESTful API Node Server Boilerplate
-
-[![Coverage Status](https://coveralls.io/repos/github/hagopj13/node-express-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/hagopj13/node-express-boilerplate?branch=master)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-
-A boilerplate/starter project for quickly building RESTful APIs using Node.js, Express, and Mongoose.
-
-By running a single command, you will get a production-ready Node.js app installed and fully configured on your machine. The app comes with many built-in features, such as authentication using JWT, request validation, unit and integration tests, continuous integration, docker support, API documentation, pagination, etc. For more details, check the features list below.
+The main api for [Tesalate](https://app.tesalate.io).
 
 ## Quick Start
 
-To create a project, simply run:
+For the quickest start use [tesalate-compose](https://github.com/tesalate/tesalate-compose).
 
-```bash
-npx create-nodejs-express-app <project-name>
-```
+## Slow Start
 
-Or
+1. Install the dependencies:
 
-```bash
-npm init nodejs-express-app <project-name>
-```
+    ```bash
+    yarn install
+    ```
 
-## Manual Installation
+2. Set the environment variables:
 
-If you would still prefer to do the installation manually, follow these steps:
+    ```bash
+    cp .env.example .env
 
-Clone the repo:
+    # open .env and modify the environment variables (if needed)
+    ```
 
-```bash
-git clone --depth 1 https://github.com/hagopj13/node-express-boilerplate.git
-cd node-express-boilerplate
-npx rimraf ./.git
-```
+3. Start MongoDB
+4. Start tesalate-api
+    ```bash
+    yarn dev
+    ```
 
-Install the dependencies:
-
-```bash
-yarn install
-```
-
-Set the environment variables:
-
-```bash
-cp .env.example .env
-
-# open .env and modify the environment variables (if needed)
-```
 
 ## Table of Contents
 
@@ -79,13 +65,12 @@ cp .env.example .env
 - **Dependency management**: with [Yarn](https://yarnpkg.com)
 - **Environment variables**: using [dotenv](https://github.com/motdotla/dotenv) and [cross-env](https://github.com/kentcdodds/cross-env#readme)
 - **Security**: set security HTTP headers using [helmet](https://helmetjs.github.io)
-- **Santizing**: sanitize request data against xss and query injection
+- **Sanitizing**: sanitize request data against xss and query injection
 - **CORS**: Cross-Origin Resource-Sharing enabled using [cors](https://github.com/expressjs/cors)
 - **Compression**: gzip compression with [compression](https://github.com/expressjs/compression)
-- **CI**: continuous integration with [Travis CI](https://travis-ci.org)
+- **CI**: continuous integration with [GitHub Actions](https://docs.github.com/en/actions)
 - **Docker support**
-- **Code coverage**: using [coveralls](https://coveralls.io)
-- **Code quality**: with [Codacy](https://www.codacy.com)
+- **Code coverage**: using [jest coverage report](https://github.com/ArtiomTr/jest-coverage-report-action)
 - **Git hooks**: with [husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged)
 - **Linting**: with [ESLint](https://eslint.org) and [Prettier](https://prettier.io)
 - **Editor config**: consistent editor configuration using [EditorConfig](https://editorconfig.org)
@@ -100,9 +85,7 @@ yarn dev
 
 Running in production:
 
-```bash
-yarn start
-```
+Use [tesalate-compose](https://github.com/tesalate/tesalate-compose).
 
 Testing:
 
@@ -114,21 +97,12 @@ yarn test
 yarn test:watch
 
 # run test coverage
-yarn coverage
+yarn test:coverage
 ```
 
 Docker:
 
-```bash
-# run docker container in development mode
-yarn docker:dev
-
-# run docker container in production mode
-yarn docker:prod
-
-# run all tests in a docker container
-yarn docker:test
-```
+Please user [tesalate-compose](https://github.com/tesalate/tesalate-compose) if you want to launch this app with Docker.
 
 Linting:
 
@@ -148,30 +122,55 @@ yarn prettier:fix
 
 ## Environment Variables
 
-The environment variables can be found and modified in the `.env` file. They come with these default values:
+The environment variables can be generated with [tesalate-compose](https://github.com/tesalate/tesalate-compose) or you can copy/paste the following into a `.env` file in the root of the project:
 
 ```bash
-# Port number
-PORT=4400
+#   ____  _______     __  _____ _   ___     __
+#  |  _ \| ____\ \   / / | ____| \ | \ \   / /
+#  | | | |  _|  \ \ / /  |  _| |  \| |\ \ / /
+#  | |_| | |___  \ V /   | |___| |\  | \ V /
+#  |____/|_____|  \_/    |_____|_| \_|  \_/
+#
 
-# URL of the Mongo DB
-MONGODB_URL=mongodb://127.0.0.1:27017/node-boilerplate
+BUILD_ENVIRONMENT=dev
 
-# JWT
-# JWT secret key
-JWT_SECRET=thisisasamplesecret
+## Public
+PUBLIC_URL=http://localhost:4400
+APP_NAME=Tesalate
+
+## Mongo DB
+MONGODB_URL=mongodb://127.0.0.1:27017/example-db
+
+## API
+API_PORT=4400
+
+## JWT
+JWT_SECRET="gAwDJFnGc1pwv3WXD2txNtn6IQB..."
 # Number of minutes after which an access token expires
-JWT_ACCESS_EXPIRATION_MINUTES=30
+JWT_ACCESS_EXPIRATION_MINUTES=90
 # Number of days after which a refresh token expires
-JWT_REFRESH_EXPIRATION_DAYS=30
+JWT_REFRESH_EXPIRATION_DAYS=90
+# Number of minutes after which a reset password token expires
+JWT_RESET_PASSWORD_EXPIRATION_MINUTES=10
+# Number of minutes after which a verify email token expires
+JWT_VERIFY_EMAIL_EXPIRATION_MINUTES=1440
 
 # SMTP configuration options for the email service
 # For testing, you can use a fake SMTP service like Ethereal: https://ethereal.email/create
-SMTP_HOST=email-server
+SMTP_HOST=smtp.ethereal.email
 SMTP_PORT=587
-SMTP_USERNAME=email-server-username
-SMTP_PASSWORD=email-server-password
-EMAIL_FROM=support@yourapp.com
+SMTP_USERNAME=example.email@ethereal.email
+SMTP_PASSWORD="1234"
+EMAIL_FROM="Tesalate <noreply@Tesalate.io>"
+
+## TESLA API
+TESLA_OAUTH_V3_URL=https://auth.tesla.com/oauth2/v3
+TESLA_OWNER_API_URL=https://owner-api.teslamotors.com/api/1
+TESLA_OWNERAPI_CLIENT_ID=81527cff06843c8634fdc09e...
+TESLA_OWNERAPI_CLIENT_SECRET=c7257eb71a564034f9419ee651c7d0e...
+
+## CORS
+ACCEPTED_CORS=["http://localhost:4400"]
 ```
 
 ## Project Structure
@@ -181,14 +180,16 @@ src\
  |--config\         # Environment variables and configuration related things
  |--controllers\    # Route controllers (controller layer)
  |--docs\           # Swagger files
- |--middleware\    # Custom express middleware
+ |--middleware\     # Custom express middleware
  |--models\         # Mongoose models (data layer)
  |--routes\         # Routes
  |--services\       # Business logic (service layer)
  |--utils\          # Utility classes and functions
  |--validations\    # Request data validation schemas
- |--app.js          # Express app
+ |--app.ts          # Express app
+ |--db.ts           # Change stream setup
  |--index.js        # App entry point
+ |--websockets.ts   # Websocket setup
 ```
 
 ## API Documentation
@@ -208,6 +209,38 @@ List of available routes:
 `POST /v1/auth/send-verification-email` - send verification email\
 `POST /v1/auth/verify-email` - verify email
 
+**Charge Session routes**:\
+`GET /v1/` - gets charge sessions\
+`GET /v1/:chargeSessionId - gets a charge session by id\
+`DELETE /v1/:chargeSessionId` - deletes a single charge session
+
+**Drive Session routes**:\
+`GET /v1/` - gets drive sessions\
+`GET /v1/:driveSessionId - gets a drive session by id\
+`DELETE /v1/:driveSessionId` - deletes a single drive session
+
+**Map Point routes**:\
+`GET /v1/` - gets map points\
+`GET /v1/distance/:vehicle` - gets map points that are n KM apart from each other\
+`GET /v1/:mapPointId - gets a map point by id\
+`DELETE /v1/:mapPointId` - deletes a single map point
+
+**Reminder routes**:\
+`GET /v1/` - gets all reminders\
+`POST /v1/` - create a reminder\
+`GET /v1/:reminderId` - get a reminder by id\
+`PATCH /v1/:reminderId` - update a reminder by id\
+`DELETE /v1/:reminderId` - delete a reminder by id
+
+**Tesla Account routes**:\
+`POST /v1/login` - link a tesla account\
+`DELETE /v1/login` - unlink a tesla account\
+`GET /v1/` - gets all Tesla Accounts <!--- Probably shouldn't have this --->\
+`POST /v1/` - create a tesla account in db\
+`GET /v1/:teslaAccountId` - get a tesla account by id\
+`PATCH /v1/:teslaAccountId` - update a tesla account by id\
+`DELETE /v1/:teslaAccountId` - delete a tesla account by id
+
 **User routes**:\
 `POST /v1/users` - create a user\
 `GET /v1/users` - get all users\
@@ -215,13 +248,26 @@ List of available routes:
 `PATCH /v1/users/:userId` - update user\
 `DELETE /v1/users/:userId` - delete user
 
+**Vehicle routes**:\
+`GET /v1/` - gets all vehicles\
+`POST /v1/` - create a vehicle\
+`GET /v1/:vehicleId` - get a vehicle by id\
+`PATCH /v1/:vehicleId` - update a vehicle by id\
+`DELETE /v1/:vehicleId` - delete a vehicle by id
+
+**Vehicle Data routes**:\
+`GET /v1/` - gets all vehicle data\
+`GET /v1/:vehicleId` - get a vehicle data by id\
+`DELETE /v1/:vehicleId` - delete a vehicle data by id
+
+
 ## Error Handling
 
 The app has a centralized error handling mechanism.
 
 Controllers should try to catch the errors and forward them to the error handling middleware (by calling `next(error)`). For convenience, you can also wrap the controller inside the catchAsync utility wrapper, which forwards the error.
 
-```javascript
+```typescript
 import catchAsync from '../utils/catchAsync';
 
 const controller = catchAsync(async (req, res) => {
@@ -245,7 +291,7 @@ The app has a utility ApiError class to which you can attach a response code and
 
 For example, if you are trying to get a user from the DB who is not found, and you want to send a 404 error, the code should look something like:
 
-```javascript
+```typescript
 import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import User from '../models/User';
@@ -264,7 +310,7 @@ Request data is validated using [Joi](https://joi.dev/). Check the [documentatio
 
 The validation schemas are defined in the `src/validations` directory and are used in the routes by providing them as parameters to the `validate` middleware.
 
-```javascript
+```typescript
 import express from 'express';
 import validate from '../../middleware/validate';
 import userValidation from '../../validations/user.validation';
@@ -279,7 +325,7 @@ router.post('/users', validate(userValidation.createUser), userController.create
 
 To require authentication for certain routes, you can use the `auth` middleware.
 
-```javascript
+```typescript
 import express from 'express';
 import auth from '../../middleware/auth';
 import userController from '../../controllers/user.controller';
@@ -295,19 +341,19 @@ These routes require a valid JWT access token in the Authorization request heade
 
 An access token can be generated by making a successful call to the register (`POST /v1/auth/register`) or login (`POST /v1/auth/login`) endpoints. The response of these endpoints also contains refresh tokens (explained below).
 
-An access token is valid for 30 minutes. You can modify this expiration time by changing the `JWT_ACCESS_EXPIRATION_MINUTES` environment variable in the .env file.
+An access token is valid for 90 minutes. You can modify this expiration time by changing the `JWT_ACCESS_EXPIRATION_MINUTES` environment variable in the .env file.
 
 **Refreshing Access Tokens**:
 
 After the access token expires, a new access token can be generated, by making a call to the refresh token endpoint (`POST /v1/auth/refresh-tokens`) and sending along a valid refresh token in the request body. This call returns a new access token and a new refresh token.
 
-A refresh token is valid for 30 days. You can modify this expiration time by changing the `JWT_REFRESH_EXPIRATION_DAYS` environment variable in the .env file.
+A refresh token is valid for 90 days. You can modify this expiration time by changing the `JWT_REFRESH_EXPIRATION_DAYS` environment variable in the .env file.
 
 ## Authorization
 
 The `auth` middleware can also be used to require certain rights/permissions to access a route.
 
-```javascript
+```typescript
 import express from 'express';
 import auth from '../../middleware/auth';
 import userController from '../../controllers/user.controller';
@@ -329,7 +375,7 @@ Import the logger from `src/config/logger.js`. It is using the [Winston](https:/
 
 Logging should be done according to the following severity levels (ascending order from most important to least important):
 
-```javascript
+```typescript
 import logger from '<path to src>/config/logger';
 
 logger.error('message'); // level 0
@@ -352,7 +398,7 @@ Note: API request information (request url, response code, timestamp, etc.) are 
 
 The app also contains 2 custom mongoose plugins that you can attach to any mongoose model schema. You can find the plugins in `src/models/plugins`.
 
-```javascript
+```typescript
 import mongoose from 'mongoose';
 const { toJSON, paginate } = require('./plugins');
 
@@ -381,7 +427,7 @@ The paginate plugin adds the `paginate` static method to the mongoose schema.
 
 Adding this plugin to the `User` model schema will allow you to do the following:
 
-```javascript
+```typescript
 const queryUsers = async (filter, options) => {
   const users = await User.paginate(filter, options);
   return users;
@@ -392,7 +438,7 @@ The `filter` param is a regular mongo filter.
 
 The `options` param can have the following (optional) fields:
 
-```javascript
+```typescript
 const options = {
   sortBy: 'name:desc', // sort order
   limit: 5, // maximum results per page
@@ -429,12 +475,6 @@ To maintain a consistent coding style across different IDEs, the project contain
 ## Contributing
 
 Contributions are more than welcome! Please check out the [contributing guide](CONTRIBUTING.md).
-
-## Inspirations
-
-- [danielfsousa/express-rest-es2017-boilerplate](https://github.com/danielfsousa/express-rest-es2017-boilerplate)
-- [madhums/node-express-mongoose](https://github.com/madhums/node-express-mongoose)
-- [kunalkapadia/express-mongoose-es6-rest-api](https://github.com/kunalkapadia/express-mongoose-es6-rest-api)
 
 ## License
 
