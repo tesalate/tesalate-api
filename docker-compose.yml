@@ -6,8 +6,8 @@ services:
     image: node-app
     ports:
       - '4400:4400'
-    depends_on:
-      - mongodb
+    # depends_on:
+    #   - mongodb
     volumes:
       - .:/home/node/app
     networks:

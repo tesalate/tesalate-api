@@ -10,8 +10,9 @@ let replset;
 const connect = async () => {
   replset = await MongoMemoryReplSet.create({
     replSet: { count: 1, storageEngine: 'wiredTiger' },
-    binary: { version: '5.0.3' },
+    binary: { version: '5.0.6' },
   });
+  await replset.waitUntilRunning();
   const uri = replset.getUri();
 
   await mongoose.connect(uri, config.mongoose.options);
@@ -30,10 +31,12 @@ const closeDatabase = async () => {
  * Remove all the data for all db collections.
  */
 const clearDatabase = async () => {
-  Object.keys(mongoose.connection.collections).forEach(async (key) => {
-    const collection = mongoose.connection.collections[key];
-    collection.deleteMany({});
-  });
+  await Promise.all(
+    Object.keys(mongoose.connection.collections).map(async (key) => {
+      const collection = mongoose.connection.collections[key];
+      await collection.deleteMany({});
+    })
+  );
 };
 
 export default { connect, closeDatabase, clearDatabase };

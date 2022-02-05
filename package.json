@@ -1,14 +1,13 @@
 {
   "name": "tesalate-api",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha",
   "description": "API for tesalate",
-  "bin": "bin/createNodejsApp.js",
   "main": "src/index.js",
-  "repository": "https://github.com/hagopj13/node-express-boilerplate.git",
+  "repository": "https://github.com/tesalate/main-api.git",
   "author": "Devin Cunningham",
   "license": "MIT",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "commit": "cz",
@@ -18,7 +17,7 @@
     "build": "yarn clean && tsc && yarn copy-files",
     "start": "pm2 start ecosystem.config.json --no-daemon",
     "dev": "NODE_ENV=development nodemon src/index.ts",
-    "test": "jest -i --colors --verbose --detectOpenHandles",
+    "test": "jest --colors --verbose --detectOpenHandles",
     "test:log-coverage": "jest --coverage",
     "test:coverage": "jest --silent --testLocationInResults --ci --all --coverage --json --outputFile=\"report.json\"",
     "test:watch": "jest -i --watchAll --verbose",
@@ -46,8 +45,6 @@
   "keywords": [
     "node",
     "node.js",
-    "boilerplate",
-    "generator",
     "express",
     "rest",
     "api",
@@ -58,12 +55,12 @@
     "es8",
     "es9",
     "jest",
-    "travis",
     "docker",
     "passport",
     "joi",
     "eslint",
-    "prettier"
+    "prettier",
+    "typescript"
   ],
   "dependencies": {
     "axios": "^0.24.0",
@@ -158,7 +155,7 @@
     "is-number": "^7.0.0",
     "jest": "^27.4.7",
     "lint-staged": "^11.0.0",
-    "mongodb-memory-server": "^8.1.0",
+    "mongodb-memory-server": "^8.2.0",
     "node-mocks-http": "^1.8.0",
     "nodemon": "^2.0.0",
     "path": "^0.12.7",
