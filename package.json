@@ -1,6 +1,6 @@
 {
   "name": "tesalate-api",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0",
   "description": "API for tesalate",
   "main": "src/index.js",
   "repository": "https://github.com/tesalate/main-api.git",
