@@ -102,7 +102,17 @@ yarn test:coverage
 
 Docker:
 
-Please user [tesalate-compose](https://github.com/tesalate/tesalate-compose) if you want to launch this app with Docker.
+```bash
+# run docker container in development mode
+yarn docker:dev
+
+# run docker container in production mode
+yarn docker:prod
+
+# run all tests in a docker container
+yarn docker:test
+```
+OR use [tesalate-compose](https://github.com/tesalate/tesalate-compose)
 
 Linting:
 
