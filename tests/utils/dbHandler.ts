@@ -14,7 +14,7 @@ const connect = async () => {
   });
   await replset.waitUntilRunning();
   const uri = replset.getUri();
-
+  config.mongoose.url = uri;
   await mongoose.connect(uri, config.mongoose.options);
 };
 

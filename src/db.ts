@@ -9,36 +9,42 @@ export default async function (db, sockets) {
   });
 
   db.once('open', () => {
-    const changeStream = db.watch({ fullDocument: 'updateLookup' });
-    changeStream.on('change', async (change) => {
-      const user = change.fullDocument?.user;
+    if (config.mongoose.url.indexOf('replicaSet') > -1) {
+      const changeStream = db.watch({ fullDocument: 'updateLookup' });
+      changeStream.on('change', async (change) => {
+        const user = change.fullDocument?.user;
 
-      switch (change.operationType) {
-        case 'insert': {
-          const message = await handleChange(change, change.operationType);
-          sockets[user]?.forEach((socket) => {
-            socket.send(JSON.stringify(message));
-          });
-          break;
-        }
+        switch (change.operationType) {
+          case 'insert': {
+            const message = await handleChange(change, change.operationType);
+            sockets[user]?.forEach((socket) => {
+              socket.send(JSON.stringify(message));
+            });
+            break;
+          }
 
-        case 'update': {
-          const message = await handleChange(change, change.operationType);
-          sockets[user]?.forEach((socket) => {
-            socket.send(JSON.stringify(message));
-          });
-          break;
-        }
+          case 'update': {
+            const message = await handleChange(change, change.operationType);
+            sockets[user]?.forEach((socket) => {
+              socket.send(JSON.stringify(message));
+            });
+            break;
+          }
 
-        case 'delete': {
-          break;
-        }
+          case 'delete': {
+            break;
+          }
 
-        default: {
-          break;
+          default: {
+            break;
+          }
         }
-      }
-    });
+      });
+    } else {
+      logger.warn(
+        'The $changeStream stage is only supported on replica sets. If you would like to enable changeStream, connect to a replica set.'
+      );
+    }
   });
 
   db.on('error', function (err) {

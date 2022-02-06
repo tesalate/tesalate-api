@@ -88,6 +88,7 @@ Running in production:
 Use [tesalate-compose](https://github.com/tesalate/tesalate-compose).
 
 Testing:
+tesalate-api uses mongodb-memory-server so there is no need to start mongodb before running tests!
 
 ```bash
 # run all tests
@@ -102,7 +103,14 @@ yarn test:coverage
 
 Docker:
 
-Please user [tesalate-compose](https://github.com/tesalate/tesalate-compose) if you want to launch this app with Docker.
+```bash
+# run docker container in development mode
+yarn docker:dev
+
+# run docker container in production mode
+yarn docker:prod
+```
+OR use [tesalate-compose](https://github.com/tesalate/tesalate-compose)
 
 Linting:
 
