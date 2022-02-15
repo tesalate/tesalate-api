@@ -307,18 +307,18 @@ describe('MapPoint routes', () => {
       ]);
 
       const res = await request(app)
-        .get(`/v1/map-points/distance/${mapPointForVehicleOneForUser.vehicle}`)
-        .query({ km: 100 })
+        .get(`/v1/map-points/distance/`)
+        .query({ km: 100, vehicle: mapPointForVehicleOneForUser.vehicle.toHexString() })
         .set('Cookie', `token=${userOneAccessToken}`)
-        .send()
-        .expect(httpStatus.OK);
+        .send();
+      // .expect(httpStatus.OK);
 
       const dbVehicleData = await VehicleData.findOne({
         'drive_state.latitude': latitude,
         'drive_state.longitude': longitude,
       }).lean();
 
-      expect(res.body).toEqual([
+      expect(res.body.results).toEqual([
         {
           _id: expect.anything(),
           dataPoints: [

@@ -11,13 +11,13 @@ const getMapPoints = catchAsync(async (req, res) => {
   };
 
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await mapPointService.queryMapPoints(filter, options);
-  res.send(result);
+  const results = await mapPointService.queryMapPoints(filter, options);
+  res.send(results);
 });
 
 const getMapPointsByDistanceApart = catchAsync(async (req, res) => {
-  const result = await mapPointService.getMapPointsByDistanceApart(req.query.km, req.params.vehicle as string, req.user._id);
-  res.send(result);
+  const results = await mapPointService.getMapPointsByDistanceApart(req.query.km, req.query.vehicle as string, req.user._id);
+  res.send({ results });
 });
 
 const getMapPoint = catchAsync(async (req, res) => {

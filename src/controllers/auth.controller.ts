@@ -18,7 +18,7 @@ const register = catchAsync(async (req, res, next) => {
     .status(httpStatus.CREATED)
     .cookie('token', accessToken, tokenCookieOptions)
     .cookie('refreshToken', refreshToken, refreshTokenCookieOptions)
-    .send({ user });
+    .send(user);
   next();
 });
 
@@ -32,7 +32,7 @@ const login = catchAsync(async (req, res) => {
   res
     .cookie('token', accessToken, tokenCookieOptions)
     .cookie('refreshToken', refreshToken, refreshTokenCookieOptions)
-    .send({ user });
+    .send(user);
 });
 
 const logout = catchAsync(async (req, res) => {

@@ -10,8 +10,8 @@ export enum TokenTypesEnum {
 }
 
 export type TokenType = {
-  [key in TokenTypesEnum] : string
-}
+  [key in TokenTypesEnum]: string;
+};
 
 const tokenTypes = {
   ACCESS: 'access',
@@ -36,8 +36,4 @@ const refreshTokenCookieOptions = {
   secure: secureCookie, // cookie must be sent over https / ssl
 };
 
-export {
-  tokenTypes,
-  tokenCookieOptions,
-  refreshTokenCookieOptions,
-};
+export { tokenTypes, tokenCookieOptions, refreshTokenCookieOptions };
