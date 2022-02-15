@@ -7,7 +7,7 @@
   "author": "Devin Cunningham",
   "license": "MIT",
   "engines": {
-    "node": ">=16.0.0"
+    "node": "~16"
   },
   "scripts": {
     "commit": "cz",
