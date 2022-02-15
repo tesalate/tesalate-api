@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/tesalate/main-api/compare/v0.1.1...v0.1.2) (2022-02-15)
+
+### [0.1.1-alpha](https://github.com/tesalate/main-api/compare/v0.1.0...v0.1.1-alpha) (2022-02-15)
+
+
+### CI
+
+* **auto-merge.yml:** change auto-merge steps ([218570f](https://github.com/tesalate/main-api/commit/218570f563220711329bd33c8fff43982436d3b7))
+
 ### [0.1.1](https://github.com/tesalate/main-api/compare/v0.1.0...v0.1.1) (2022-02-15)
 
 
