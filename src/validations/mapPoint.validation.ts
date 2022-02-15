@@ -14,10 +14,8 @@ const getMapPoints = {
 };
 
 const getMapPointsByDistanceApart = {
-  params: {
-    vehicle: Joi.string().custom(objectId).required(),
-  },
   query: Joi.object().keys({
+    vehicle: Joi.string().custom(objectId).required(),
     km: Joi.number(),
   }),
 };

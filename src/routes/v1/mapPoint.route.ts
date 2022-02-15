@@ -9,7 +9,7 @@ const router = express.Router();
 router.route('/').get(auth('getMapPoints'), validate(mapPointValidation.getMapPoints), mapPointController.getMapPoints);
 
 router
-  .route('/distance/:vehicle')
+  .route('/distance')
   .get(
     auth('getMapPoints'),
     validate(mapPointValidation.getMapPointsByDistanceApart),
