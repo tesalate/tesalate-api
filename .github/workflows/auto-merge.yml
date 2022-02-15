@@ -14,8 +14,8 @@ jobs:
           token: ${{ secrets.DEPENDABOT_TOKEN }}
           checkName: CI
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - name: Github Action Merge Dependabot
-        uses: fastify/github-action-merge-dependabot@v2.4.0
+      - uses: actions/checkout@v2
+      - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
+          target: minor
           github-token: ${{ secrets.DEPENDABOT_TOKEN }}
-          target: patch
