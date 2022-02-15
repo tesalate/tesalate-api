@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/tesalate/main-api/compare/v0.1.0...v0.1.1) (2022-02-15)
+
+
+### Bug Fixes
+
+* **auth.* mappoint.*:** update routes to return a better object formatted for the frontend ([17c789f](https://github.com/tesalate/main-api/commit/17c789f93dc8b895ebbc7e6aa7c03537d2935a50))
+
+
+### Code Refactoring
+
+* **docker-compose*.yml db.ts:** improves local development with docker compose ([2e5daf9](https://github.com/tesalate/main-api/commit/2e5daf93cc4179c2df826128c94da77ae0d47541))
+
+
+### Others
+
+* **package.json yark.lock:** dependency update ([ae82a9c](https://github.com/tesalate/main-api/commit/ae82a9cfb2c93b4668e62c47563d5eda8c4b5307)), closes [#31](https://github.com/tesalate/main-api/issues/31)
+* **package.json:** remove "git add" step from lint-staged ([ce1e378](https://github.com/tesalate/main-api/commit/ce1e3780e79ccbc0885d4ac2f261d6a8c400dca3))
+
+
+### Tests
+
+* **dbhandler.ts:** fix issue where db watch tests would fail ([5f94e03](https://github.com/tesalate/main-api/commit/5f94e03f588d2a203dad58d4c2912b955e785f3b))
+* **docker-compose.test.yml readme.md package.json:** removes docker-compose.test.yml ([cdc50eb](https://github.com/tesalate/main-api/commit/cdc50eb654c96e0ff442b6dd16cd2fb62d587875))
+
+
+### CI
+
+* **auto-merge.yml:** auto merge dependabot PR patches ([f790372](https://github.com/tesalate/main-api/commit/f790372e6af65d5b132825d06e1444370fc0eba7))
+* **coverage.yml:** turns off coverage test for dependabot PRs ([68dd5f6](https://github.com/tesalate/main-api/commit/68dd5f6896cab3f6350f987cd1c5e0e315bf095b))
+
 ## [0.1.0](https://github.com/tesalate/main-api/compare/v0.1.0-alpha...v0.1.0) (2022-02-05)
 
 
