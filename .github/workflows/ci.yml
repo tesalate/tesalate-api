@@ -6,27 +6,14 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  NODE_ENV: test
-  PORT: 4400
-  APP_NAME: tesalate-ci
-  PUBLIC_URL: http://localhost
-  MONGODB_URL: mongodb://localhost:27017/test
-  JWT_SECRET: thisisasamplesecret
-  JWT_ACCESS_EXPIRATION_MINUTES: 30
-  JWT_REFRESH_EXPIRATION_DAYS: 30
-  TESLA_OAUTH_V3_URL: https://auth.tesla.com/oauth2/v3
-  TESLA_OWNERAPI_CLIENT_ID: '12345'
-  TESLA_OWNERAPI_CLIENT_SECRET: '54321'
-  ACCEPTED_CORS: '["http://localhost:4400"]'
-
 jobs:
   ci:
-    name: Building, linting, testing on node ${{ matrix.node }} and ${{ matrix.os }}
+    name: Building, linting, testing on node ${{ matrix.node }}, mongo ${{ matrix.mongo }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         node: ['16.x', '17.4']
+        mongo: ['5.0.6', '5.1.0']
         os: [ubuntu-latest]
     steps:
       - name: Checkout repo
@@ -50,4 +37,18 @@ jobs:
         run: yarn lint
 
       - name: Test
+        env:
+          NODE_ENV: test
+          PORT: 4400
+          APP_NAME: tesalate-ci
+          PUBLIC_URL: http://localhost
+          MONGODB_URL: mongodb://localhost:27017/test
+          MONGODB_VERSION: ${{ matrix.mongo }}
+          JWT_SECRET: thisisasamplesecret
+          JWT_ACCESS_EXPIRATION_MINUTES: 30
+          JWT_REFRESH_EXPIRATION_DAYS: 30
+          TESLA_OAUTH_V3_URL: https://auth.tesla.com/oauth2/v3
+          TESLA_OWNERAPI_CLIENT_ID: '12345'
+          TESLA_OWNERAPI_CLIENT_SECRET: '54321'
+          ACCEPTED_CORS: '["http://localhost:4400"]'
         run: yarn test -- --ci --coverage

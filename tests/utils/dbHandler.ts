@@ -10,8 +10,9 @@ let replset;
 const connect = async () => {
   replset = await MongoMemoryReplSet.create({
     replSet: { count: 1, storageEngine: 'wiredTiger' },
-    binary: { version: '5.0.6' },
+    binary: { version: config.mongoose.version },
   });
+
   await replset.waitUntilRunning();
   const uri = replset.getUri();
   config.mongoose.url = uri;

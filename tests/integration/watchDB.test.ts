@@ -13,7 +13,7 @@ import { teslaAccountOne, insertTeslaAccounts } from '../fixtures/teslaAccount.f
 
 setupWebSocket();
 
-describe('DB Change Stream', () => {
+describe('DB Change Stream INSERT', () => {
   test('INSERT for charge session', async () => {
     await insertUsers([userOne]);
     const [client1, messages1] = await createSocketClient(config.port, userOneAccessToken, 1, 1);
@@ -21,7 +21,6 @@ describe('DB Change Stream', () => {
     await ChargeSession.create(chargeSessionForVehicleOneForUser);
 
     await waitForSocketState(client1, client1.CLOSED);
-
     expect(JSON.parse(messages1 as string)).toMatchObject({
       _id: chargeSessionForVehicleOneForUser._id.toHexString(),
       action: 'insert',
@@ -103,7 +102,9 @@ describe('DB Change Stream', () => {
       type: 'tesla-accounts',
     });
   });
+});
 
+describe('DB Change Stream UPDATE', () => {
   test('UPDATE for charge session', async () => {
     await insertUsers([userOne]);
     await insertChargeSessions([chargeSessionForVehicleOneForUser]);
