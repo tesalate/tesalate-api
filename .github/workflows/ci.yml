@@ -12,10 +12,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        include:
-          - node: ['16.x', '17.4']
-            mongo: ['4.4.10', '5.0.6']
-            os: [ubuntu-latest]
+        node: ['16.x', '17.4']
+        mongo: ['4.4.10', '5.0.6']
+        os: [ubuntu-latest]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
