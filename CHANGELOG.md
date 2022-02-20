@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/tesalate/main-api/compare/v0.1.2...v0.1.3) (2022-02-20)
+
+
+### Build System
+
+* **dockerfile package.json:** smaller docker image 1.21GB -> 114MB ([e2e4e9d](https://github.com/tesalate/main-api/commit/e2e4e9dfb3d8fa9f223b0905a1e3a7d3506681a9))
+
 ### [0.1.2](https://github.com/tesalate/main-api/compare/v0.1.1...v0.1.2) (2022-02-15)
 
 ### [0.1.1-alpha](https://github.com/tesalate/main-api/compare/v0.1.0...v0.1.1-alpha) (2022-02-15)
