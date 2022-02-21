@@ -7,7 +7,7 @@ RUN yarn global add typescript ts-node rimraf
 
 # RUN yarn global add copyfiles
 USER node
-RUN yarn install --production --frozen-lockfile --pure-lockfile
+RUN yarn install
 COPY --chown=node:node . .
 RUN rimraf dist/
 RUN tsc
