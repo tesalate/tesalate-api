@@ -3,6 +3,7 @@ import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
 import { vehicleDataService } from '../services';
 import pick from 'lodash/pick';
+import client from '../redis';
 
 const getVehicleDataPoints = catchAsync(async (req, res) => {
   const filter = {
@@ -11,8 +12,17 @@ const getVehicleDataPoints = catchAsync(async (req, res) => {
   };
 
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await vehicleDataService.queryVehicleDataPoints(filter, options);
-  res.send(result);
+  const redisKey = JSON.stringify({ ...filter, ...options });
+  const cachesDataPoint = await client.get(redisKey);
+  if (cachesDataPoint != null) {
+    res.setHeader('x-cache', 'cached');
+    return res.send(JSON.parse(cachesDataPoint));
+  } else {
+    const result = await vehicleDataService.queryVehicleDataPoints(filter, options);
+    await client.setEx(redisKey, 24 * 60 * 60, JSON.stringify(result));
+    res.setHeader('x-cache', 'no-cache');
+    res.send(result);
+  }
 });
 
 const getVehicleDataPoint = catchAsync(async (req, res) => {

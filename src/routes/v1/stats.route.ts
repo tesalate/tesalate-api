@@ -1,45 +1,31 @@
 import express from 'express';
 import auth from '../../middleware/auth';
 import validate from '../../middleware/validate';
-import userValidation from '../../validations/user.validation';
-import userController from '../../controllers/user.controller';
+import statsController from '../../controllers/stats.controller';
+import statsValidation from '../../validations/stats.validation';
 
 const router = express.Router();
 
-router
-  .route('/')
-  .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
-
-router.post(
-  '/send-invite-email',
-  auth('send-invite'),
-  validate(userValidation.sendInviteEmail),
-  userController.sendInviteEmail
-);
-
-router
-  .route('/:userId')
-  .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
-  .patch(auth('manageUsers'), validate(userValidation.updateUser), userController.updateUser)
-  .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
+router.route('/driveStats').get(auth('getStats'), validate(statsValidation.getStats), statsController.getDriveStats);
+router.route('/chargeStats').get(auth('getStats'), validate(statsValidation.getStats), statsController.getChargeStats);
+router.route('/mapPointStats').get(auth('getStats'), validate(statsValidation.getStats), statsController.getMapPointStats);
 
 export default router;
 
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: User management and retrieval
+ *   name: Vehicles
+ *   description: Vehicle management and retrieval
  */
 
 /**
  * @swagger
- * /users:
+ * /vehicles:
  *   post:
- *     summary: Create a user
- *     description: Only admins can create other users.
- *     tags: [Users]
+ *     summary: Create a vehicle
+ *     description: Users and admins can create vehicles.
+ *     tags: [Vehicles]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -49,70 +35,61 @@ export default router;
  *           schema:
  *             type: object
  *             required:
- *               - username
- *               - firstName
- *               - lastName
- *               - email
- *               - password
- *               - role
+ *               - user
+ *               - vin
+ *               - teslaAccount
+ *               - vehicle_id
+ *               - id_s
  *             properties:
- *               username:
+ *               user:
  *                 type: string
- *                 description: must be unique
- *               firstName:
+ *                 description: the id of the user creating the vehicle
+ *               vin:
  *                 type: string
- *               lastName:
+ *               teslaAccount:
  *                 type: string
- *               email:
+ *                 description: the id of the tesla account that belongs to this vehicle
+ *               vehicle_id:
+ *                 type: number
+ *               id_s:
  *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
- *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *               role:
- *                  type: string
- *                  enum: [user, admin]
  *             example:
- *               username: fake_name
- *               firstName: fake
- *               lastName: name
- *               email: fake@example.com
- *               password: password1
- *               role: user
+ *               user: 618dbb89a85101633aeff5e7
+ *               vin: 6f12345678912M125N
+ *               teslaAccount: J618dbb89b85101633aeff5e8
+ *               vehicle_id: 12345678,
+ *               id_s: "22446688"
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Vehicle'
  *       "400":
- *         $ref: '#/components/responses/DuplicateEmail'
+ *         $ref: '#/components/responses/DuplicateVehicle'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all users
- *     description: Only admins can retrieve all users.
- *     tags: [Users]
+ *     summary: Get all vehicles
+ *     description: Only admins can retrieve all vehicles.
+ *     tags: [Vehicles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: username
+ *         name: vehiclename
  *         schema:
  *           type: string
- *         description: Username
+ *         description: Vehiclename
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: User role
+ *         description: Vehicle role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -124,7 +101,7 @@ export default router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of vehicles
  *       - in: query
  *         name: page
  *         schema:
@@ -143,7 +120,7 @@ export default router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/User'
+ *                     $ref: '#/components/schemas/Vehicle'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -164,11 +141,11 @@ export default router;
 
 /**
  * @swagger
- * /users/{id}:
+ * /vehicles/{id}:
  *   get:
- *     summary: Get a user
- *     description: Logged in users can fetch only their own user information. Only admins can fetch other users.
- *     tags: [Users]
+ *     summary: Get a vehicle
+ *     description: Logged in vehicles can fetch only their own vehicle information. Only admins can fetch other vehicles.
+ *     tags: [Vehicles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -177,14 +154,14 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Vehicle id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Vehicle'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -193,9 +170,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a user
- *     description: Logged in users can only update their own information. Only admins can update other users.
- *     tags: [Users]
+ *     summary: Update a vehicle
+ *     description: Logged in vehicles can only update their own information. Only admins can update other vehicles.
+ *     tags: [Vehicles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -204,7 +181,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Vehicle id
  *     requestBody:
  *       required: true
  *       content:
@@ -233,7 +210,7 @@ export default router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Vehicle'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -244,9 +221,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a user
- *     description: Logged in users can delete only themselves. Only admins can delete other users.
- *     tags: [Users]
+ *     summary: Delete a vehicle
+ *     description: Logged in vehicles can delete only themselves. Only admins can delete other vehicles.
+ *     tags: [Vehicles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -255,7 +232,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Vehicle id
  *     responses:
  *       "200":
  *         description: No content

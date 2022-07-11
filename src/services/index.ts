@@ -9,3 +9,6 @@ export { default as vehicleDataService } from './vehicleData.service';
 export { default as chargeSessionService } from './chargeSession.service';
 export { default as driveSessionService } from './driveSession.service';
 export { default as mapPointService } from './mapPoint.service';
+export { default as healthService } from './health.service';
+export { default as settingsService } from './settings.service';
+export { default as statsService } from './stats.service';

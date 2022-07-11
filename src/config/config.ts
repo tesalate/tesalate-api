@@ -12,6 +12,8 @@ const envVarsSchema = Joi.object()
     PORT: Joi.number().default(4400),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
     MONGODB_VERSION: Joi.string().default('5.0.6'),
+    REDIS_PORT: Joi.number().default(6379),
+    REDIS_PASSWORD: Joi.string().description('Password for Redis'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().default(30).description('minutes after which access tokens expire'),
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(90).description('days after which refresh tokens expire'),
@@ -35,6 +37,7 @@ const envVarsSchema = Joi.object()
       .default(86400 * 1000 * 60)
       .description('minutes after which cookies expire'),
     ACCEPTED_CORS: Joi.string().description('allowed urls for cors').required(),
+    REQUIRES_INVITE: Joi.boolean().description('users must be invited to register').default(true),
   })
   .unknown();
 
@@ -49,6 +52,7 @@ export default {
   publicUrl: envVars.PUBLIC_URL,
   env: envVars.NODE_ENV,
   port: envVars.PORT,
+  requiresInvite: envVars.REQUIRES_INVITE,
   mongoose: {
     url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '_test' : ''),
     options: {
@@ -57,6 +61,10 @@ export default {
       useUnifiedTopology: true,
     },
     version: envVars.MONGODB_VERSION,
+  },
+  redis: {
+    port: envVars.REDIS_PORT,
+    pass: envVars.REDIS_PASSWORD,
   },
   jwt: {
     secret: envVars.JWT_SECRET,

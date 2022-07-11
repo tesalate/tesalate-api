@@ -1,45 +1,34 @@
 import express from 'express';
 import auth from '../../middleware/auth';
 import validate from '../../middleware/validate';
-import userValidation from '../../validations/user.validation';
-import userController from '../../controllers/user.controller';
+import settingsValidation from '../../validations/settings.validation';
+import settingsController from '../../controllers/settings.controller';
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
-
-router.post(
-  '/send-invite-email',
-  auth('send-invite'),
-  validate(userValidation.sendInviteEmail),
-  userController.sendInviteEmail
-);
-
-router
-  .route('/:userId')
-  .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
-  .patch(auth('manageUsers'), validate(userValidation.updateUser), userController.updateUser)
-  .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
+  .get(auth('getSettings'), validate(settingsValidation.getSettings), settingsController.getSettings)
+  .post(auth('manageSettings'), validate(settingsValidation.createSettings), settingsController.createSettings)
+  .patch(auth('manageSettings'), validate(settingsValidation.updateSettings), settingsController.updateSettings)
+  .delete(auth('manageSettings'), validate(settingsValidation.deleteSettings), settingsController.deleteSettings);
 
 export default router;
 
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: User management and retrieval
+ *   name: Settings
+ *   description: Settings management and retrieval
  */
 
 /**
  * @swagger
- * /users:
+ * /settings:
  *   post:
- *     summary: Create a user
- *     description: Only admins can create other users.
- *     tags: [Users]
+ *     summary: Create a settings
+ *     description: Only admins can create other settings.
+ *     tags: [Settings]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -49,14 +38,14 @@ export default router;
  *           schema:
  *             type: object
  *             required:
- *               - username
+ *               - settingsname
  *               - firstName
  *               - lastName
  *               - email
  *               - password
  *               - role
  *             properties:
- *               username:
+ *               settingsname:
  *                 type: string
  *                 description: must be unique
  *               firstName:
@@ -74,21 +63,21 @@ export default router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [user, admin]
+ *                  enum: [settings, admin]
  *             example:
- *               username: fake_name
+ *               settingsname: fake_name
  *               firstName: fake
  *               lastName: name
  *               email: fake@example.com
  *               password: password1
- *               role: user
+ *               role: settings
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Settings'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -97,22 +86,22 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all users
- *     description: Only admins can retrieve all users.
- *     tags: [Users]
+ *     summary: Get all settings
+ *     description: Only admins can retrieve all settings.
+ *     tags: [Settings]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: username
+ *         name: settingsname
  *         schema:
  *           type: string
- *         description: Username
+ *         description: Settingsname
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: User role
+ *         description: Settings role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -124,7 +113,7 @@ export default router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of settings
  *       - in: query
  *         name: page
  *         schema:
@@ -143,7 +132,7 @@ export default router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/User'
+ *                     $ref: '#/components/schemas/Settings'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -164,11 +153,11 @@ export default router;
 
 /**
  * @swagger
- * /users/{id}:
+ * /settings/{id}:
  *   get:
- *     summary: Get a user
- *     description: Logged in users can fetch only their own user information. Only admins can fetch other users.
- *     tags: [Users]
+ *     summary: Get a settings
+ *     description: Logged in settings can fetch only their own settings information. Only admins can fetch other settings.
+ *     tags: [Settings]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -177,14 +166,14 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Settings id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Settings'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -193,9 +182,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a user
- *     description: Logged in users can only update their own information. Only admins can update other users.
- *     tags: [Users]
+ *     summary: Update a settings
+ *     description: Logged in settings can only update their own information. Only admins can update other settings.
+ *     tags: [Settings]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -204,7 +193,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Settings id
  *     requestBody:
  *       required: true
  *       content:
@@ -233,7 +222,7 @@ export default router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Settings'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -244,9 +233,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a user
- *     description: Logged in users can delete only themselves. Only admins can delete other users.
- *     tags: [Users]
+ *     summary: Delete a settings
+ *     description: Logged in settings can delete only themselves. Only admins can delete other settings.
+ *     tags: [Settings]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -255,7 +244,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Settings id
  *     responses:
  *       "200":
  *         description: No content

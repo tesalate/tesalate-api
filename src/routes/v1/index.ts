@@ -9,6 +9,8 @@ import teslaRoute from './teslaAccount.route';
 import chargeSessionRoute from './chargeSession.route';
 import driveSessionRoute from './driveSession.route';
 import mapPointRoute from './mapPoint.route';
+import settingsRoute from './settings.route';
+import statsRoute from './stats.route';
 import config from '../../config/config';
 
 const router = express.Router();
@@ -49,6 +51,14 @@ const defaultRoutes = [
   {
     path: '/map-points',
     route: mapPointRoute,
+  },
+  {
+    path: '/settings',
+    route: settingsRoute,
+  },
+  {
+    path: '/stats',
+    route: statsRoute,
   },
 ];
 

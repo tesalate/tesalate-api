@@ -7,3 +7,4 @@ export { default as vehicleDataValidation } from './vehicleData.validation';
 export { default as chargeSessionValidation } from './chargeSession.validation';
 export { default as driveSessionValidation } from './driveSession.validation';
 export { default as mapPointValidation } from './mapPoint.validation';
+export { default as statsValidation } from './stats.validation';

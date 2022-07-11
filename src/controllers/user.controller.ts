@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import pick from 'lodash/pick';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
-import { userService } from '../services';
+import { emailService, tokenService, userService } from '../services';
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -34,10 +34,21 @@ const deleteUser = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const sendInviteEmail = catchAsync(async (req, res) => {
+  const userTaken = await userService.getUserByEmail(req.body.email);
+  if (userTaken) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  }
+  const inviteToken = await tokenService.generateInviteToken(req.body.email);
+  await emailService.sendInviteEmail(req.body.email, inviteToken);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 export default {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  sendInviteEmail,
 };

@@ -1,4 +1,3 @@
-
 export enum UserRoles {
   admin = 'admin',
   user = 'user',
@@ -18,6 +17,9 @@ const allRoles = {
     'manageMapPoints',
     'getReminders',
     'manageReminders',
+    'getSettings',
+    'manageSettings',
+    'getStats',
   ],
   admin: [
     'getUsers',
@@ -34,13 +36,14 @@ const allRoles = {
     'manageMapPoints',
     'getReminders',
     'manageReminders',
+    'getSettings',
+    'manageSettings',
+    'send-invite',
+    'getStats',
   ],
 };
 
 const roles = Object.keys(allRoles);
 const roleRights = new Map(Object.entries(allRoles));
 
-export {
-  roles,
-  roleRights,
-};
+export { roles, roleRights };

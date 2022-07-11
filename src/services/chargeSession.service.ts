@@ -1,5 +1,6 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+import { pipeline } from 'stream';
 import { ChargeSession } from '../models';
 import ApiError from '../utils/ApiError';
 
@@ -205,10 +206,24 @@ const deleteChargeSessionById = async (chargeSessionPointId, user) => {
   return chargeSession;
 };
 
+const getChargeSessionAggregation = async (body, user) => {
+  const [first, ...rest] = body.pipeline;
+  Object.keys(first?.['$match']).forEach((key) => {
+    if (key === '_id' || key === 'vehicle' || key === 'user') {
+      first['$match'][key] = mongoose.Types.ObjectId(first['$match'][key]);
+    }
+  });
+  first['$match']['user'] = mongoose.Types.ObjectId(user);
+  const pipeline = [first, ...rest];
+  const chargeSessions = await ChargeSession.aggregate(pipeline);
+  return chargeSessions;
+};
+
 export default {
   queryChargeSessions,
   getChargeSessionById,
   getChargeSessionAggregateById,
   getChargeSessionByUserId,
   deleteChargeSessionById,
+  getChargeSessionAggregation,
 };

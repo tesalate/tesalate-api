@@ -1,7 +1,7 @@
-import  httpStatus from 'http-status';
-import  mongoose from 'mongoose';
+import httpStatus from 'http-status';
+import mongoose from 'mongoose';
 import { DriveSession } from '../models';
-import  ApiError from '../utils/ApiError';
+import ApiError from '../utils/ApiError';
 
 /**
  * Query for drive sessions
@@ -108,7 +108,7 @@ const getDriveSessionAggregateById = async (_id, user) => {
     },
     {
       $project: {
-        mapData: '$mapData',
+        mapData: { $reverseArray: ['$mapData'] },
         graphData: {
           datasets: [
             // { label: 'battery level', data: '$batteryLevel' },
@@ -291,6 +291,7 @@ const getDriveSessionAggregateById = async (_id, user) => {
       },
     },
   ]);
+
   return driveSession;
 };
 
