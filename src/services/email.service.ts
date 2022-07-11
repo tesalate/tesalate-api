@@ -81,7 +81,6 @@ const sendVerificationEmail = async (to, token) => {
 /**
  * Send verification email
  * @param {string} to
- * @param {string} token
  * @returns {Promise}
  */
 const sendDataCollectorStoppedEmail = async (to) => {
@@ -99,10 +98,32 @@ const sendDataCollectorStoppedEmail = async (to) => {
   await sendEmail(to, subject, htmlToSend);
 };
 
+/** Send verification email
+ * @param {string} to
+ * @param {string} token
+ * @returns {Promise}
+ */
+const sendInviteEmail = async (to, token) => {
+  const filePath = path.join(__dirname, '../templates/invite-email.html');
+  const source = fs.readFileSync(filePath, 'utf-8').toString();
+  const template = handlebars.compile(source);
+  const replacements = {
+    appName,
+    copyrightYear,
+    signupLink: `${config.publicUrl}/sign-up/${token}`,
+    email: to,
+    validFor: moment.duration(2.628e9).humanize(),
+  };
+  const htmlToSend = template(replacements);
+  const subject = `🥳 You're invited to join ${config.appName} 🚘`;
+  await sendEmail(to, subject, htmlToSend);
+};
+
 export default {
   transport,
   sendEmail,
   sendResetPasswordEmail,
   sendVerificationEmail,
   sendDataCollectorStoppedEmail,
+  sendInviteEmail,
 };

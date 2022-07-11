@@ -56,10 +56,17 @@ const deleteUser = {
   }),
 };
 
+const sendInviteEmail = {
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+  }),
+};
+
 export default {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  sendInviteEmail,
 };

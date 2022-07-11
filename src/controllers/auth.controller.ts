@@ -1,25 +1,37 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync';
 import { authService, userService, tokenService, emailService } from '../services';
-import { tokenCookieOptions, refreshTokenCookieOptions } from '../config/tokens';
+import { tokenCookieOptions, refreshTokenCookieOptions, tokenTypes } from '../config/tokens';
 import { TypedRequest } from './types';
+import config from '../config/config';
+import ApiError from '../utils/ApiError';
 
 const register = catchAsync(async (req, res, next) => {
   const newUser = req.body;
+  let inviteToken;
 
+  if (config.requiresInvite) {
+    try {
+      inviteToken = await tokenService.verifyToken(req.body.inviteToken, tokenTypes.INVITE);
+    } catch (error) {
+      throw new ApiError(httpStatus.FORBIDDEN, 'requires invite');
+    }
+  }
   // CREATE USER
   const user = await userService.createUser({ ...newUser, displayName: newUser.username });
+
   const {
     access: { token: accessToken },
     refresh: { token: refreshToken },
   } = await tokenService.generateAuthTokens(user);
+
+  if (inviteToken) await inviteToken.remove();
 
   res
     .status(httpStatus.CREATED)
     .cookie('token', accessToken, tokenCookieOptions)
     .cookie('refreshToken', refreshToken, refreshTokenCookieOptions)
     .send(user);
-  next();
 });
 
 const login = catchAsync(async (req, res) => {
@@ -37,7 +49,7 @@ const login = catchAsync(async (req, res) => {
 
 const logout = catchAsync(async (req, res) => {
   await authService.logout(req.cookies.refreshToken);
-  res.status(httpStatus.NO_CONTENT).clearCookie('refreshToken', { path: '' }).clearCookie('token').send();
+  res.status(httpStatus.NO_CONTENT).clearCookie('refreshToken', { path: '/v1/auth' }).clearCookie('token').send();
 });
 
 const refreshTokens = catchAsync(async (req, res) => {

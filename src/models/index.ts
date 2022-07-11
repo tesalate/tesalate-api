@@ -9,3 +9,5 @@ export { default as MapPoint } from './mapPoint.model';
 export { default as Reminder } from './reminder.model';
 export { default as Charger } from './charger.model';
 export { default as Flag } from './flag.model';
+export { default as Health } from './health.model';
+export { default as Settings } from './settings.model';

@@ -54,36 +54,46 @@ const deleteMapPointById = async (mapPointPointId, user) => {
   return mapPoint;
 };
 
+const dateFromObjectId = function (objectId) {
+  return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
+};
+
 /**
  * Get map point data by id
  * @param {number} km
  * @param {ObjectId} vehicle
  * @returns {Promise<MapPoint[]>}
  */
-const getMapPointsByDistanceApart = async (km, vehicle, user) => {
-  const mapPoints = await getMapPointByVid(vehicle, user);
-  const geoPoints: Partial<IMapPoint>[] = [];
-  return mapPoints
-    .sort((a, b) => new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf())
-    .reduce((acc: Partial<IMapPoint>[], curr) => {
-      const { geoJSON: _geoJSON, user: _user, ...rest } = curr.toJSON();
-      const { drive_state: latLong } = rest.dataPoints[0];
 
-      if (geoPoints.length === 0) {
-        geoPoints.push(latLong);
-        return [...acc, rest];
-      }
-      let save = true;
-      for (let i = geoPoints.length - 1; i >= 0; i -= 1) {
-        if (getDistance(geoPoints[i] as GeolibGeoJSONPoint, latLong) <= parseInt(km, 10) * 1000) {
-          save = false;
-          break;
-        }
-      }
-      if (!save) return [...acc];
+const getMapPointsByDistanceApart = async (km, vehicle, user) => {
+  const mapPoints = await MapPoint.find({ vehicle, user })
+    .select('_id dataPoints latLongString visitCount')
+    .sort({ updatedAt: -1 });
+
+  const geoPoints: Partial<IMapPoint>[] = [];
+  const returnArr = mapPoints.reduce((acc: Partial<IMapPoint>[], curr) => {
+    const { drive_state: latLong } = curr.dataPoints[0].toJSON();
+
+    if (geoPoints.length === 0) {
       geoPoints.push(latLong);
-      return [...acc, rest];
-    }, []);
+      return [...acc, curr];
+    }
+
+    let save = true;
+
+    for (let i = geoPoints.length - 1; i >= 0; i -= 1) {
+      if (getDistance(geoPoints[i] as GeolibGeoJSONPoint, latLong) <= parseInt(km, 10) * 1000) {
+        save = false;
+        break;
+      }
+    }
+
+    if (!save) return acc;
+
+    geoPoints.push(latLong);
+    return [...acc, curr];
+  }, []);
+  return returnArr;
 };
 
 export default {

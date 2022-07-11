@@ -11,6 +11,14 @@ router
   .get(auth('getSessions'), validate(chargeSessionValidation.getChargeSessions), chargeSessionController.getChargeSessions);
 
 router
+  .route('/aggregate')
+  .post(
+    auth('getSessions'),
+    validate(chargeSessionValidation.getChargeSessionAggregation),
+    chargeSessionController.getChargeSessionAggregation
+  );
+
+router
   .route('/:chargeSessionId')
   .get(auth('getSessions'), validate(chargeSessionValidation.getChargeSession), chargeSessionController.getChargeSession)
   .delete(

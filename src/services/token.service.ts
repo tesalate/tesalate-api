@@ -54,7 +54,12 @@ const saveToken = async (token, userId, expiresAt, type, blacklisted = false) =>
  */
 const verifyToken = async (token: string, type: string) => {
   const payload = jwt.verify(token, config.jwt.secret);
-  const tokenDoc = await Token.findOne({ token, type, user: payload.sub as string, blacklisted: false });
+  const tokenDoc = await Token.findOne({
+    token,
+    type,
+    user: type === tokenTypes.INVITE ? undefined : (payload.sub as string),
+    blacklisted: false,
+  });
   if (!tokenDoc) {
     throw new Error('Token not found');
   }
@@ -114,6 +119,23 @@ const generateVerifyEmailToken = async (user) => {
   return verifyEmailToken;
 };
 
+/**
+ * Generate invite token
+ * @returns {Promise<string>}
+ */
+const generateInviteToken = async (email) => {
+  const expiresAt = moment().add(1, 'month');
+  const payload = {
+    sub: email,
+    iat: moment().unix(),
+    exp: expiresAt.unix(),
+    type: tokenTypes.INVITE,
+  };
+  const inviteToken = jwt.sign(payload, config.jwt.secret);
+  await saveToken(inviteToken, null, expiresAt, tokenTypes.INVITE);
+  return inviteToken;
+};
+
 export default {
   generateToken,
   saveToken,
@@ -121,4 +143,5 @@ export default {
   generateAuthTokens,
   generateResetPasswordToken,
   generateVerifyEmailToken,
+  generateInviteToken,
 };

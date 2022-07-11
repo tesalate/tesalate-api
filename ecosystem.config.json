@@ -2,17 +2,15 @@
   "apps": [
     {
       "name": "tesalate-api",
-      "script": "dist/src/index.js",
+      "script": "./dist/src/index.js",
       "instances": 2,
-      "autorestart": false,
+      "autorestart": true,
       "watch": false,
-      "time": true,
       "env": {
         "NODE_ENV": "production"
       },
       "output": "./logs/out.log",
-      "error": "./logs/error.log",
-      "log_type": "json"
+      "error": "./logs/error.log"
     }
   ]
 }

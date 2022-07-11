@@ -9,7 +9,7 @@ export default async function (db, sockets) {
   });
 
   db.once('open', () => {
-    if (config.mongoose.url.indexOf('replicaSet') > -1) {
+    if (config.mongoose.url.indexOf('replicaSet') !== -1) {
       const changeStream = db.watch({ fullDocument: 'updateLookup' });
       changeStream.on('change', async (change) => {
         const user = change.fullDocument?.user;
@@ -49,11 +49,12 @@ export default async function (db, sockets) {
 
   db.on('error', function (err) {
     logger.error('Mongoose default connection has encountered an error', err);
-    process.exit(1);
+    process.exit(0);
   });
 
   db.on('disconnected', function () {
-    logger.info('Mongoose default connection is disconnected');
+    logger.error('Mongoose default connection is disconnected');
+    if (config.env !== 'test') process.exit(0);
   });
 
   process.on('SIGINT', function () {

@@ -1,5 +1,5 @@
 # STAGE 1
-FROM node:16-alpine as builder
+FROM node:16-alpine as ts-compiler
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 WORKDIR /home/node/app
 COPY package.json ./
@@ -13,12 +13,20 @@ RUN rimraf dist/
 RUN tsc
 COPY src/templates dist/src/templates
 
-
 # STAGE 2
+FROM node:16-alpine as ts-remover
+WORKDIR /home/node/app
+COPY --from=ts-compiler /home/node/app/package.json ./
+COPY --from=ts-compiler /home/node/app/yarn.lock ./
+COPY --from=ts-compiler /home/node/app/dist ./dist/
+RUN yarn install --production
+
+
+# STAGE 3
 FROM node:16-alpine
 RUN apk add --no-cache --upgrade bash
 WORKDIR /home/node/app
 COPY ecosystem.config.json wait-for-it.sh ./
-COPY --from=builder /home/node/app/dist ./dist
+COPY --from=ts-remover /home/node/app/ ./
 
 EXPOSE 4400

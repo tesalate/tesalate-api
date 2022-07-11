@@ -9,6 +9,7 @@ const register = {
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     displayName: Joi.string(),
+    inviteToken: Joi.any(),
   }),
 };
 
@@ -20,17 +21,21 @@ const login = {
 };
 
 const logout = {
-  cookies: {
-    token: Joi.string(),
-    refreshToken: Joi.string().required(),
-  },
+  cookies: Joi.object()
+    .keys({
+      token: Joi.string(),
+      refreshToken: Joi.string().required(),
+    })
+    .pattern(/./, Joi.string()),
 };
 
 const refreshTokens = {
-  cookies: {
-    token: Joi.string(),
-    refreshToken: Joi.string().required(),
-  },
+  cookies: Joi.object()
+    .keys({
+      token: Joi.string(),
+      refreshToken: Joi.string().required(),
+    })
+    .pattern(/./, Joi.string()),
 };
 
 const forgotPassword = {
