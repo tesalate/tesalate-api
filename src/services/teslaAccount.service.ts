@@ -96,26 +96,26 @@ const linkTeslaAccount = async ({ email, refreshToken, user }) => {
     scope: 'openid email offline_access',
   });
 
-  const { data: ownerTokenData } = await axios.post(
-    `${config.tesla.ownerUrl}/oauth/token`,
-    {
-      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      client_id: config.tesla.clientId,
-      client_secret: config.tesla.clientSecret,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${bearerTokenData.access_token}`,
-        'Content-Type': 'application/json',
-        'User-Agent': 'TeslaAPI-proxy/2.0 (Node.js)',
-      },
-    }
-  );
+  // const { data: ownerTokenData } = await axios.post(
+  //   `${config.tesla.ownerUrl}/oauth/token`,
+  //   {
+  //     grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+  //     client_id: config.tesla.clientId,
+  //     client_secret: config.tesla.clientSecret,
+  //   },
+  //   {
+  //     headers: {
+  //       Authorization: `Bearer ${bearerTokenData.access_token}`,
+  //       'Content-Type': 'application/json',
+  //       'User-Agent': 'TeslaAPI-proxy/2.0 (Node.js)',
+  //     },
+  //   }
+  // );
 
   try {
     const account = {
       email,
-      access_token: ownerTokenData.access_token,
+      access_token: bearerTokenData.access_token,
       refresh_token: bearerTokenData.refresh_token,
       linked: true,
     };

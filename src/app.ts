@@ -7,6 +7,7 @@ import cors from 'cors';
 import passport from 'passport';
 import httpStatus from 'http-status';
 import cookieParser from 'cookie-parser';
+import health from './routes/health.route';
 // import expressOasGenerator from 'express-oas-generator';
 // import mongoose from 'mongoose';
 import config from './config/config';
@@ -18,20 +19,8 @@ import { errorConverter, errorHandler } from './middleware/error';
 import ApiError from './utils/ApiError';
 
 // const modelNames = mongoose.modelNames();
-
+const isProd = config.env === 'production';
 const app = express();
-
-const options = {
-  credentials: true,
-  origin: function (origin, callback) {
-    if (config.cors.allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  exposedHeaders: ['set-cookie'],
-};
 
 // expressOasGenerator.handleResponses(app, {
 //   predefinedSpec(spec) {
@@ -43,7 +32,33 @@ const options = {
 //   alwaysServeDocs: true,
 //   specOutputFileBehavior: 'PRESERVE',
 // });
+
+// const options = {
+//   credentials: true,
+//   origin: function (origin, callback) {
+//     console.log('WHAT', { ALLOWED: config.cors.allowedOrigins, origin });
+//     if (config.cors.allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'development') {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   // origin: "*",
+//   exposedHeaders: ['set-cookie'],
+// };
+
+// app.use(cors(options));
+
+const options: cors.CorsOptions = {
+  origin: config.cors.allowedOrigins,
+  exposedHeaders: ['set-cookie'],
+  credentials: true,
+};
+
 app.use(cors(options));
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+/* @ts-ignore */
+app.options('*', cors());
 
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
@@ -74,9 +89,12 @@ app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);
 
 // limit repeated failed requests to auth endpoints
-if (config.env === 'production') {
+if (isProd) {
   app.use('/v1/auth', authLimiter);
 }
+
+// health routes
+app.use('/health', health);
 
 // v1 api routes
 app.use('/v1', routes);
@@ -86,10 +104,6 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
-
-app.get('/', (_, res) => {
-  res.send('ok');
-});
 
 // expressOasGenerator.handleRequests();
 

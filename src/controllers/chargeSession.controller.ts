@@ -28,8 +28,17 @@ const deleteChargeSession = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getChargeSessionAggregation = catchAsync(async (req, res) => {
+  const agg = await chargeSessionService.getChargeSessionAggregation(req.body, req.user._id);
+  if (!agg) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Charge session agg err');
+  }
+  res.send(agg);
+});
+
 export default {
   getChargeSessions,
   getChargeSession,
   deleteChargeSession,
+  getChargeSessionAggregation,
 };

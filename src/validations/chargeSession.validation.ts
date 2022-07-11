@@ -30,8 +30,21 @@ const deleteChargeSession = {
   }),
 };
 
+const getChargeSessionAggregation = {
+  body: Joi.object().keys({ pipeline: Joi.array() }),
+  // .keys({
+  //   $match: Joi.object().keys({
+  //     vehicle: Joi.custom(objectId),
+  //   }),
+  //   $project: Joi.object(),
+  //   $group: Joi.object(),
+  //   $sort: Joi.object(),
+  // }),
+};
+
 export default {
   getChargeSessions,
   getChargeSession,
   deleteChargeSession,
+  getChargeSessionAggregation,
 };
