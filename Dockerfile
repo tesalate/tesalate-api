@@ -31,3 +31,5 @@ COPY ecosystem.config.json wait-for-it.sh ./
 COPY --from=ts-remover /home/node/app/ ./
 
 EXPOSE 4400
+
+CMD yarn start

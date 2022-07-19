@@ -19,7 +19,7 @@ const getVehicleDataPoints = catchAsync(async (req, res) => {
     return res.send(JSON.parse(cachesDataPoint));
   } else {
     const result = await vehicleDataService.queryVehicleDataPoints(filter, options);
-    await client.setEx(redisKey, 24 * 60 * 60, JSON.stringify(result));
+    await client.setex(redisKey, 24 * 60 * 60, JSON.stringify(result));
     res.setHeader('x-cache', 'no-cache');
     res.send(result);
   }

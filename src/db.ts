@@ -9,42 +9,40 @@ export default async function (db, sockets) {
   });
 
   db.once('open', () => {
-    if (config.mongoose.url.indexOf('replicaSet') !== -1) {
-      const changeStream = db.watch({ fullDocument: 'updateLookup' });
-      changeStream.on('change', async (change) => {
-        const user = change.fullDocument?.user;
+    const changeStream = db.watch({ fullDocument: 'updateLookup' });
+    changeStream.on('error', (err) => {
+      logger.warn(err.message, err);
+      return;
+    });
+    changeStream.on('change', async (change) => {
+      const user = change.fullDocument?.user;
 
-        switch (change.operationType) {
-          case 'insert': {
-            const message = await handleChange(change, change.operationType);
-            sockets[user]?.forEach((socket) => {
-              socket.send(JSON.stringify(message));
-            });
-            break;
-          }
-
-          case 'update': {
-            const message = await handleChange(change, change.operationType);
-            sockets[user]?.forEach((socket) => {
-              socket.send(JSON.stringify(message));
-            });
-            break;
-          }
-
-          case 'delete': {
-            break;
-          }
-
-          default: {
-            break;
-          }
+      switch (change.operationType) {
+        case 'insert': {
+          const message = await handleChange(change, change.operationType);
+          sockets[user]?.forEach((socket) => {
+            socket.send(JSON.stringify(message));
+          });
+          break;
         }
-      });
-    } else {
-      logger.warn(
-        'The $changeStream stage is only supported on replica sets. If you would like to enable changeStream, connect to a replica set.'
-      );
-    }
+
+        case 'update': {
+          const message = await handleChange(change, change.operationType);
+          sockets[user]?.forEach((socket) => {
+            socket.send(JSON.stringify(message));
+          });
+          break;
+        }
+
+        case 'delete': {
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
+    });
   });
 
   db.on('error', function (err) {
