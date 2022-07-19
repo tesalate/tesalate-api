@@ -1,9 +1,9 @@
 # STAGE 1
 FROM node:16-alpine as ts-compiler
 RUN mkdir -p /home/node/app/node_modules
-RUN chown -R node:node /home/node/app
 WORKDIR /home/node/app
 COPY package.json yarn.lock ./
+RUN chown -R node:node /home/node/app
 RUN yarn global add typescript ts-node rimraf
 
 # RUN yarn global add copyfiles
@@ -31,3 +31,5 @@ COPY ecosystem.config.json wait-for-it.sh ./
 COPY --from=ts-remover /home/node/app/ ./
 
 EXPOSE 4400
+
+CMD yarn start

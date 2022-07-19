@@ -4,7 +4,7 @@ import config from './config/config';
 import logger from './config/logger';
 import db from './db';
 import { createWebSocketServer, activeSockets } from './websockets';
-import client from './redis';
+// import client from './redis';
 
 let server;
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(async () => {
@@ -15,7 +15,7 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(async () => 
   // CREATE WEBSOCKETS
   createWebSocketServer(server);
   // connect to redis client
-  await client.connect();
+  // await client.connect();
 });
 
 // START DB LISTENERS

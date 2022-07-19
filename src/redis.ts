@@ -1,13 +1,6 @@
-import { createClient } from 'redis';
+import Redis from 'ioredis';
 import config from './config/config';
-import logger from './config/logger';
 
-const client = createClient({
-  password: config.redis.pass,
-});
+const connection = new Redis({ maxRetriesPerRequest: null, enableReadyCheck: false, ...config.redis });
 
-client.on('connect', () => {
-  logger.info(`Client connected to redis on port ${config.redis.port}`);
-});
-
-export default client;
+export default connection;
