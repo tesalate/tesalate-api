@@ -12,7 +12,7 @@ const envVarsSchema = Joi.object()
     PORT: Joi.number().default(4400),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
     MONGODB_VERSION: Joi.string().default('5.0.6'),
-    REDIS_HOST: Joi.string().default('defualt'),
+    REDIS_HOST: Joi.string().default('default'),
     REDIS_PORT: Joi.number().default(6379),
     REDIS_PASSWORD: Joi.string().description('Password for Redis'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),

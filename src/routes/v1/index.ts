@@ -11,6 +11,7 @@ import driveSessionRoute from './driveSession.route';
 import mapPointRoute from './mapPoint.route';
 import settingsRoute from './settings.route';
 import statsRoute from './stats.route';
+import sessionRoute from './session.route';
 import config from '../../config/config';
 
 const router = express.Router();
@@ -59,6 +60,10 @@ const defaultRoutes = [
   {
     path: '/stats',
     route: statsRoute,
+  },
+  {
+    path: '/sessions',
+    route: sessionRoute,
   },
 ];
 
