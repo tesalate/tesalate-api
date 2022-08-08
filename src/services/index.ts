@@ -12,3 +12,4 @@ export { default as mapPointService } from './mapPoint.service';
 export { default as healthService } from './health.service';
 export { default as settingsService } from './settings.service';
 export { default as statsService } from './stats.service';
+export { default as sessionService } from './session.service';

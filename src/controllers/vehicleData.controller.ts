@@ -11,18 +11,20 @@ const getVehicleDataPoints = catchAsync(async (req, res) => {
     user: req.user._id,
   };
 
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const redisKey = JSON.stringify({ ...filter, ...options });
-  const cachesDataPoint = await client.get(redisKey);
-  if (cachesDataPoint != null) {
-    res.setHeader('x-cache', 'cached');
-    return res.send(JSON.parse(cachesDataPoint));
-  } else {
-    const result = await vehicleDataService.queryVehicleDataPoints(filter, options);
-    await client.setex(redisKey, 24 * 60 * 60, JSON.stringify(result));
-    res.setHeader('x-cache', 'no-cache');
-    res.send(result);
-  }
+  const options = pick(req.query, ['sortBy', 'limit', 'page', 'select']);
+
+  // const redisKey = JSON.stringify({ ...filter, ...options });
+
+  // const cachesDataPoint = await client.get(redisKey);
+  // if (cachesDataPoint != null) {
+  // res.setHeader('x-cache', 'cached');
+  // return res.send(JSON.parse(cachesDataPoint));
+  // } else {
+  const result = await vehicleDataService.queryVehicleDataPoints(filter, options);
+  // await client.setex(redisKey, 24 * 60 * 60, JSON.stringify(result));
+  // res.setHeader('x-cache', 'no-cache');
+  res.send(result);
+  // }
 });
 
 const getVehicleDataPoint = catchAsync(async (req, res) => {

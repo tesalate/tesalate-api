@@ -11,3 +11,4 @@ export { default as Charger } from './charger.model';
 export { default as Flag } from './flag.model';
 export { default as Health } from './health.model';
 export { default as Settings } from './settings.model';
+export { default as Session } from './session.model';
