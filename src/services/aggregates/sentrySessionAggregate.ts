@@ -1,51 +1,20 @@
 import mongoose from 'mongoose';
-import { Session } from '../../models';
-import Efficiency from '../../models/efficiency.model';
-import { searchObject } from '../../utils/searchObj';
 
-const driveSessionAggregate = async (_id, user) => {
-  const [driveSession] = await Session.find({ _id: mongoose.Types.ObjectId(_id), user })
-    .populate({
-      path: 'dataPoints',
-      select: 'vehicle_state.car_version',
-      options: { limit: 1 },
-    })
-    .lean()
-    .select('dataPoints');
-
-  const version = driveSession['dataPoints'][0]['vehicle_state']['car_version'];
-
-  const [eff] = await Efficiency.find(
-    {
-      [version]: { $exists: true },
-      user,
-    },
-    { [version]: 1, _id: 0 }
-  ).lean();
-
-  const avg = searchObject(eff, 'avg') ?? 0;
-
+const driveSessionAggregate = (_id, user) => {
   return [
     { $match: { _id: mongoose.Types.ObjectId(_id), user } },
     {
       $unwind: {
         path: '$dataPoints',
+        preserveNullAndEmptyArrays: false,
       },
     },
     {
       $lookup: {
         from: 'vehicledata',
-        let: {
-          locator: '$dataPoints',
-        },
+        let: { locator: '$dataPoints' },
         pipeline: [
-          {
-            $match: {
-              $expr: {
-                $eq: ['$_id', '$$locator'],
-              },
-            },
-          },
+          { $match: { $expr: { $eq: ['$_id', '$$locator'] } } },
           {
             $project: {
               _id: 1,
@@ -56,8 +25,6 @@ const driveSessionAggregate = async (_id, user) => {
               'drive_state.timestamp': 1,
               'drive_state.heading': 1,
               'charge_state.battery_level': 1,
-              'charge_state.charge_energy_added': 1,
-              'charge_state.charge_miles_added_ideal': 1,
               'charge_state.battery_range': 1,
               'vehicle_state.odometer': 1,
               'climate_state.outside_temp': 1,
@@ -74,11 +41,7 @@ const driveSessionAggregate = async (_id, user) => {
         preserveNullAndEmptyArrays: false,
       },
     },
-    {
-      $sort: {
-        'populated.drive_state.timestamp': 1,
-      },
-    },
+    { $sort: { 'populated.drive_state.timestamp': 1 } },
     {
       $group: {
         _id: '$_id',
@@ -99,12 +62,6 @@ const driveSessionAggregate = async (_id, user) => {
         },
         batteryRange: {
           $push: '$populated.charge_state.battery_range',
-        },
-        energyAdded: {
-          $last: '$populated.charge_state.charge_energy_added',
-        },
-        milesAdded: {
-          $last: '$populated.charge_state.charge_miles_added_ideal',
         },
         power: {
           $push: '$populated.drive_state.power',
@@ -228,17 +185,10 @@ const driveSessionAggregate = async (_id, user) => {
                       $divide: [
                         {
                           $abs: {
-                            $subtract: [
-                              {
-                                $arrayElemAt: ['$data.timestamp', 0],
-                              },
-                              {
-                                $arrayElemAt: ['$data.timestamp', -1],
-                              },
-                            ],
+                            $subtract: [{ $arrayElemAt: ['$data.timestamp', 0] }, { $arrayElemAt: ['$data.timestamp', -1] }],
                           },
                         },
-                        3600000,
+                        36e5,
                       ],
                     },
                   ],
@@ -325,28 +275,7 @@ const driveSessionAggregate = async (_id, user) => {
                   $trunc: [
                     {
                       $divide: [
-                        {
-                          $cond: {
-                            if: { $eq: [avg, 0] },
-                            then: {
-                              $cond: {
-                                if: {
-                                  $or: [{ $eq: ['$energyAdded', 0] }, { $eq: ['$milesAdded', 0] }],
-                                },
-                                then: 241.9,
-                                else: {
-                                  $multiply: [
-                                    {
-                                      $divide: ['$energyAdded', '$milesAdded'],
-                                    },
-                                    1000,
-                                  ],
-                                },
-                              },
-                            },
-                            else: avg,
-                          },
-                        },
+                        241.9,
                         {
                           $divide: [
                             {

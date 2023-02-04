@@ -31,12 +31,12 @@ const defaultTokenOptions = {
 
 const tokenCookieOptions = {
   ...defaultTokenOptions,
-  maxAge: config.jwt.accessExpirationMinutes * 60000, // 6,0000 = ms in 1 minute
+  maxAge: Number.MAX_SAFE_INTEGER,
 };
 
 const refreshTokenCookieOptions = {
   ...defaultTokenOptions,
-  maxAge: config.jwt.refreshExpirationDays * 86400000, // 86,400,000 = ms in 1 day
+  maxAge: Number.MAX_SAFE_INTEGER,
 };
 
 export { tokenTypes, tokenCookieOptions, refreshTokenCookieOptions };

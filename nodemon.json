@@ -1,3 +1,3 @@
 {
-  "ignore": ["swagger/*", "scripts/"]
+  "ignore": ["swagger/*", "scripts/", "mappoints.json"]
 }

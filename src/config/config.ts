@@ -15,6 +15,7 @@ const envVarsSchema = Joi.object()
     REDIS_HOST: Joi.string().default('default'),
     REDIS_PORT: Joi.number().default(6379),
     REDIS_PASSWORD: Joi.string().description('Password for Redis'),
+    REDIS_USER: Joi.string().default('default').description('User for Redis'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().default(30).description('minutes after which access tokens expire'),
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(90).description('days after which refresh tokens expire'),
@@ -29,6 +30,9 @@ const envVarsSchema = Joi.object()
     SMTP_USERNAME: Joi.string().description('username for email server'),
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
+    SMS_FROM: Joi.string().description('twilio phone number').required(),
+    TWILIO_ACCOUNT_SID: Joi.string().description('twilio account number').required(),
+    TWILIO_AUTH_TOKEN: Joi.string().description('twilio auth token').required(),
     TESLA_OAUTH_V3_URL: Joi.string().description('tesla oauth v3 api url').default('https://auth.tesla.com/oauth2/v3'),
     TESLA_OWNER_API_URL: Joi.string().description('tesla owner api url').default('https://owner-api.teslamotors.com'),
     TESLA_OWNERAPI_CLIENT_ID: Joi.string().required(),
@@ -39,6 +43,16 @@ const envVarsSchema = Joi.object()
       .description('minutes after which cookies expire'),
     ACCEPTED_CORS: Joi.string().description('allowed urls for cors').required(),
     REQUIRES_INVITE: Joi.boolean().description('users must be invited to register').default(true),
+    LATEST_DATA_POINT_SORT: Joi.string().default('$natural:desc'),
+    LATEST_DATA_POINT_TTL: Joi.number()
+      .default(60 * 60 * 24) // one day
+      .description('seconds after which the latest data point expires from cache'),
+    REPEAT_JOB_INTERVAL: Joi.number()
+      .integer()
+      .min(2)
+      .max(10)
+      .default(10)
+      .description('How often a job should repeat in seconds. 2 <= value <= 10'),
   })
   .unknown();
 
@@ -77,6 +91,11 @@ export default {
     verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
     maxCookieAge: envVars.MAX_COOKIE_AGE,
   },
+  sms: {
+    from: envVars.SMS_FROM,
+    sid: envVars.TWILIO_ACCOUNT_SID,
+    auth: envVars.TWILIO_AUTH_TOKEN,
+  },
   email: {
     smtp: {
       host: envVars.SMTP_HOST,
@@ -96,5 +115,12 @@ export default {
   },
   cors: {
     allowedOrigins: JSON.parse(envVars.ACCEPTED_CORS),
+  },
+  cache: {
+    latestSortBy: envVars.LATEST_DATA_POINT_SORT,
+    latestTTL: envVars.LATEST_DATA_POINT_TTL,
+  },
+  queue: {
+    jobInterval: envVars.REPEAT_JOB_INTERVAL,
   },
 };

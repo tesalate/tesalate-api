@@ -8,7 +8,7 @@
   "author": "Devin Cunningham",
   "license": "MIT",
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
     "commit": "cz",
@@ -16,7 +16,7 @@
     "clean": "rimraf dist/",
     "copy-files": "copyfiles -u 1 src/**/*.html dist/",
     "build": "yarn clean && tsc && yarn copy-files",
-    "start": "pm2 start ecosystem.config.json --no-daemon",
+    "start": "node ./dist/src/index.js",
     "dev": "NODE_ENV=development nodemon src/index.ts",
     "test": "jest --colors --verbose --detectOpenHandles",
     "test:coverage": "jest --silent --testLocationInResults --ci --all --coverage --json --outputFile=\"report.json\"",
@@ -89,13 +89,14 @@
     "nodemailer": "^6.3.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "pm2": "^5.2.0",
+    "pm2": "^5.2.2",
     "query-string": "^7.0.1",
     "set-cookie-parser": "^2.4.8",
     "swagger-jsdoc": "^6.0.8",
     "swagger-ui-express": "^4.1.6",
     "ts-node": "^10.4.0",
     "tsc": "^2.0.4",
+    "twilio": "^3.84.0",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
     "winston": "^3.2.1",
@@ -119,6 +120,7 @@
     "@types/jest": "^27.4.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/lodash": "^4.14.178",
+    "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.3",
     "@types/node": "^17.0.10",
     "@types/nodemailer": "^6.4.4",

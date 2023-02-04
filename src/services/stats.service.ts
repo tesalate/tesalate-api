@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
-import { ChargeSession, DriveSession, MapPoint } from '../models';
+import { ChargeSession, DriveSession, MapPoint, Session } from '../models';
 import ApiError from '../utils/ApiError';
 
 /**
@@ -10,11 +10,12 @@ import ApiError from '../utils/ApiError';
  * @returns {Promise<QueryResult>}
  */
 const getDriveStats = async (vehicle, user) => {
-  const data = await DriveSession.aggregate([
+  const data = await Session.aggregate([
     {
       $match: {
         vehicle: mongoose.Types.ObjectId(vehicle),
         user: mongoose.Types.ObjectId(user),
+        type: 'drive',
       },
     },
     {
@@ -22,7 +23,7 @@ const getDriveStats = async (vehicle, user) => {
         day: {
           $dayOfMonth: {
             date: {
-              $toDate: '$startDate',
+              $toDate: '$createdAt',
             },
             timezone: 'America/Los_Angeles',
           },
@@ -30,7 +31,7 @@ const getDriveStats = async (vehicle, user) => {
         month: {
           $month: {
             date: {
-              $toDate: '$startDate',
+              $toDate: '$createdAt',
             },
             timezone: 'America/Los_Angeles',
           },
@@ -38,12 +39,12 @@ const getDriveStats = async (vehicle, user) => {
         year: {
           $year: {
             date: {
-              $toDate: '$startDate',
+              $toDate: '$createdAt',
             },
             timezone: 'America/Los_Angeles',
           },
         },
-        distance: '$distance',
+        distance: '$sessionData.distance',
       },
     },
     {
@@ -76,11 +77,12 @@ const getDriveStats = async (vehicle, user) => {
  * @returns {Promise<QueryResult>}
  */
 const getChargeStats = async (vehicle, user) => {
-  const data = await ChargeSession.aggregate([
+  const data = await Session.aggregate([
     {
       $match: {
         vehicle: mongoose.Types.ObjectId(vehicle),
         user: mongoose.Types.ObjectId(user),
+        type: 'charge',
       },
     },
     {
@@ -88,7 +90,7 @@ const getChargeStats = async (vehicle, user) => {
         day: {
           $dayOfMonth: {
             date: {
-              $toDate: '$startDate',
+              $toDate: '$createdAt',
             },
             timezone: 'America/Los_Angeles',
           },
@@ -96,7 +98,7 @@ const getChargeStats = async (vehicle, user) => {
         month: {
           $month: {
             date: {
-              $toDate: '$startDate',
+              $toDate: '$createdAt',
             },
             timezone: 'America/Los_Angeles',
           },
@@ -104,12 +106,12 @@ const getChargeStats = async (vehicle, user) => {
         year: {
           $year: {
             date: {
-              $toDate: '$startDate',
+              $toDate: '$createdAt',
             },
             timezone: 'America/Los_Angeles',
           },
         },
-        energyAdded: '$energyAdded',
+        energyAdded: '$sessionData.energyAdded',
       },
     },
     {

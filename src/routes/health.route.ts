@@ -1,4 +1,5 @@
 import express from 'express';
+import os from 'os';
 // import { healthService } from '../services';
 
 const router = express.Router();
@@ -8,6 +9,7 @@ router.route('/').get(async (_, res) => {
     uptime: process.uptime(),
     message: 'OK',
     timestamp: Date.now(),
+    host: os.hostname(),
   };
   try {
     // await healthService.getHealth();

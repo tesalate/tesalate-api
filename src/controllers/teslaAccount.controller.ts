@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import pick from 'lodash/pick';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
-import { teslaAccountService, emailService } from '../services';
+import { teslaAccountService, emailService, smsService, userService } from '../services';
 
 const linkTeslaAccount = catchAsync(async (req, res) => {
   const { access_token, linked, email, user, _id, createdAt, updatedAt } = await teslaAccountService.linkTeslaAccount({
@@ -65,13 +65,44 @@ const deleteTeslaAccount = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const sendDataCollectionStoppedEmail = catchAsync(async (req, res) => {
-  const teslaAccount = await teslaAccountService.getTeslaAccountById(req.query.teslaAccountId, req.query.userId);
-  if (!teslaAccount) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'TeslaAccount not found');
+const sendDataCollectionStoppedNotification = catchAsync(async (req, res) => {
+  const user = await userService.getUserById(req.query.userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found');
   }
-  await emailService.sendDataCollectorStoppedEmail(teslaAccount.email);
+  await emailService.sendDataCollectorStoppedEmail(user.email);
+  await smsService.sendDataCollectorStoppedSMS(user.phoneNumber);
   res.status(httpStatus.NO_CONTENT).send();
+});
+
+const refreshTeslaAccount = catchAsync(async (req, res) => {
+  const { refresh_token, email } = await teslaAccountService.getTeslaAccountTokens(req.user.teslaAccount._id, req.user._id);
+
+  const { access_token, linked, user, _id, createdAt, updatedAt } = await teslaAccountService.linkTeslaAccount({
+    email,
+    refreshToken: refresh_token,
+    user: req.user,
+  });
+
+  const vehicles = await teslaAccountService.getAndSetVehiclesFromTesla({
+    teslaAccount: _id,
+    accessToken: access_token,
+    user: req.user,
+  });
+
+  res
+    .status(createdAt === updatedAt ? httpStatus.CREATED : httpStatus.OK)
+    .send({
+      results: {
+        linked,
+        _id,
+        email,
+        user,
+        createdAt,
+        updatedAt,
+        vehicles: vehicles.filter((vehicle) => vehicle.teslaAccount),
+      },
+    });
 });
 
 export default {
@@ -82,5 +113,6 @@ export default {
   getTeslaAccount,
   updateTeslaAccount,
   deleteTeslaAccount,
-  sendDataCollectionStoppedEmail,
+  sendDataCollectionStoppedNotification,
+  refreshTeslaAccount,
 };

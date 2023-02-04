@@ -12,7 +12,7 @@ export enum SessionType {
 }
 
 export interface ISession extends IPaginator, IToJSON {
-  _id: string;
+  _id: string | mongoose.Types.ObjectId;
   dataPoints: string[];
   createdAt: Date;
   updatedAt: Date;

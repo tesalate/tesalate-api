@@ -41,6 +41,19 @@ const getTeslaAccountById = async (_id, user) => {
   return TeslaAccount.findOne({ _id, user }).populate('vehicles');
 };
 
+const getTeslaAccountTokens = async (_id, user) => {
+  const teslaAccount = await TeslaAccount.findOne({ _id, user });
+  if (!teslaAccount) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Tesla Account not found');
+  }
+  return {
+    _id: teslaAccount._id,
+    access_token: teslaAccount.access_token,
+    refresh_token: teslaAccount.refresh_token,
+    email: teslaAccount.email,
+  };
+};
+
 /**
  * Get teslaAccount by email
  * @param {string} email
@@ -153,7 +166,12 @@ const getAndSetVehiclesFromTesla = async ({ accessToken, user, teslaAccount }) =
     const userVehicles = await vehicleService.getVehiclesByUserId(user._id);
 
     // Loop through userVehicles
-    // If vehicle not in tesla vehicle response =>  teslaAccount = null collectData = false
+    /* 
+      If vehicle not in tesla vehicle response
+      then the vehicle is no longer in tesla account
+      set teslaAccount = null 
+      set collectData = false
+    */
     await Promise.all(
       userVehicles
         .filter((curr) => !vehicles.find((teslaVehicle) => teslaVehicle.vin === curr.vin) && curr.teslaAccount)
@@ -163,7 +181,7 @@ const getAndSetVehiclesFromTesla = async ({ accessToken, user, teslaAccount }) =
     );
     await Promise.all(
       vehicles.map((vehicle) =>
-        Vehicle.updateOne({ vin: vehicle.vin, user, teslaAccount }, { ...vehicle, collectData: false }, { upsert: true })
+        Vehicle.updateOne({ vin: vehicle.vin, user, teslaAccount }, { ...vehicle }, { upsert: true })
       )
     );
 
@@ -177,6 +195,7 @@ const getAndSetVehiclesFromTesla = async ({ accessToken, user, teslaAccount }) =
 export default {
   linkTeslaAccount,
   getAndSetVehiclesFromTesla,
+  getTeslaAccountTokens,
   createTeslaAccount,
   queryTeslaAccounts,
   getTeslaAccountById,

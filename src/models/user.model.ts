@@ -12,9 +12,11 @@ export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   password: string;
   role: UserRoles;
   isEmailVerified: boolean;
+  isPhoneVerified: boolean;
   teslaAccount: string | Types.ObjectId | null;
   vehicles: string[] | Types.ObjectId[];
   isPasswordMatch(password: string): boolean;
@@ -65,6 +67,11 @@ const userSchema = new Schema<IUser>(
         }
       },
     },
+    phoneNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     password: {
       type: String,
       required: true,
@@ -83,6 +90,10 @@ const userSchema = new Schema<IUser>(
       default: 'user',
     },
     isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    isPhoneVerified: {
       type: Boolean,
       default: false,
     },

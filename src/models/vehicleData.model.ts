@@ -11,8 +11,6 @@ export interface IVehicleData {
   backseat_token_updated_at: null;
   drive_session_id: string | null;
   charge_session_id: string | null;
-  speed: number[];
-  power: number[];
   id: number;
   user_id: number;
   vehicle_id: number;
@@ -348,14 +346,6 @@ const vehicleData = new Schema<IVehicleData>(
       ref: 'ChargeSession',
       default: null,
       autopopulate: false,
-    },
-    speed: {
-      type: Array,
-      default: [],
-    },
-    power: {
-      type: Array,
-      default: [],
     },
     geoJSON: {
       type: {

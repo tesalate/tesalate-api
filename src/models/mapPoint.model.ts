@@ -4,6 +4,7 @@ import { GeoJSONPolygon, IToJSON, IPaginator } from './types';
 import { IVehicleData } from './vehicleData.model';
 
 export interface IMapPoint {
+  _id: string;
   dataPoints: string[] | Types.ObjectId[] | IVehicleData;
   visitCount: number;
   latLongString: string;
@@ -70,6 +71,8 @@ mapPoint.plugin(require('mongoose-autopopulate'));
 
 mapPoint.index({ vehicle: 'text', user: 1 });
 mapPoint.index({ user: 1 });
+mapPoint.index({ geoJSON: '2dsphere' });
+mapPoint.index({ geoJSON: '2dsphere', vehicle: 1 });
 
 interface MapPointModel extends Model<IMapPoint>, IPaginator, IToJSON {}
 

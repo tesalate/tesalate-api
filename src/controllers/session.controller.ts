@@ -1,8 +1,10 @@
+import client from '../redis';
 import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
 import { sessionService } from '../services';
 import pick from 'lodash/pick';
+// import isToday from '../utils/isToday';
 
 // const getSessions = catchAsync(async (req, res) => {
 //   const filter = {
@@ -34,8 +36,18 @@ const getSessionAggregateById = catchAsync(async (req, res) => {
 });
 
 const getSessionLogs = catchAsync(async (req, res) => {
-  const result = await sessionService.getSessionLogs(req.query, req.user._id);
-  res.send({ result });
+  const redisKey = JSON.stringify({ query: req.query, user: req.user._id, path: req.route.path });
+
+  // const cacheData = await client.get(redisKey);
+  // if (cacheData != null) {
+  //   res.setHeader('x-cache', 'cached');
+  //   return res.send({ results: JSON.parse(cacheData) });
+  // } else {
+  const results = await sessionService.getSessionLogs(req.query, req.user._id);
+  // await client.setex(redisKey, 60, JSON.stringify(results));
+  // res.setHeader('x-cache', 'no-cache');
+  res.send({ results });
+  // }
 });
 
 const deleteSession = catchAsync(async (req, res) => {

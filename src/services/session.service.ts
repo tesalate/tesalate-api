@@ -1,5 +1,6 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+import config from '../config/config';
 import { Session } from '../models';
 import { SessionType } from '../models/session.model';
 import ApiError from '../utils/ApiError';
@@ -59,12 +60,22 @@ const getSessions = async (query, user) => {
           },
           {
             $addFields: {
-              page,
-              limit,
+              page: 0,
+              limit: 10,
               totalPages: {
                 $ceil: {
-                  $divide: ['$totalResults', limit || 1],
+                  $divide: ['$totalResults', 10],
                 },
+              },
+            },
+          },
+        ],
+        sortedIds: [
+          {
+            $group: {
+              _id: '$vehicle',
+              ids: {
+                $push: '$_id',
               },
             },
           },
@@ -75,6 +86,9 @@ const getSessions = async (query, user) => {
     {
       $project: {
         results: '$data',
+        sortedIds: {
+          $first: '$sortedIds.ids',
+        },
         page: {
           $first: '$metadata.page',
         },
@@ -100,24 +114,66 @@ const getSessionLogs = async (query, user) => {
       $match: {
         vehicle: new mongoose.Types.ObjectId(vehicle),
         user: new mongoose.Types.ObjectId(user),
-        createdAt: {
-          $gte: new Date(startDate),
-          $lte: new Date(endDate),
-        },
+        $or: [
+          {
+            /* ANY SESSION THAT HAS A CREATED AT DATE WITHIN THE BOUNDS */
+            createdAt: {
+              $gte: new Date(startDate),
+              $lte: new Date(endDate),
+            },
+          },
+          {
+            /* OR ANY SESSION THAT HAS AN UPDATED AT DATE WITHIN THE BOUNDS */
+            updatedAt: {
+              $gte: new Date(startDate),
+              $lte: new Date(endDate),
+            },
+          },
+        ],
       },
     },
     {
       $project: {
         data: [
           {
-            type: '$type',
-            date: '$createdAt',
-            start: true,
+            $cond: [
+              {
+                $gte: ['$createdAt', new Date(startDate)],
+              },
+              {
+                type: '$type',
+                date: '$createdAt',
+                start: true,
+              },
+              null,
+            ],
           },
           {
-            type: '$type',
-            date: '$updatedAt',
-            start: false,
+            $cond: [
+              {
+                $and: [
+                  {
+                    /* this is necessary for active sessions so the returned
+                     * logs don't show a charge or drive session has "ended"
+                     * while it is currently still being updated.
+                     * i.e a session that has been updated within the
+                     * last n seconds should not be considered a session
+                     * that has "ended"
+                     */
+                    $lt: ['$updatedAt', new Date(Date.now() - 1000 * config.queue.jobInterval * 2)], // NOW MINUS 2x JOB INTERVAL
+                  },
+                  {
+                    $lte: ['$updatedAt', new Date(endDate)],
+                  },
+                ],
+              },
+              {
+                type: '$type',
+                date: '$updatedAt',
+                start: false,
+              },
+              null,
+            ],
           },
         ],
       },
@@ -136,6 +192,14 @@ const getSessionLogs = async (query, user) => {
             },
             '$data',
           ],
+        },
+      },
+    },
+    {
+      /* REMOVE THE NULL VALUES FROM THE PROJECT STAGE */
+      $match: {
+        date: {
+          $exists: true,
         },
       },
     },
@@ -165,7 +229,7 @@ const getSessionAggregateById = async (_id, user, type) => {
       [session] = await Session.aggregate(chargeSessionAggregate(_id, user));
       break;
     case SessionType['drive']:
-      [session] = await Session.aggregate(driveSessionAggregate(_id, user));
+      [session] = await Session.aggregate(await driveSessionAggregate(_id, user));
       break;
     default:
       break;

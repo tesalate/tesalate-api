@@ -55,8 +55,9 @@ const linkTeslaAccount = {
 };
 
 const unlinkTeslaAccount = {};
+const refreshTeslaAccount = {};
 
-const sendDataCollectionStoppedEmail = {
+const sendDataCollectionStoppedNotification = {
   query: Joi.object().keys({
     teslaAccountId: Joi.custom(objectId).required(),
     userId: Joi.custom(objectId).required(),
@@ -69,7 +70,8 @@ export default {
   createTeslaAccount,
   getTeslaAccounts,
   getTeslaAccount,
+  refreshTeslaAccount,
   updateTeslaAccount,
   deleteTeslaAccount,
-  sendDataCollectionStoppedEmail,
+  sendDataCollectionStoppedNotification,
 };

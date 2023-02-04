@@ -1,25 +1,24 @@
-import mongoose from 'mongoose';
+import mongoose, { MongooseOptions } from 'mongoose';
 import app from './app';
 import config from './config/config';
 import logger from './config/logger';
-import db from './db';
-import { createWebSocketServer, activeSockets } from './websockets';
+import dbWatcher from './dbWatcher';
+import { createWebSocketServer } from './websockets';
 // import client from './redis';
+import mongoService from './services/mongo.service';
 
 let server;
-mongoose.connect(config.mongoose.url, config.mongoose.options).then(async () => {
-  logger.info(`Connected to ${config.mongoose.url}`);
+
+mongoService(() => {
   server = app.listen(config.port, () => {
     logger.info(`Listening to port ${config.port}`);
   });
-  // CREATE WEBSOCKETS
-  createWebSocketServer(server);
-  // connect to redis client
-  // await client.connect();
-});
 
-// START DB LISTENERS
-db(mongoose.connection, activeSockets);
+  // CREATE WEBSOCKETS
+  const wss = createWebSocketServer(server);
+  // START DB LISTENERS
+  dbWatcher(wss.clients);
+});
 
 const exitHandler = () => {
   if (server) {

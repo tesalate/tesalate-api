@@ -43,9 +43,16 @@ router
   );
 
 router.post(
-  '/send-data-collection-stopped-email',
-  validate(teslaAccountValidation.sendDataCollectionStoppedEmail),
-  teslaAccountController.sendDataCollectionStoppedEmail
+  '/send-data-collection-stopped-notification',
+  validate(teslaAccountValidation.sendDataCollectionStoppedNotification),
+  teslaAccountController.sendDataCollectionStoppedNotification
+);
+
+router.put(
+  '/refresh',
+  auth('getTeslaAccounts'),
+  validate(teslaAccountValidation.refreshTeslaAccount),
+  teslaAccountController.refreshTeslaAccount
 );
 
 export default router;
