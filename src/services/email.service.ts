@@ -5,6 +5,8 @@ import nodemailer from 'nodemailer';
 import handlebars from 'handlebars';
 import config from '../config/config';
 import logger from '../config/logger';
+import VehicleData from '../models/vehicleData.model';
+import mongoose from 'mongoose';
 
 const { appName } = config;
 const copyrightYear = new Date().getFullYear();
@@ -119,6 +121,69 @@ const sendInviteEmail = async (to, token) => {
   await sendEmail(to, subject, htmlToSend);
 };
 
+/** Send verification email
+ * @param {string} to
+ * @param {string} token
+ * @returns {Promise}
+ */
+const sendEndOfWeekEmail = async (to, vehicleId) => {
+  const filePath = path.join(__dirname, '../templates/end-of-weekl.html');
+  const source = fs.readFileSync(filePath, 'utf-8').toString();
+  const template = handlebars.compile(source);
+
+  const now = new Date();
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const nowObjectId = new mongoose.Types.ObjectId(Math.floor(now.getTime() / 1000).toString(16) + '0000000000000000');
+  const sevenDaysAgoObjectId = new mongoose.Types.ObjectId(
+    Math.floor(sevenDaysAgo.getTime() / 1000).toString(16) + '0000000000000000'
+  );
+  const miles = await VehicleData.aggregate([
+    {
+      $match: {
+        _id: {
+          $gte: sevenDaysAgoObjectId,
+          $lt: nowObjectId,
+        },
+        vehicle: new mongoose.Types.ObjectId(vehicleId),
+      },
+    },
+    {
+      $sort: {
+        'drive_state.timestamp': 1,
+      },
+    },
+    {
+      $group: {
+        _id: '$vehicle',
+        start: {
+          $first: '$vehicle_state.odometer',
+        },
+        end: {
+          $last: '$vehicle_state.odometer',
+        },
+      },
+    },
+    {
+      $project: {
+        miles: {
+          $subtract: ['$end', '$start'],
+        },
+      },
+    },
+  ]);
+
+  const replacements = {
+    appName,
+    copyrightYear,
+    miles,
+    email: to,
+    validFor: moment.duration(2.628e9).humanize(),
+  };
+  const htmlToSend = template(replacements);
+  const subject = `🚘 ${config.appName} - Your week wrapped up`;
+  await sendEmail(to, subject, htmlToSend);
+};
+
 export default {
   transport,
   sendEmail,
@@ -126,4 +191,5 @@ export default {
   sendVerificationEmail,
   sendDataCollectorStoppedEmail,
   sendInviteEmail,
+  sendEndOfWeekEmail,
 };

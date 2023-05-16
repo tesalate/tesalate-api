@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
-import { vehicleService } from '../services';
+import { emailService, vehicleService } from '../services';
 import pick from 'lodash/pick';
 
 const createVehicle = catchAsync(async (req, res) => {
@@ -56,10 +56,16 @@ const deleteVehicle = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const endOfWeekEmail = catchAsync(async (req, res) => {
+  await emailService.sendEndOfWeekEmail(req.user.email, req.params.vehicleId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 export default {
   createVehicle,
   getVehicles,
   getVehicle,
   updateVehicle,
   deleteVehicle,
+  endOfWeekEmail,
 };

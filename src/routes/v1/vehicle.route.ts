@@ -17,6 +17,10 @@ router
   .patch(auth('manageVehicles'), validate(vehicleValidation.updateVehicle), vehicleController.updateVehicle)
   .delete(auth('manageVehicles'), validate(vehicleValidation.deleteVehicle), vehicleController.deleteVehicle);
 
+router
+  .route('/endOfWeekEmail/:vehicleId')
+  .post(auth('getVehicles'), validate(vehicleValidation.getVehicle), vehicleController.endOfWeekEmail);
+
 export default router;
 
 /**
